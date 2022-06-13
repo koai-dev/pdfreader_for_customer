@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "42416033485",
+    "project_id": "pdfviewer-3bc87",
+    "storage_bucket": "pdfviewer-3bc87.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:42416033485:android:24f6338eaffe04a4ea6384",
+        "android_client_info": {
+          "package_name": "com.igi.office"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "42416033485-03ucqi83rlvikrk5dv3eph62id70tmhc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArkgZnX__bT2EUaEtyviKYJY3AuXK4T7Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "42416033485-03ucqi83rlvikrk5dv3eph62id70tmhc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

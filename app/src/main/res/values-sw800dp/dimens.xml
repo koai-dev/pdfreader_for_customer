@@ -1,0 +1,86 @@
+<resources>
+  <dimen name="activity_horizontal_margin">
+    35.56dp
+  </dimen>
+  <dimen name="activity_vertical_margin">
+    35.56dp
+  </dimen>
+  <dimen name="nav_header_vertical_spacing">
+    17.78dp
+  </dimen>
+  <dimen name="nav_header_height">
+    391.11dp
+  </dimen>
+  <dimen name="fab_margin">
+    35.56dp
+  </dimen>
+  <dimen name="margin_all">
+    22.22dp
+  </dimen>
+  <dimen name="margin_double_all">
+    44.44dp
+  </dimen>
+  <dimen name="margin_small">
+    11.11dp
+  </dimen>
+  <dimen name="height_toolbar_home">
+    133.33dp
+  </dimen>
+  <dimen name="height_toolbar_all">
+    106.67dp
+  </dimen>
+  <dimen name="radius_search">
+    44.44dp
+  </dimen>
+  <dimen name="corner_radius_dialog">
+    35.56dp
+  </dimen>
+  <dimen name="size_image_home">
+    71.11dp
+  </dimen>
+  <dimen name="dp2">
+    4.44dp
+  </dimen>
+  <dimen name="corner_button">
+    17.78dp
+  </dimen>
+  <dimen name="size_image_item">
+    120.0dp
+  </dimen>
+  <dimen name="size_image_item_theme">
+    93.33dp
+  </dimen>
+  <dimen name="size_image_splash">
+    355.56dp
+  </dimen>
+  <dimen name="padding_bottom_list">
+    222.22dp
+  </dimen>
+  <dimen name="text_size_title">
+    40.0sp
+  </dimen>
+  <dimen name="text_size_content">
+    28.89sp
+  </dimen>
+  <dimen name="text_size_menu_home">
+    22.22sp
+  </dimen>
+  <dimen name="text_size_sp12">
+    26.67sp
+  </dimen>
+  <dimen name="text_size_sp9">
+    20.0sp
+  </dimen>
+  <dimen name="text_size_sp16">
+    35.56sp
+  </dimen>
+  <dimen name="text_size_sp14">
+    31.11sp
+  </dimen>
+  <dimen name="text_size_sp15">
+    33.33sp
+  </dimen>
+  <dimen name="text_size_sp24">
+    53.33sp
+  </dimen>
+</resources>

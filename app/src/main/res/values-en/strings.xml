@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PdfReader</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string name="title_my_file">My Files</string>
+    <string name="title_favorite">Favorite</string>
+    <string name="title_browse">Browse</string>
+
+    <string name="msg_no_internet">Không có kết nối mạng, vui lòng kiểm tra lại wifi/3G!</string>
+    <string name="msg_connect_server_error">Không thể kết nối đến server!</string>
+    <string name="msg_socket_time_out">Quá thời gian kết nối đến server!</string>
+    <string name="msg_unknown_host">Unknown Host Exception!</string>
+    <string name="msg_request_failed">Đã có lỗi xảy ra, vui lòng thử lại sau!</string>
+
+</resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llItemChangeLanguage"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="@dimen/margin_all">
+
+    <ImageView
+        android:id="@+id/imvItemLanguage"
+        android:layout_width="@dimen/size_image_home"
+        android:layout_height="@dimen/size_image_home"
+        android:padding="@dimen/dp2" />
+
+    <TextView
+        android:id="@+id/vlItemLanguageName"
+        style="@style/Text_Content_Language"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/margin_all"
+        android:layout_weight="1"
+        android:gravity="center|start" />
+
+    <ImageView
+        android:id="@+id/imvSelected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_selected_language"
+        android:visibility="invisible" />
+
+</LinearLayout>

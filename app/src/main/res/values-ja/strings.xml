@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PdfReader</string>
+
+    <string name="title_my_file">私のファイル</string>
+    <string name="title_favorite">お気に入り</string>
+    <string name="title_browse">ブラウズ</string>
+    <string name="title_setting">設定</string>
+</resources>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llItemMyFile"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/margin_all"
+    android:paddingBottom="@dimen/margin_all">
+
+    <ImageView
+        android:id="@+id/imvItemFile"
+        android:layout_width="@dimen/size_image_item"
+        android:layout_height="@dimen/size_image_item"
+        android:layout_marginStart="@dimen/margin_all"
+        android:src="@drawable/ic_pdf_file"
+        android:padding="@dimen/margin_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imvItemMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_all"
+        android:padding="@dimen/margin_small"
+        android:src="@drawable/ic_three_dots"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/vlItemName"
+        style="@style/Text_Title_Item"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:ellipsize="middle"
+        android:singleLine="true"
+        app:layout_constraintEnd_toStartOf="@id/imvItemMore"
+        app:layout_constraintStart_toEndOf="@id/imvItemFile"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/vlItemDate"
+        style="@style/Text_Item_Date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp2"
+        android:ellipsize="end"
+        android:lines="1"
+        android:maxLines="1"
+        app:layout_constraintEnd_toEndOf="@id/vlItemName"
+        app:layout_constraintStart_toStartOf="@id/vlItemName"
+        app:layout_constraintTop_toBottomOf="@id/vlItemName" />
+
+    <TextView
+        android:id="@+id/vlItemPage"
+        style="@style/Text_Item_Page"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="1"
+        android:maxLines="1"
+        app:layout_constraintEnd_toEndOf="@id/vlItemName"
+        app:layout_constraintStart_toStartOf="@id/vlItemName"
+        app:layout_constraintTop_toBottomOf="@id/vlItemDate" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

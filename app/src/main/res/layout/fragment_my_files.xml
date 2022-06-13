@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_bg_menu"
+    android:clickable="true"
+    android:focusable="true"
+    tools:context=".ui.home.MyFilesFragment">
+
+    <LinearLayout
+        android:id="@+id/llButtonHome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/margin_all"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/llMyFile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/size_image_home"
+                android:layout_height="@dimen/size_image_home"
+                android:src="@drawable/ic_all_files" />
+
+            <TextView
+                android:id="@+id/vlHomeMyFile"
+                style="@style/Text_Button_Home"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:gravity="center"
+                android:text="@string/vl_home_my_file" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llPdf"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/size_image_home"
+                android:layout_height="@dimen/size_image_home"
+                android:src="@drawable/ic_pdf_file" />
+
+            <TextView
+                android:id="@+id/vlHomePdf"
+                style="@style/Text_Button_Home"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:gravity="center"
+                android:text="@string/vl_home_pdf" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llWord"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/size_image_home"
+                android:layout_height="@dimen/size_image_home"
+                android:src="@drawable/ic_doc_file" />
+
+            <TextView
+                android:id="@+id/vlHomeWord"
+                style="@style/Text_Button_Home"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:gravity="center"
+                android:text="@string/vl_home_word" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llExcel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/size_image_home"
+                android:layout_height="@dimen/size_image_home"
+                android:src="@drawable/ic_excel_file" />
+
+            <TextView
+                android:id="@+id/vlHomeExcel"
+                style="@style/Text_Button_Home"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:gravity="center"
+                android:text="@string/vl_home_excel" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llPowerPoint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/size_image_home"
+                android:layout_height="@dimen/size_image_home"
+                android:src="@drawable/ic_powpoint_file" />
+
+            <TextView
+                android:id="@+id/vlHomePowerPoint"
+                style="@style/Text_Button_Home"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:gravity="center"
+                android:text="@string/vl_home_power_point" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imvReloadRecent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_all"
+        android:padding="@dimen/margin_small"
+        android:src="@drawable/ic_reload"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llButtonHome" />
+
+    <ImageView
+        android:id="@+id/imvRecentMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_all"
+        android:padding="@dimen/margin_small"
+        android:src="@drawable/ic_three_dots"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/imvReloadRecent" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/vl_recent_file"
+        android:textColor="@color/text_color_search_home"
+        android:textSize="@dimen/text_size_sp16"
+        android:fontFamily="@font/googlesans_regular"
+        app:layout_constraintBottom_toBottomOf="@id/imvReloadRecent"
+        app:layout_constraintEnd_toStartOf="@id/imvRecentMore"
+        app:layout_constraintStart_toEndOf="@id/imvReloadRecent"
+        app:layout_constraintTop_toTopOf="@id/imvReloadRecent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvRecentFile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_all"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imvReloadRecent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

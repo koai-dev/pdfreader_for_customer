@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#29434E</color>
+    <color name="colorPrimaryDark">#29434E</color>
+    <color name="colorAccent">#29434E</color>
+
+    <color name="color_bg_toolbar">#FAFAFA</color>
+    <color name="color_bg">#E5E5E5</color>
+    <color name="color_bg_menu">#FCFCFC</color>
+    <color name="color_bg_search">#F5F5F5</color>
+    <color name="color_white">#FFFFFF</color>
+    <color name="color_black">#000000</color>
+
+    <color name="text_color_all">#1C313A</color>
+    <color name="text_color_search_home_hint">#86899B</color>
+    <color name="text_color_search_home">#1C313A</color>
+    <color name="text_rgb_102027">#102027</color>
+    <color name="text_rgb_29434E">#29434E</color>
+
+    <color name="rgb_62757F">#62757F</color>
+    <color name="rgb_F44336">#F44336</color>
+    <color name="rgb_6F6AF8">#6F6AF8</color>
+    <color name="rgb_2B85FF">#2B85FF</color>
+    <color name="rgb_ED6316">#ED6316</color>
+    <color name="rgb_433EA6">#433EA6</color>
+    <color name="rgb_167E30">#167E30</color>
+    <color name="rgb_0F4743">#0F4743</color>
+    <color name="rgb_808E95">#808E95</color>
+    <color name="rgb_167E60">#167E60</color>
+    <color name="rgb_164030">#164030</color>
+    <color name="rgb_4B636E">#4B636E</color>
+    <color name="rgb_34515E">#34515E</color>
+    <color name="color_bg_edittext">#1A7B97CE</color>
+</resources>

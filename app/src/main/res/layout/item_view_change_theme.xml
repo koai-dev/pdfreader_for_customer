@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llItemChangeTheme"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:paddingTop="@dimen/margin_all"
+    android:paddingBottom="@dimen/margin_all">
+
+    <ImageView
+        android:id="@+id/imvItemChangeTheme"
+        android:layout_width="@dimen/size_image_item_theme"
+        android:layout_height="@dimen/size_image_item_theme"
+        android:padding="@dimen/dp2"
+        android:src="@drawable/ic_theme_circle_unselected"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</LinearLayout>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_all_size"
+        android:title="@string/menu_size" />
+
+    <item
+        android:id="@+id/menu_all_name_a_z"
+        android:title="@string/menu_name_a_z" />
+
+    <item
+        android:id="@+id/menu_all_name_z_a"
+        android:title="@string/menu_name_z_a" />
+    <item
+        android:id="@+id/menu_all_date_modified"
+        android:title="@string/menu_date_modified" />
+    <item
+        android:id="@+id/menu_all_date_added"
+        android:title="@string/menu_date_added" />
+</menu>
