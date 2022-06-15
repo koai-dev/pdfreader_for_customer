@@ -46,6 +46,7 @@
 
     <string name="vl_hint_search_file">Search file</string>
     <string name="vl_recent_file">Recent file</string>
+    <string name="vl_favorite_file">Favorite file</string>
     <string name="vl_home_my_file">All File (%d)</string>
     <string name="vl_home_pdf">PDF (%d)</string>
     <string name="vl_home_word">Word (%d)</string>

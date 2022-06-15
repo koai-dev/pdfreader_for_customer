@@ -6,13 +6,14 @@
     android:layout_height="wrap_content"
     android:paddingStart="@dimen/margin_all"
     android:paddingTop="@dimen/margin_all"
-    android:paddingEnd="@dimen/margin_small">
+    android:paddingEnd="@dimen/margin_all">
 
     <ImageView
         android:id="@+id/imvItemFile"
         android:layout_width="@dimen/size_image_item"
         android:layout_height="@dimen/size_image_item"
         android:layout_marginTop="@dimen/margin_all"
+        android:padding="@dimen/margin_small"
         android:src="@drawable/ic_pdf_file"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,17 +44,5 @@
         android:maxLines="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vlItemName" />
-
-    <TextView
-        android:id="@+id/vlItemPage"
-        style="@style/Text_Item_Page"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:gravity="center|start"
-        android:lines="1"
-        android:maxLines="1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vlItemDate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

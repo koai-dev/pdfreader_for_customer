@@ -85,8 +85,8 @@ class RenameFileDialog(
     }
 
     private fun renameFile(strName: String): Boolean {
-        if (myFileModel.uri?.path?.isNotEmpty() == true) {
-            val mDocumentFile = DocumentFile.fromFile(File(myFileModel.uri.path!!))
+        if (myFileModel.uriPath?.isNotEmpty() == true) {
+            val mDocumentFile = DocumentFile.fromFile(File(myFileModel.uriPath))
             return mDocumentFile.renameTo(strName)
         }
         return false

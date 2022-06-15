@@ -34,6 +34,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
         MobileAds.setRequestConfiguration(configuration)
 
         loadInterstAds()
+//        gotoMainScreen()
     }
 
     private fun showInterstitial() {
@@ -47,6 +48,13 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
 
                 override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                     Logger.showLog("---fullScreenContentCallback--onAdFailedToShowFullScreenContent : " + adError.message)
+                    mInterstitialAd = null
+                    if (countRetry < 5) {
+                        countRetry++
+                        loadInterstAds()
+                    } else {
+                        gotoMainScreen()
+                    }
                 }
 
                 override fun onAdShowedFullScreenContent() {

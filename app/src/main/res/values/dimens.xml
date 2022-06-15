@@ -16,7 +16,7 @@
     <dimen name="size_image_home">32dp</dimen>
     <dimen name="dp2">2dp</dimen>
     <dimen name="corner_button">8dp</dimen>
-    <dimen name="size_image_item">54dp</dimen>
+    <dimen name="size_image_item">48dp</dimen>
     <dimen name="size_image_item_theme">42dp</dimen>
     <dimen name="size_image_splash">160dp</dimen>
     <dimen name="padding_bottom_list">100dp</dimen>

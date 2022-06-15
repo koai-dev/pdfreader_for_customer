@@ -8,8 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.aspose.slides.Presentation
-import com.aspose.slides.SaveFormat
 import com.aspose.words.Document
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener
 import com.github.barteksc.pdfviewer.util.FitPolicy
@@ -39,13 +37,13 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         myFileModel?.apply {
             binding.ttToolbarPdf.text = name
             if (extensionName?.lowercase() == "pdf") {
-                openFDPFile(uri)
+                openFDPFile(uriPath)
             } else if (extensionName?.lowercase() == "doc" || extensionName?.lowercase() == "docx") {
                 Handler(Looper.myLooper()!!).postDelayed({
                     if (!outputPDF.exists()) {
                         outputPDF.mkdirs()
                     }
-                    convertDocToPdf(uri!!)
+                    convertDocToPdf(uriPath)
                 }, 100)
             }
 
@@ -54,14 +52,21 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         }
     }
 
-    private fun convertDocToPdf(document: Uri) {
+    private fun convertDocToPdf(uriPath: String?) {
         try {
-            activity?.contentResolver!!.openInputStream(document).use { inputStream ->
-                val doc = Document(inputStream)
-                // save DOCX as PDF
-                doc.save(outputPDF.path)
-                viewPDFFile()
-            }
+//            activity?.contentResolver!!.openInputStream(document).use { inputStream ->
+//                val doc = Document(inputStream)
+//                // save DOCX as PDF
+//                doc.save(outputPDF.path)
+//                viewPDFFile()
+//            }
+
+//            val fileData = File(document.path!!)
+            val os = FileOutputStream(outputPDF)
+            val doc = Document(uriPath)
+            doc.save(os, com.aspose.words.SaveFormat.PDF)
+            os.close()
+
 //            val press = Presentation(document.path)
 ////            val fileOS = FileOutputStream(outputPDF)
 //            press.save(outputPDF.path, SaveFormat.Pdf)
@@ -98,10 +103,10 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         listenClickViews(binding.imvPdfBack, binding.imvPdfMore)
     }
 
-    private fun openFDPFile(uri: Uri?) {
+    private fun openFDPFile(uriPath: String?) {
 //        val scrollHandle = DefaultScrollHandle(context, false)
 //        scrollHandle.show()
-        binding.pdfViewer.fromUri(uri).defaultPage(0)
+        binding.pdfViewer.fromFile(File(uriPath)).defaultPage(0)
             .spacing(10)
             .enableSwipe(true)
             .enableDoubletap(true)

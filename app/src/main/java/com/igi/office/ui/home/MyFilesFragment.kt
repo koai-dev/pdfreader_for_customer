@@ -9,6 +9,7 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
@@ -26,8 +27,12 @@ import com.google.gson.Gson
 import com.igi.office.R
 import com.igi.office.common.*
 import com.igi.office.databinding.FragmentMyFilesBinding
+import com.igi.office.myinterface.OnDialogItemClickListener
+import com.igi.office.myinterface.OnPopupMenuItemClickListener
 import com.igi.office.ui.base.BaseFragment
 import com.igi.office.ui.home.adapter.MyFilesAdapter
+import com.igi.office.ui.home.dialog.DeleteFileDialog
+import com.igi.office.ui.home.dialog.RenameFileDialog
 import com.igi.office.ui.home.model.MyFilesModel
 import io.reactivex.disposables.Disposable
 
@@ -37,7 +42,7 @@ import io.reactivex.disposables.Disposable
 class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickListener {
     private lateinit var externalLauncher: ActivityResultLauncher<String>
     private lateinit var launcher: ActivityResultLauncher<String>
-    private lateinit var mRecentAdapter: MyFilesAdapter
+    private var mRecentAdapter: MyFilesAdapter? = null
 
     private lateinit var lstAllFile: ArrayList<MyFilesModel>
     private lateinit var lstFilePdf: ArrayList<MyFilesModel>
@@ -58,16 +63,17 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
         setupRecycleView()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             executeWithPerm {
+                binding.prbLoadingFile.visible()
                 Handler(Looper.myLooper()!!).postDelayed({
                     getAllFilePdf(false)
-                },500)
+                }, 500)
             }
         }
 
     }
 
     override fun initEvents() {
-        listenClickViews(binding.llMyFile, binding.llPdf, binding.llWord, binding.llExcel, binding.llPowerPoint)
+        listenClickViews(binding.llMyFile, binding.llPdf, binding.llWord, binding.llExcel, binding.llPowerPoint, binding.imvReloadRecent, binding.imvRecentMore)
     }
 
     override fun onClick(v: View?) {
@@ -88,6 +94,12 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
             R.id.llPowerPoint -> {
                 gotoMyFileDetail(lstFilePowerPoint, getString(R.string.tt_power_point_file))
             }
+            R.id.imvReloadRecent -> {
+                reloadRecentFile()
+            }
+            R.id.imvRecentMore -> {
+                showPopupRecentMore()
+            }
         }
     }
 
@@ -99,15 +111,17 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
     }
 
     private fun setupRecycleView() {
-        mRecentAdapter = MyFilesAdapter(context, ArrayList(), 0, object : MyFilesAdapter.OnItemClickListener {
+        val lstRecent = getBaseActivity()?.sharedPreferences?.getRecentFile()
+        mRecentAdapter = MyFilesAdapter(context, lstRecent ?: ArrayList(), 0, object : MyFilesAdapter.OnItemClickListener {
             override fun onClickItem(documentFile: MyFilesModel) {
                 Logger.showLog("Thuytv-----documentFile: " + documentFile.name)
                 val bundle = Bundle()
-                bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, documentFile.uri)
+                bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, documentFile)
                 getBaseActivity()?.onNextScreen(PdfViewActivity::class.java, bundle, false)
             }
 
             override fun onClickItemMore(view: View, documentFile: MyFilesModel) {
+                showPopupItemRecentMore(view, documentFile)
             }
         })
         binding.rcvRecentFile.apply {
@@ -203,10 +217,12 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
         if ((pdfArray?.size ?: 0) > 0) {
 //            mRecentAdapter.updateData(pdfArray as ArrayList<DocumentFile>)
             if (isReload) {
+                lstAllFile.removeAll(lstFilePdf.toSet())
                 lstFilePdf.clear()
             }
             for (item in pdfArray!!) {
-                val model = MyFilesModel(name = item.name, uri = item.uri, lastModified = item.lastModified(), extensionName = item.extension, length = item.length())
+                val model =
+                    MyFilesModel(name = item.name, uriPath = item.uri.path, lastModified = item.lastModified(), extensionName = item.extension, length = item.length())
                 lstFilePdf.add(model)
                 lstAllFile.add(model)
             }
@@ -225,10 +241,12 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
         Log.e("lstFileWord", pdfArray?.size.toString())
         if ((pdfArray?.size ?: 0) > 0) {
             if (isReload) {
+                lstAllFile.removeAll(lstFileWord.toSet())
                 lstFileWord.clear()
             }
             for (item in pdfArray!!) {
-                val model = MyFilesModel(name = item.name, uri = item.uri, lastModified = item.lastModified(), extensionName = item.extension, length = item.length())
+                val model =
+                    MyFilesModel(name = item.name, uriPath = item.uri.path, lastModified = item.lastModified(), extensionName = item.extension, length = item.length())
                 lstFileWord.add(model)
                 lstAllFile.add(model)
             }
@@ -247,10 +265,12 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
         Log.e("lstFileExcel", pdfArray?.size.toString())
         if ((pdfArray?.size ?: 0) > 0) {
             if (isReload) {
+                lstAllFile.removeAll(lstFileExcel.toSet())
                 lstFileExcel.clear()
             }
             for (item in pdfArray!!) {
-                val model = MyFilesModel(name = item.name, uri = item.uri, lastModified = item.lastModified(), extensionName = item.extension, length = item.length())
+                val model =
+                    MyFilesModel(name = item.name, uriPath = item.uri.path, lastModified = item.lastModified(), extensionName = item.extension, length = item.length())
                 lstFileExcel.add(model)
                 lstAllFile.add(model)
             }
@@ -269,10 +289,12 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
         Log.e("lstFilePowpoint", pdfArray?.size.toString())
         if ((pdfArray?.size ?: 0) > 0) {
             if (isReload) {
+                lstAllFile.removeAll(lstFilePowerPoint.toSet())
                 lstFilePowerPoint.clear()
             }
             for (item in pdfArray!!) {
-                val model = MyFilesModel(name = item.name, uri = item.uri, lastModified = item.lastModified(), extensionName = item.extension, length = item.length())
+                val model =
+                    MyFilesModel(name = item.name, uriPath = item.uri.path, lastModified = item.lastModified(), extensionName = item.extension, length = item.length())
                 lstFilePowerPoint.add(model)
                 lstAllFile.add(model)
             }
@@ -280,37 +302,143 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
         binding.vlHomePowerPoint.text = getString(R.string.vl_home_power_point, lstFilePowerPoint.size)
         binding.vlHomeMyFile.text = getString(R.string.vl_home_my_file, lstAllFile.size)
         Log.e("lstAllFile", lstAllFile.size.toString())
+        binding.prbLoadingFile.gone()
     }
 
     private fun onListenReloadFile() {
-        eventsBusDisposable = RxBus.listenDeBounce(EventsBus::class.java).subscribe {
+        eventsBusDisposable = RxBus.listen(EventsBus::class.java).subscribe {
             when {
                 EventsBus.RELOAD_ALL_FILE == it -> {
-                    lstAllFile.clear()
-                    lstFilePdf.clear()
-                    lstFileWord.clear()
-                    lstFileExcel.clear()
-                    lstFilePowerPoint.clear()
-                    getAllFilePdf(false)
+                    Handler(Looper.myLooper()!!).postDelayed({
+                        lstAllFile.clear()
+                        lstFilePdf.clear()
+                        lstFileWord.clear()
+                        lstFileExcel.clear()
+                        lstFilePowerPoint.clear()
+                        reloadRecentFile()
+                        getAllFilePdf(false)
+                    }, 500)
                 }
                 EventsBus.RELOAD_PDF_FILE == it -> {
-                    lstAllFile.removeAll(lstFilePdf.toSet())
                     getAllFilePdf(true)
                 }
                 EventsBus.RELOAD_WORD_FILE == it -> {
-                    lstAllFile.removeAll(lstFileWord.toSet())
                     getAllFileWord(true)
                 }
                 EventsBus.RELOAD_EXCEL_FILE == it -> {
-                    lstAllFile.removeAll(lstFileExcel.toSet())
                     getAllFileExcel(true)
                 }
                 EventsBus.RELOAD_POWER_POINT_FILE == it -> {
-                    lstAllFile.removeAll(lstFilePowerPoint.toSet())
                     getAllFilePowpoint(true)
                 }
+                EventsBus.RELOAD_RECENT == it -> {
+                    reloadRecentFile()
+                }
             }
-            RxBus.removeEvent()
+//            RxBus.removeEvent()
         }
     }
+
+    private fun reloadRecentFile() {
+        val lstRecent = getBaseActivity()?.sharedPreferences?.getRecentFile()
+        lstRecent?.apply {
+            getBaseActivity()?.runOnUiThread {
+                mRecentAdapter?.updateData(this)
+            }
+        }
+    }
+
+    private fun showPopupRecentMore() {
+        val lstRecent = getBaseActivity()?.sharedPreferences?.getRecentFile()
+        showPopupMenu(binding.imvRecentMore, R.menu.menu_more_all_file, object : OnPopupMenuItemClickListener {
+            override fun onClickItemPopupMenu(menuItem: MenuItem?) {
+                when (menuItem?.itemId) {
+                    R.id.menu_all_size -> {
+                        lstRecent?.apply {
+                            sortWith(Comparator { o1, o2 -> o1.length!!.compareTo(o2.length!!) })
+                            mRecentAdapter?.updateData(this)
+                        }
+
+                    }
+                    R.id.menu_all_name_a_z -> {
+                        lstRecent?.apply {
+                            sortWith(Comparator { o1, o2 -> o1.name!!.compareTo(o2.name!!) })
+                            mRecentAdapter?.updateData(this)
+                        }
+                    }
+                    R.id.menu_all_name_z_a -> {
+                        lstRecent?.apply {
+                            sortWith(Comparator { o1, o2 -> o2.name!!.compareTo(o1.name!!) })
+                            mRecentAdapter?.updateData(this)
+                        }
+                    }
+                    R.id.menu_all_date_modified -> {
+                        lstRecent?.apply {
+                            sortWith(Comparator { o1, o2 -> o1.lastModified!!.compareTo(o2.lastModified!!) })
+                            mRecentAdapter?.updateData(this)
+                        }
+                    }
+                    R.id.menu_all_date_added -> {
+
+                    }
+                }
+            }
+
+        })
+    }
+
+    private fun showPopupItemRecentMore(view: View, myFileModel: MyFilesModel) {
+        showPopupMenu(view, R.menu.menu_more_file, object : OnPopupMenuItemClickListener {
+            override fun onClickItemPopupMenu(menuItem: MenuItem?) {
+                when (menuItem?.itemId) {
+                    R.id.menu_rename -> {
+                        getBaseActivity()?.apply {
+                            RenameFileDialog(this, myFileModel, object : OnDialogItemClickListener {
+                                override fun onClickItemConfirm(mData: MyFilesModel) {
+                                    mRecentAdapter?.renameData(mData)
+                                    if (mData.extensionName?.lowercase() == "pdf") {
+                                        getAllFilePdf(true)
+                                    } else if (mData.extensionName?.lowercase() == "docx" || mData.extensionName?.lowercase() == "doc") {
+                                        getAllFileWord(true)
+                                    } else if (mData.extensionName?.lowercase() == "xlsx" || mData.extensionName?.lowercase() == "xls") {
+                                        getAllFileExcel(true)
+                                    } else if (mData.extensionName?.lowercase() == "pptx" || mData.extensionName?.lowercase() == "ppt") {
+                                        getAllFilePowpoint(true)
+                                    }
+                                }
+
+                            }).show()
+                        }
+                    }
+                    R.id.menu_favorite -> {
+                        getBaseActivity()?.sharedPreferences?.setFavoriteFile(myFileModel)
+                        RxBus.publish(EventsBus.RELOAD_FAVORITE)
+                    }
+                    R.id.menu_share -> {
+
+                    }
+                    R.id.menu_delete -> {
+                        getBaseActivity()?.apply {
+                            val deleteFileDialog = DeleteFileDialog(this, myFileModel, object : OnDialogItemClickListener {
+                                override fun onClickItemConfirm(mData: MyFilesModel) {
+                                    mRecentAdapter?.deleteData(mData)
+                                    getBaseActivity()?.sharedPreferences?.removeFavoriteFile(myFileModel)
+                                    getBaseActivity()?.sharedPreferences?.removeRecentFile(myFileModel)
+                                    RxBus.publish(EventsBus.RELOAD_ALL_FILE)
+                                }
+
+                            })
+                            deleteFileDialog.show()
+                        }
+                    }
+                }
+            }
+
+        })
+    }
+
+    fun onSearchFile(strName: String) {
+        mRecentAdapter?.filter?.filter(strName)
+    }
+
 }

@@ -13,7 +13,9 @@ dependencyResolutionManagement {
         gradlePluginPortal()
         maven { url 'https://jitpack.io' }
         maven { url "https://repository.aspose.com/repo/" }
+        flatDir { dir "libs" }
     }
 }
 rootProject.name = "PdfReader"
 include ':app'
+include ':app:mylibrary'

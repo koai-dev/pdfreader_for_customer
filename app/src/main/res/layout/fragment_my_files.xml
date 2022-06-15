@@ -148,7 +148,7 @@
         android:id="@+id/imvRecentMore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_all"
+        android:layout_marginEnd="@dimen/margin_double_all"
         android:padding="@dimen/margin_small"
         android:src="@drawable/ic_three_dots"
         app:layout_constraintEnd_toEndOf="parent"
@@ -157,10 +157,10 @@
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/googlesans_regular"
         android:text="@string/vl_recent_file"
         android:textColor="@color/text_color_search_home"
         android:textSize="@dimen/text_size_sp16"
-        android:fontFamily="@font/googlesans_regular"
         app:layout_constraintBottom_toBottomOf="@id/imvReloadRecent"
         app:layout_constraintEnd_toStartOf="@id/imvRecentMore"
         app:layout_constraintStart_toEndOf="@id/imvReloadRecent"
@@ -169,9 +169,20 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvRecentFile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_margin="@dimen/margin_all"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imvReloadRecent" />
+
+    <ProgressBar
+        android:id="@+id/prbLoadingFile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -50,16 +50,6 @@
     <!--        ads:adUnitId="@string/banner_ad_unit_id"-->
     <!--        ads:layout_constraintBottom_toBottomOf="parent"-->
     <!--        ads:layout_constraintStart_toStartOf="parent"/>-->
-    <ImageView
-        android:id="@+id/imvSplash"
-        android:layout_width="@dimen/size_image_splash"
-        android:layout_height="@dimen/size_image_splash"
-        android:src="@mipmap/logo_app_splash"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/vlAppName"
         android:layout_width="wrap_content"
@@ -69,9 +59,20 @@
         android:text="PDF Reader"
         android:textColor="@color/rgb_F44336"
         android:textSize="@dimen/text_size_sp24"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imvSplash" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imvSplash"
+        android:layout_width="@dimen/size_image_splash"
+        android:layout_height="@dimen/size_image_splash"
+        android:padding="@dimen/margin_double_all"
+        android:src="@mipmap/logo_app_splash"
+        app:layout_constraintBottom_toTopOf="@id/vlAppName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"

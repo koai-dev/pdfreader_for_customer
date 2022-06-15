@@ -46,6 +46,7 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
             if (item.idLanguage == mLanguage) {
                 lstLanguage[0].isSelected = false
                 item.isSelected = true
+                mLanguageModelSelected = item
                 break
             }
         }

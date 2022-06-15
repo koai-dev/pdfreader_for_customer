@@ -50,8 +50,8 @@ class DeleteFileDialog(
     }
 
     private fun deleteFile(): Boolean {
-        if (myFileModel.uri?.path?.isNotEmpty() == true) {
-            val mDocumentFile = DocumentFile.fromFile(File(myFileModel.uri.path!!))
+        if (myFileModel.uriPath?.isNotEmpty() == true) {
+            val mDocumentFile = DocumentFile.fromFile(File(myFileModel.uriPath))
             return mDocumentFile.delete()
         }
         return false

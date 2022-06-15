@@ -1,27 +1,18 @@
 package com.igi.office.ui.home
 
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
-import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
-import android.widget.Toast
-import androidx.documentfile.provider.DocumentFile
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.aspose.slides.Presentation
-import com.aspose.slides.SaveFormat
-import com.aspose.words.Document
-import com.github.barteksc.pdfviewer.listener.OnPageChangeListener
 import com.igi.office.R
 import com.igi.office.common.*
 import com.igi.office.databinding.FragmentMyFileDetailBinding
-import com.igi.office.databinding.FragmentPdfViewerBinding
 import com.igi.office.myinterface.OnDialogItemClickListener
 import com.igi.office.myinterface.OnPopupMenuItemClickListener
 import com.igi.office.ui.base.BaseFragment
@@ -29,7 +20,6 @@ import com.igi.office.ui.home.adapter.MyFilesAdapter
 import com.igi.office.ui.home.dialog.DeleteFileDialog
 import com.igi.office.ui.home.dialog.RenameFileDialog
 import com.igi.office.ui.home.model.MyFilesModel
-import java.io.*
 
 
 /**
@@ -39,6 +29,7 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
     private var lstDataFile: ArrayList<MyFilesModel>? = null
     private var myFilesAdapter: MyFilesAdapter? = null
     private var isViewType = false
+    private var isReleadRecent = false
     private lateinit var sharePreferenceUtils: SharePreferenceUtils
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMyFileDetailBinding
@@ -54,7 +45,31 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
     }
 
     override fun initEvents() {
-        listenClickViews(binding.imvAllBack, binding.imvTypeAdapter, binding.imvToolbarSearch, binding.imvToolbarMore)
+        listenClickViews(binding.imvAllBack, binding.imvTypeAdapter, binding.imvToolbarSearch, binding.imvToolbarMore, binding.imvCloseSearch)
+
+        binding.edtSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                myFilesAdapter?.filter?.filter(p0?.toString())
+            }
+
+        })
+//        binding.edtSearch.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                return false
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                myFilesAdapter?.filter?.filter(newText)
+//                return false
+//            }
+//
+//        })
     }
 
     override fun onClick(v: View?) {
@@ -68,7 +83,14 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                 getBaseActivity()?.finish()
             }
             R.id.imvToolbarSearch -> {
-                MultiClickPreventer.preventMultiClick(v)
+                binding.llToolbarSearch.visible()
+                binding.llToolbarAll.gone()
+            }
+            R.id.imvCloseSearch -> {
+                binding.llToolbarSearch.gone()
+                binding.llToolbarAll.visible()
+                binding.edtSearch.setText("")
+                getBaseActivity()?.hideKeyboard()
             }
             R.id.imvToolbarMore -> {
                 MultiClickPreventer.preventMultiClick(v)
@@ -137,6 +159,8 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
             myFilesAdapter = MyFilesAdapter(context, lstDataFile!!, MyFilesAdapter.TYPE_VIEW_FILE, object : MyFilesAdapter.OnItemClickListener {
                 override fun onClickItem(documentFile: MyFilesModel) {
                     Logger.showLog("Thuytv-----documentFile: " + documentFile.name)
+                    sharePreferenceUtils.setRecentFile(documentFile)
+                    isReleadRecent = true
                     val bundle = Bundle()
                     bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, documentFile)
                     getBaseActivity()?.onNextScreen(PdfViewActivity::class.java, bundle, false)
@@ -147,7 +171,6 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                         override fun onClickItemPopupMenu(menuItem: MenuItem?) {
                             when (menuItem?.itemId) {
                                 R.id.menu_rename -> {
-
                                     getBaseActivity()?.apply {
                                         RenameFileDialog(this, myFileModel, object : OnDialogItemClickListener {
                                             override fun onClickItemConfirm(mData: MyFilesModel) {
@@ -167,7 +190,8 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                                     }
                                 }
                                 R.id.menu_favorite -> {
-                                    Logger.showToast(context!!, "menu_favorite")
+                                    sharePreferenceUtils.setFavoriteFile(myFileModel)
+                                    RxBus.publish(EventsBus.RELOAD_FAVORITE)
                                 }
                                 R.id.menu_share -> {
 
@@ -177,18 +201,14 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                                         val deleteFileDialog = DeleteFileDialog(this, myFileModel, object : OnDialogItemClickListener {
                                             override fun onClickItemConfirm(mData: MyFilesModel) {
                                                 myFilesAdapter?.deleteData(mData)
+                                                sharedPreferences.removeFavoriteFile(myFileModel)
+                                                sharedPreferences.removeRecentFile(myFileModel)
                                                 RxBus.publish(EventsBus.RELOAD_ALL_FILE)
                                             }
 
                                         })
                                         deleteFileDialog.show()
                                     }
-
-//                                    mData.uri?.path?.apply {
-//                                        val mDocumentFile = DocumentFile.fromFile(File(this))
-//                                        val isDelete = mDocumentFile.delete()
-//                                        Logger.showToast(context!!, "isDelete :$isDelete")
-//                                    }
                                 }
                             }
                         }
@@ -215,5 +235,11 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
         }
     }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        Logger.showLog("Thuytv-----onDestroy: $isReleadRecent")
+        if (isReleadRecent) {
+            RxBus.publish(EventsBus.RELOAD_RECENT)
+        }
+    }
 }

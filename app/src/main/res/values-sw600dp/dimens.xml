@@ -45,7 +45,7 @@
     13.33dp
   </dimen>
   <dimen name="size_image_item">
-    90.0dp
+    80.0dp
   </dimen>
   <dimen name="size_image_item_theme">
     70.0dp

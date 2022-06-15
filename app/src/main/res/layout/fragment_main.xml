@@ -19,25 +19,32 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
+            android:id="@+id/edtSearchAll"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/margin_all"
             android:layout_weight="1"
-            android:background="@drawable/bg_border_search_home"
-            android:drawableStart="@drawable/ic_search_home"
-            android:drawablePadding="@dimen/margin_all"
-            android:hint="@string/vl_hint_search_file"
-            android:padding="@dimen/margin_small"
-            android:textColor="@color/text_color_search_home"
-            android:textColorHint="@color/text_color_search_home_hint"
-            android:textSize="@dimen/text_size_sp12" />
+            style="@style/Text_Edittext_Search" />
 
         <ImageView
+            android:id="@+id/imvPurchase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_double_all"
             android:src="@drawable/ic_crown" />
+        <TextView
+            android:id="@+id/ttSettingHome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/Text_Title_Dialog"
+            android:visibility="gone"
+            android:text="@string/title_setting"/>
     </LinearLayout>
-
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/color_bg_search"
+    app:layout_constraintTop_toBottomOf="@id/llToolbarHome"/>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation_bottom"
         android:layout_width="0dp"

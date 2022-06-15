@@ -3,6 +3,8 @@ package com.igi.office.ui.home.adapter
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageView
 import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.RecyclerView
@@ -23,29 +25,36 @@ class MyFilesAdapter(
     private var lstData: ArrayList<MyFilesModel>,
     private var typeAdapter: Int,
     private val onItemClickListener: OnItemClickListener
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
+    var mFileFilterList = ArrayList<MyFilesModel>()
+
     companion object {
         const val TYPE_VIEW_FILE = 0
         const val TYPE_VIEW_FILE_GRID = 2
         const val TYPE_VIEW_ADS = 1
     }
 
+    init {
+        mFileFilterList = lstData
+    }
+
     fun updateData(mlstData: ArrayList<MyFilesModel>) {
         lstData = mlstData
+        mFileFilterList = lstData
         notifyDataSetChanged()
     }
 
     fun renameData(mData: MyFilesModel) {
-        val indexItem = lstData.indexOf(mData)
+        val indexItem = mFileFilterList.indexOf(mData)
         if (indexItem > -1) {
-            lstData[indexItem] = mData
+            mFileFilterList[indexItem] = mData
             notifyItemChanged(indexItem)
         }
     }
 
     fun deleteData(mData: MyFilesModel) {
-        val indexItem = lstData.indexOf(mData)
-        lstData.remove(mData)
+        val indexItem = mFileFilterList.indexOf(mData)
+        mFileFilterList.remove(mData)
         notifyItemRemoved(indexItem)
     }
 
@@ -74,14 +83,14 @@ class MyFilesAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is MyFilesItemView -> holder.bind(lstData[position])
-            is GridItemView -> holder.bind(lstData[position])
-            is AdsItemView -> holder.bind(lstData[position])
+            is MyFilesItemView -> holder.bind(mFileFilterList[position])
+            is GridItemView -> holder.bind(mFileFilterList[position])
+            is AdsItemView -> holder.bind(mFileFilterList[position])
         }
     }
 
     override fun getItemCount(): Int {
-        return lstData.size
+        return mFileFilterList.size
     }
 
     inner class MyFilesItemView(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -89,7 +98,6 @@ class MyFilesAdapter(
             val binding = ItemViewMyFilesBinding.bind(itemView)
             binding.vlItemName.text = mData.name
             binding.vlItemDate.text = Common.covertTimeLongToString(mData.lastModified)
-            binding.vlItemPage.text = mData.length?.toString()
             setIconFile(binding.imvItemFile, mData.extensionName ?: "")
 
             binding.llItemMyFile.setOnClickListener {
@@ -108,7 +116,6 @@ class MyFilesAdapter(
             val binding = ItemViewFilesGridBinding.bind(itemView)
             binding.vlItemName.text = mData.name
             binding.vlItemDate.text = Common.covertTimeLongToStringGrid(mData.lastModified)
-            binding.vlItemPage.text = mData.length?.toString()
             setIconFile(binding.imvItemFile, mData.extensionName ?: "")
             binding.llItemMyFile.setOnClickListener {
                 onItemClickListener.onClickItem(mData)
@@ -139,4 +146,33 @@ class MyFilesAdapter(
             val binding = ItemViewAdsBinding.bind(itemView)
         }
     }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val charSearch = constraint.toString()
+                if (charSearch.isEmpty()) {
+                    mFileFilterList = lstData
+                } else {
+                    val resultList = ArrayList<MyFilesModel>()
+                    for (row in lstData) {
+                        if (row.name?.lowercase()?.contains(charSearch.lowercase()) == true) {
+                            resultList.add(row)
+                        }
+                    }
+                    mFileFilterList = resultList
+                }
+                val filterResults = FilterResults()
+                filterResults.values = mFileFilterList
+                return filterResults
+            }
+
+            @Suppress("UNCHECKED_CAST")
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                mFileFilterList = results?.values as ArrayList<MyFilesModel>
+                notifyDataSetChanged()
+            }
+        }
+    }
+
 }
