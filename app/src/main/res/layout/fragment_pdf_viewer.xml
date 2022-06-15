@@ -44,15 +44,93 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/llJumpToPage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_toolbar_all"
+        android:background="@color/color_bg_toolbar"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/margin_all"
+        android:paddingEnd="@dimen/margin_all"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!--        <androidx.appcompat.widget.AppCompatSeekBar-->
+        <!--            android:id="@+id/seekbarJumpToPage"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:progressDrawable="@drawable/seekbar_style"-->
+        <!--            android:thumb="@drawable/custom_thumb"-->
+        <!--            android:progress="10"-->
+        <!--            android:layout_weight="1" />-->
+        <com.google.android.material.slider.Slider
+            android:id="@+id/seekbarJumpToPage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:stepSize="1.0"
+            android:valueFrom="0.0"
+            android:valueTo="100.0"
+            app:thumbColor="@color/color_white"
+            app:tickColor="@android:color/transparent"
+            app:trackColorActive="@color/rgb_F44336"
+            app:trackColorInactive="@color/color_FFEBEE"
+            app:trackHeight="@dimen/margin_small" />
+
+        <TextView
+            android:id="@+id/vlJumpPage"
+            style="@style/Text_Page_View"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_border_edittext_page"
+            android:gravity="center"
+            android:minWidth="@dimen/size_edit_box"
+            android:padding="@dimen/margin_small" />
+
+        <TextView
+            android:id="@+id/vlTotalPage"
+            style="@style/Text_Page_View"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp2"
+            android:layout_marginEnd="@dimen/margin_all" />
+    </LinearLayout>
+
     <com.github.barteksc.pdfviewer.PDFView
         android:id="@+id/pdfViewer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/llJumpToPage"
         app:layout_constraintTop_toBottomOf="@id/llToolbarPdf" />
     <!--    <com.itsrts.pptviewer.PPTViewer-->
     <!--        android:id="@+id/pptViewer"-->
     <!--        android:layout_width="match_parent"-->
     <!--        android:layout_height="match_parent"/>-->
+
+    <View
+        android:id="@+id/viewBgPage"
+        android:layout_width="@dimen/width_page"
+        android:layout_height="@dimen/height_page"
+        android:layout_marginTop="@dimen/margin_double_all"
+        android:background="@drawable/bg_page_view"
+        app:layout_constraintStart_toStartOf="@id/pdfViewer"
+        app:layout_constraintTop_toTopOf="@id/pdfViewer" />
+
+    <TextView
+        android:id="@+id/vlPageAndTotalPage"
+        style="@style/Text_Page_View"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/viewBgPage"
+        app:layout_constraintEnd_toEndOf="@id/viewBgPage"
+        app:layout_constraintStart_toStartOf="@id/viewBgPage"
+        app:layout_constraintTop_toTopOf="@id/viewBgPage" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupPageViewer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="viewBgPage, vlPageAndTotalPage,llJumpToPage" />
 </androidx.constraintlayout.widget.ConstraintLayout>

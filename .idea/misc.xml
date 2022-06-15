@@ -6,8 +6,11 @@
         <entry key="../../../../../layout/custom_preview.xml" value="0.10281774580335731" />
         <entry key="app/src/main/res/drawable/bg_border_button_all.xml" value="0.1695" />
         <entry key="app/src/main/res/drawable/bg_border_edittext_all.xml" value="0.1715" />
+        <entry key="app/src/main/res/drawable/bg_border_edittext_page.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/bg_border_search_home.xml" value="0.1715" />
         <entry key="app/src/main/res/drawable/bg_button_all.xml" value="0.1695" />
+        <entry key="app/src/main/res/drawable/border_shadow.xml" value="0.1805" />
+        <entry key="app/src/main/res/drawable/custom_thumb.xml" value="0.1805" />
         <entry key="app/src/main/res/drawable/horizontal_progress_bar.xml" value="0.182" />
         <entry key="app/src/main/res/drawable/ic_all_files.xml" value="0.1715" />
         <entry key="app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.1715" />
@@ -21,6 +24,8 @@
         <entry key="app/src/main/res/drawable/icon_menu_home_my_file.xml" value="0.1715" />
         <entry key="app/src/main/res/drawable/icon_menu_home_setting.xml" value="0.1715" />
         <entry key="app/src/main/res/drawable/imv_theme_01.xml" value="0.1715" />
+        <entry key="app/src/main/res/drawable/seekbar_progress.xml" value="0.1805" />
+        <entry key="app/src/main/res/drawable/seekbar_style.xml" value="0.1805" />
         <entry key="app/src/main/res/layout/activity_base.xml" value="0.23229166666666667" />
         <entry key="app/src/main/res/layout/activity_change_theme.xml" value="0.22864583333333333" />
         <entry key="app/src/main/res/layout/activity_language.xml" value="0.25" />
@@ -38,7 +43,7 @@
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_my_file_detail.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_my_files.xml" value="0.19583333333333333" />
-        <entry key="app/src/main/res/layout/fragment_pdf_viewer.xml" value="0.23333333333333334" />
+        <entry key="app/src/main/res/layout/fragment_pdf_viewer.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_recent.xml" value="0.19583333333333333" />
         <entry key="app/src/main/res/layout/fragment_setting.xml" value="0.2015625" />
         <entry key="app/src/main/res/layout/fragment_slideshow.xml" value="0.19583333333333333" />

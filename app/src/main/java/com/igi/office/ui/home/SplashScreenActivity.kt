@@ -33,8 +33,8 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
         val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
         MobileAds.setRequestConfiguration(configuration)
 
-        loadInterstAds()
-//        gotoMainScreen()
+//        loadInterstAds()
+        gotoMainScreen()
     }
 
     private fun showInterstitial() {

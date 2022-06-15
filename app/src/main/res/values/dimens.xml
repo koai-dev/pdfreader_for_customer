@@ -20,6 +20,10 @@
     <dimen name="size_image_item_theme">42dp</dimen>
     <dimen name="size_image_splash">160dp</dimen>
     <dimen name="padding_bottom_list">100dp</dimen>
+    <dimen name="size_edit_box">35dp</dimen>
+    <dimen name="width_page">80dp</dimen>
+    <dimen name="height_page">24dp</dimen>
+    <dimen name="height_thump_seekbar">15dp</dimen>
 
     <dimen name="text_size_title">18sp</dimen>
     <dimen name="text_size_content">13sp</dimen>

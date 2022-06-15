@@ -83,4 +83,7 @@
     <string name="vl_netherlands">Netherlands</string>
     <string name="vl_japan">Japan</string>
 
+    <string name="vl_total_page">%1d/%2d</string>
+    <string name="vl_page">[%1d]</string>
+
 </resources>

@@ -56,6 +56,18 @@
   <dimen name="padding_bottom_list">
     166.67dp
   </dimen>
+  <dimen name="size_edit_box">
+    58.33dp
+  </dimen>
+  <dimen name="width_page">
+    133.33dp
+  </dimen>
+  <dimen name="height_page">
+    40.0dp
+  </dimen>
+  <dimen name="height_thump_seekbar">
+    25.0dp
+  </dimen>
   <dimen name="text_size_title">
     30.0sp
   </dimen>
