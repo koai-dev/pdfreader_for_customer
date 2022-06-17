@@ -105,6 +105,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                     myFilesFragment.onSearchFile(strData?.toString() ?: "")
                 } else if (R.id.navigation_favorite == idViewSelected) {
                     favoriteFragment.onSearchFileFavorite(strData?.toString() ?: "")
+                } else if (R.id.navigation_browse == idViewSelected) {
+                    browseFragment.onSearchFolder(strData?.toString() ?: "")
                 }
             }
 

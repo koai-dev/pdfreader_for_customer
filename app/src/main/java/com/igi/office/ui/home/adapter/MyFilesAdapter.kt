@@ -15,6 +15,7 @@ import com.igi.office.common.inflate
 import com.igi.office.databinding.ItemViewAdsBinding
 import com.igi.office.databinding.ItemViewFilesGridBinding
 import com.igi.office.databinding.ItemViewMyFilesBinding
+import com.igi.office.databinding.ItemViewMyFolderBinding
 import com.igi.office.ui.home.model.MyFilesModel
 
 /**
@@ -30,8 +31,9 @@ class MyFilesAdapter(
 
     companion object {
         const val TYPE_VIEW_FILE = 0
-        const val TYPE_VIEW_FILE_GRID = 2
         const val TYPE_VIEW_ADS = 1
+        const val TYPE_VIEW_FILE_GRID = 2
+        const val TYPE_VIEW_FOLDER = 3
     }
 
     init {
@@ -65,6 +67,7 @@ class MyFilesAdapter(
 
     override fun getItemViewType(position: Int): Int {
 //        if (position > 0 && position % 4 == 0) return TYPE_VIEW_ADS
+        if ((mFileFilterList[position].lstChildFile?.size ?: 0) > 0) return TYPE_VIEW_FOLDER
         return typeAdapter
     }
 
@@ -77,6 +80,7 @@ class MyFilesAdapter(
         return when (viewType) {
             TYPE_VIEW_ADS -> AdsItemView(parent.inflate(R.layout.item_view_ads))
             TYPE_VIEW_FILE_GRID -> GridItemView(parent.inflate(R.layout.item_view_files_grid))
+            TYPE_VIEW_FOLDER -> MyFolderItemView(parent.inflate(R.layout.item_view_my_folder))
             else -> MyFilesItemView(parent.inflate(R.layout.item_view_my_files))
         }
     }
@@ -86,6 +90,7 @@ class MyFilesAdapter(
             is MyFilesItemView -> holder.bind(mFileFilterList[position])
             is GridItemView -> holder.bind(mFileFilterList[position])
             is AdsItemView -> holder.bind(mFileFilterList[position])
+            is MyFolderItemView -> holder.bind(mFileFilterList[position])
         }
     }
 
@@ -108,6 +113,10 @@ class MyFilesAdapter(
                 MultiClickPreventer.preventMultiClick(it)
                 onItemClickListener.onClickItemMore(binding.imvItemMore, mData)
             }
+            binding.llItemMyFile.setOnLongClickListener {
+                onItemClickListener.onClickItemMore(binding.imvItemMore, mData)
+                true
+            }
         }
     }
 
@@ -120,8 +129,25 @@ class MyFilesAdapter(
             binding.llItemMyFile.setOnClickListener {
                 onItemClickListener.onClickItem(mData)
             }
+            binding.llItemMyFile.setOnLongClickListener {
+                onItemClickListener.onClickItemMore(binding.llItemMyFile, mData)
+                true
+            }
         }
 
+    }
+
+    inner class MyFolderItemView(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(mData: MyFilesModel) {
+            val binding = ItemViewMyFolderBinding.bind(itemView)
+            binding.vlItemFolderName.text = mData.folderName
+            binding.vlItemSizeFolder.text = mContext?.getString(R.string.vl_size_folder, mData.lstChildFile?.size ?: 0)
+
+            binding.llItemMyFile.setOnClickListener {
+                MultiClickPreventer.preventMultiClick(it)
+                onItemClickListener.onClickItem(mData)
+            }
+        }
     }
 
     private fun setIconFile(imageView: ImageView, strExtension: String) {
@@ -156,7 +182,7 @@ class MyFilesAdapter(
                 } else {
                     val resultList = ArrayList<MyFilesModel>()
                     for (row in lstData) {
-                        if (row.name?.lowercase()?.contains(charSearch.lowercase()) == true) {
+                        if (row.name?.lowercase()?.contains(charSearch.lowercase()) == true || row.folderName?.lowercase()?.contains(charSearch.lowercase()) == true) {
                             resultList.add(row)
                         }
                     }

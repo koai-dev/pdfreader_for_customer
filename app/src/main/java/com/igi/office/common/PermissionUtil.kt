@@ -14,7 +14,6 @@ object PermissionUtil {
     fun checkExternalStoragePermission(context: Context): Boolean {
         var permissionGranted: Boolean = false
         return (sdk29andMore {
-
             Environment.isExternalStorageManager()
         } ?: {
             ContextCompat.checkSelfPermission(
@@ -26,7 +25,7 @@ object PermissionUtil {
     }
 
     fun <T> sdk29andMore(code: ()-> T):T?{
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) code()
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) code()
         else return null
     }
 

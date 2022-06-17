@@ -20,6 +20,7 @@ import com.igi.office.ui.home.dialog.DeleteFileDialog
 import com.igi.office.ui.home.dialog.RenameFileDialog
 import com.igi.office.ui.home.model.MyFilesModel
 import io.reactivex.disposables.Disposable
+import java.io.File
 
 /**
  * Created by Thuytv on 09/06/2022.
@@ -27,11 +28,13 @@ import io.reactivex.disposables.Disposable
 class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>() {
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentFavoriteBinding = FragmentFavoriteBinding::inflate
     private var eventsBusDisposable: Disposable? = null
+    private var rxBusDisposable: Disposable? = null
     private var mFavoriteAdapter: MyFilesAdapter? = null
     private var isViewType = false
 
     override fun initData() {
         onListenReloadFile()
+        onListenUpdateFile()
         isViewType = getBaseActivity()?.sharedPreferences?.getValueBoolean(SharePreferenceUtils.KEY_TYPE_VIEW_FILE) ?: false
         val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile() ?: ArrayList()
         val typeAdapter = if (isViewType) {
@@ -105,15 +108,18 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>() {
                             RenameFileDialog(this, myFileModel, object : OnDialogItemClickListener {
                                 override fun onClickItemConfirm(mData: MyFilesModel) {
                                     mFavoriteAdapter?.renameData(mData)
-                                    if (mData.extensionName?.lowercase() == "pdf") {
-                                        RxBus.publish(EventsBus.RELOAD_PDF_FILE)
-                                    } else if (mData.extensionName?.lowercase() == "docx" || mData.extensionName?.lowercase() == "doc") {
-                                        RxBus.publish(EventsBus.RELOAD_WORD_FILE)
-                                    } else if (mData.extensionName?.lowercase() == "xlsx" || mData.extensionName?.lowercase() == "xls") {
-                                        RxBus.publish(EventsBus.RELOAD_EXCEL_FILE)
-                                    } else if (mData.extensionName?.lowercase() == "pptx" || mData.extensionName?.lowercase() == "ppt") {
-                                        RxBus.publish(EventsBus.RELOAD_POWER_POINT_FILE)
-                                    }
+//                                    sharedPreferences.updateRecentFile(mData)
+//                                    sharedPreferences.updateFavoriteFile(mData)
+//
+//                                    if (mData.extensionName?.lowercase() == "pdf") {
+//                                        RxBus.publish(EventsBus.RELOAD_PDF_FILE)
+//                                    } else if (mData.extensionName?.lowercase() == "docx" || mData.extensionName?.lowercase() == "doc") {
+//                                        RxBus.publish(EventsBus.RELOAD_WORD_FILE)
+//                                    } else if (mData.extensionName?.lowercase() == "xlsx" || mData.extensionName?.lowercase() == "xls") {
+//                                        RxBus.publish(EventsBus.RELOAD_EXCEL_FILE)
+//                                    } else if (mData.extensionName?.lowercase() == "pptx" || mData.extensionName?.lowercase() == "ppt") {
+//                                        RxBus.publish(EventsBus.RELOAD_POWER_POINT_FILE)
+//                                    }
                                 }
 
                             }).show()
@@ -124,16 +130,16 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>() {
                         getBaseActivity()?.sharedPreferences?.removeFavoriteFile(myFileModel)
                     }
                     R.id.menu_share -> {
-
+                        myFileModel.uriPath?.let { File(it) }?.let { shareFile(it) }
                     }
                     R.id.menu_delete -> {
                         getBaseActivity()?.apply {
                             val deleteFileDialog = DeleteFileDialog(this, myFileModel, object : OnDialogItemClickListener {
                                 override fun onClickItemConfirm(mData: MyFilesModel) {
                                     mFavoriteAdapter?.deleteData(mData)
-                                    getBaseActivity()?.sharedPreferences?.removeFavoriteFile(myFileModel)
-                                    getBaseActivity()?.sharedPreferences?.removeRecentFile(myFileModel)
-                                    RxBus.publish(EventsBus.RELOAD_ALL_FILE)
+//                                    getBaseActivity()?.sharedPreferences?.removeFavoriteFile(myFileModel)
+//                                    getBaseActivity()?.sharedPreferences?.removeRecentFile(myFileModel)
+//                                    RxBus.publish(EventsBus.RELOAD_ALL_FILE)
                                 }
 
                             })
@@ -149,12 +155,37 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>() {
     override fun onDestroy() {
         super.onDestroy()
         if (eventsBusDisposable?.isDisposed == false) eventsBusDisposable?.dispose()
+        if (rxBusDisposable?.isDisposed == false) rxBusDisposable?.dispose()
     }
 
     private fun onListenReloadFile() {
         eventsBusDisposable = RxBus.listen(EventsBus::class.java).subscribe {
-            if (EventsBus.RELOAD_FAVORITE == it || EventsBus.RELOAD_ALL_FILE == it) {
+            if (EventsBus.RELOAD_FAVORITE == it) {
                 reloadFavoriteFile()
+            }
+        }
+    }
+
+    private fun onListenUpdateFile() {
+        rxBusDisposable = RxBus.listen(Any::class.java).subscribe {
+            if (it is MyFilesModel) {
+                if (it.isRename == true) {
+                    val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile()
+                    if (lstFavorite?.contains(it) == true) {
+                        getBaseActivity()?.sharedPreferences?.updateFavoriteFile(it)
+                        getBaseActivity()?.runOnUiThread {
+                            mFavoriteAdapter?.renameData(it)
+                        }
+                    }
+                } else if (it.isDelete == true) {
+                    val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile()
+                    if (lstFavorite?.contains(it) == true) {
+                        getBaseActivity()?.sharedPreferences?.removeFavoriteFile(it)
+                        getBaseActivity()?.runOnUiThread {
+                            mFavoriteAdapter?.deleteData(it)
+                        }
+                    }
+                }
             }
         }
     }

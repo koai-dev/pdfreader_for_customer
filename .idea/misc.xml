@@ -6,6 +6,7 @@
         <entry key="../../../../../layout/custom_preview.xml" value="0.10281774580335731" />
         <entry key="app/src/main/res/drawable/bg_border_button_all.xml" value="0.1695" />
         <entry key="app/src/main/res/drawable/bg_border_edittext_all.xml" value="0.1715" />
+        <entry key="app/src/main/res/drawable/bg_border_edittext_edit_page.xml" value="0.1815" />
         <entry key="app/src/main/res/drawable/bg_border_edittext_page.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/bg_border_search_home.xml" value="0.1715" />
         <entry key="app/src/main/res/drawable/bg_button_all.xml" value="0.1695" />
@@ -30,6 +31,7 @@
         <entry key="app/src/main/res/layout/activity_change_theme.xml" value="0.22864583333333333" />
         <entry key="app/src/main/res/layout/activity_language.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/activity_main_bk.xml" value="0.1234375" />
         <entry key="app/src/main/res/layout/activity_splass_screen.xml" value="0.16510416666666666" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.2526041666666667" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.25" />
@@ -52,14 +54,17 @@
         <entry key="app/src/main/res/layout/item_view_change_theme.xml" value="0.22864583333333333" />
         <entry key="app/src/main/res/layout/item_view_files_grid.xml" value="0.18229166666666666" />
         <entry key="app/src/main/res/layout/item_view_my_files.xml" value="0.20989583333333334" />
+        <entry key="app/src/main/res/layout/item_view_my_folder.xml" value="0.21458333333333332" />
         <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.146875" />
         <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.146875" />
         <entry key="app/src/main/res/menu/main.xml" value="0.146875" />
         <entry key="app/src/main/res/menu/menu_more_all_file.xml" value="0.14114583333333333" />
+        <entry key="app/src/main/res/menu/menu_more_detail_file.xml" value="0.15520833333333334" />
         <entry key="app/src/main/res/menu/menu_more_file.xml" value="0.14114583333333333" />
         <entry key="app/src/main/res/menu/menu_more_file_favorite.xml" value="0.14114583333333333" />
         <entry key="app/src/main/res/menu/navigation_bottom.xml" value="0.2015625" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1715" />
+        <entry key="app/src/main/res/xml/provider_paths.xml" value="0.15520833333333334" />
       </map>
     </option>
   </component>

@@ -20,6 +20,9 @@
   <dimen name="margin_double_all">
     40.0dp
   </dimen>
+  <dimen name="dp15">
+    30.0dp
+  </dimen>
   <dimen name="margin_small">
     10.0dp
   </dimen>
@@ -67,6 +70,9 @@
   </dimen>
   <dimen name="height_thump_seekbar">
     30.0dp
+  </dimen>
+  <dimen name="size_image_setting">
+    50.0dp
   </dimen>
   <dimen name="text_size_title">
     36.0sp

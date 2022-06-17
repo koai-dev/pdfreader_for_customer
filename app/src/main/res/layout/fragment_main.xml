@@ -38,6 +38,8 @@
             android:layout_height="match_parent"
             style="@style/Text_Title_Dialog"
             android:visibility="gone"
+            android:gravity="center|start"
+            android:layout_marginStart="@dimen/margin_all"
             android:text="@string/title_setting"/>
     </LinearLayout>
 <View

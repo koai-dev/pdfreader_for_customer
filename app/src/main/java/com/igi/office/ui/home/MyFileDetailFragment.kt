@@ -1,6 +1,8 @@
 package com.igi.office.ui.home
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -10,6 +12,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.igi.office.R
 import com.igi.office.common.*
 import com.igi.office.databinding.FragmentMyFileDetailBinding
@@ -20,6 +23,8 @@ import com.igi.office.ui.home.adapter.MyFilesAdapter
 import com.igi.office.ui.home.dialog.DeleteFileDialog
 import com.igi.office.ui.home.dialog.RenameFileDialog
 import com.igi.office.ui.home.model.MyFilesModel
+import io.reactivex.disposables.Disposable
+import java.io.File
 
 
 /**
@@ -29,8 +34,9 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
     private var lstDataFile: ArrayList<MyFilesModel>? = null
     private var myFilesAdapter: MyFilesAdapter? = null
     private var isViewType = false
-    private var isReleadRecent = false
+    private var isReloadRecent = false
     private lateinit var sharePreferenceUtils: SharePreferenceUtils
+    private var rxBusDisposable: Disposable? = null
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMyFileDetailBinding
         get() = FragmentMyFileDetailBinding::inflate
@@ -42,6 +48,7 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
         val titleData = arguments?.getString(AppKeys.KEY_BUNDLE_SCREEN)
         binding.ttToolbar.text = titleData
         setupRecycleView()
+        onListenDeleteFile()
     }
 
     override fun initEvents() {
@@ -123,7 +130,10 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                                 }
                             }
                             R.id.menu_all_date_added -> {
-
+                                lstDataFile?.apply {
+                                    sortWith(Comparator { o1, o2 -> o2.lastModified!!.compareTo(o1.lastModified!!) })
+                                    myFilesAdapter?.updateData(this)
+                                }
                             }
                         }
                     }
@@ -160,7 +170,7 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                 override fun onClickItem(documentFile: MyFilesModel) {
                     Logger.showLog("Thuytv-----documentFile: " + documentFile.name)
                     sharePreferenceUtils.setRecentFile(documentFile)
-                    isReleadRecent = true
+                    isReloadRecent = true
                     val bundle = Bundle()
                     bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, documentFile)
                     getBaseActivity()?.onNextScreen(PdfViewActivity::class.java, bundle, false)
@@ -174,16 +184,19 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                                     getBaseActivity()?.apply {
                                         RenameFileDialog(this, myFileModel, object : OnDialogItemClickListener {
                                             override fun onClickItemConfirm(mData: MyFilesModel) {
-                                                myFilesAdapter?.renameData(mData)
-                                                if (mData.extensionName?.lowercase() == "pdf") {
-                                                    RxBus.publish(EventsBus.RELOAD_PDF_FILE)
-                                                } else if (mData.extensionName?.lowercase() == "docx" || mData.extensionName?.lowercase() == "doc") {
-                                                    RxBus.publish(EventsBus.RELOAD_WORD_FILE)
-                                                } else if (mData.extensionName?.lowercase() == "xlsx" || mData.extensionName?.lowercase() == "xls") {
-                                                    RxBus.publish(EventsBus.RELOAD_EXCEL_FILE)
-                                                } else if (mData.extensionName?.lowercase() == "pptx" || mData.extensionName?.lowercase() == "ppt") {
-                                                    RxBus.publish(EventsBus.RELOAD_POWER_POINT_FILE)
-                                                }
+//                                                myFilesAdapter?.renameData(mData)
+//
+//                                                sharedPreferences.updateRecentFile(mData)
+//                                                sharedPreferences.updateFavoriteFile(mData)
+//                                                if (mData.extensionName?.lowercase() == "pdf") {
+//                                                    RxBus.publish(EventsBus.RELOAD_PDF_FILE)
+//                                                } else if (mData.extensionName?.lowercase() == "docx" || mData.extensionName?.lowercase() == "doc") {
+//                                                    RxBus.publish(EventsBus.RELOAD_WORD_FILE)
+//                                                } else if (mData.extensionName?.lowercase() == "xlsx" || mData.extensionName?.lowercase() == "xls") {
+//                                                    RxBus.publish(EventsBus.RELOAD_EXCEL_FILE)
+//                                                } else if (mData.extensionName?.lowercase() == "pptx" || mData.extensionName?.lowercase() == "ppt") {
+//                                                    RxBus.publish(EventsBus.RELOAD_POWER_POINT_FILE)
+//                                                }
                                             }
 
                                         }).show()
@@ -194,16 +207,16 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                                     RxBus.publish(EventsBus.RELOAD_FAVORITE)
                                 }
                                 R.id.menu_share -> {
-
+                                    myFileModel.uriPath?.let { File(it) }?.let { shareFile(it) }
                                 }
                                 R.id.menu_delete -> {
                                     getBaseActivity()?.apply {
                                         val deleteFileDialog = DeleteFileDialog(this, myFileModel, object : OnDialogItemClickListener {
                                             override fun onClickItemConfirm(mData: MyFilesModel) {
-                                                myFilesAdapter?.deleteData(mData)
-                                                sharedPreferences.removeFavoriteFile(myFileModel)
-                                                sharedPreferences.removeRecentFile(myFileModel)
-                                                RxBus.publish(EventsBus.RELOAD_ALL_FILE)
+//                                                myFilesAdapter?.deleteData(mData)
+//                                                sharedPreferences.removeFavoriteFile(myFileModel)
+//                                                sharedPreferences.removeRecentFile(myFileModel)
+//                                                RxBus.publish(EventsBus.RELOAD_ALL_FILE)
                                             }
 
                                         })
@@ -237,9 +250,23 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
 
     override fun onDestroy() {
         super.onDestroy()
-        Logger.showLog("Thuytv-----onDestroy: $isReleadRecent")
-        if (isReleadRecent) {
+        Logger.showLog("Thuytv-----onDestroy: $isReloadRecent")
+        if (isReloadRecent) {
             RxBus.publish(EventsBus.RELOAD_RECENT)
+        }
+        if (rxBusDisposable?.isDisposed == false) rxBusDisposable?.dispose()
+    }
+
+    private fun onListenDeleteFile() {
+        rxBusDisposable = RxBus.listen(Any::class.java).subscribe {
+            if (it is MyFilesModel) {
+                Logger.showLog("Thuytv------onListen Detail: " + Gson().toJson(it))
+                if(it.isRename == true){
+                    myFilesAdapter?.renameData(it)
+                }else if(it.isDelete == true){
+                    myFilesAdapter?.deleteData(it)
+                }
+            }
         }
     }
 }

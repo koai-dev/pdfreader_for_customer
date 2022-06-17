@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+pdfReader.apk
+output-metadata.json

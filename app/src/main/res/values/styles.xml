@@ -143,6 +143,11 @@
         <item name="android:textSize">@dimen/text_size_sp14</item>
         <item name="android:fontFamily">@font/googlesans_regular</item>
     </style>
+    <style name="Text_Setting_View">
+        <item name="android:textColor">@color/color_0C0C0D</item>
+        <item name="android:textSize">@dimen/text_size_sp16</item>
+        <item name="android:fontFamily">@font/googlesans_regular</item>
+    </style>
 
     <!--define theme start-->
     <style name="MyTheme1" parent="Theme.PdfReader">

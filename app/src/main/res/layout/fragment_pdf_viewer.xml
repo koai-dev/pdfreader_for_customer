@@ -133,4 +133,50 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:constraint_referenced_ids="viewBgPage, vlPageAndTotalPage,llJumpToPage" />
+
+    <LinearLayout
+        android:id="@+id/llJumpToPageEdit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_toolbar_all"
+        android:background="@color/color_EDEDED"
+        android:gravity="center|start"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/margin_all"
+        android:paddingEnd="@dimen/margin_all"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/googlesans_regular"
+            android:text="@string/vl_jump_to"
+            android:textColor="@color/rgb_808E95"
+            android:textSize="@dimen/text_size_sp14" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edtJumpPage"
+                style="@style/Text_Page_View"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_border_edittext_edit_page"
+                android:imeActionLabel="OK"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:minWidth="@dimen/size_edit_box"
+                android:padding="@dimen/margin_small" />
+
+            <TextView
+                android:id="@+id/vlJumpTotalPageEdit"
+                style="@style/Text_Page_View"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

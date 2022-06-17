@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llItemMyFile"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/margin_all"
+    android:paddingBottom="@dimen/margin_all">
+
+    <ImageView
+        android:id="@+id/imvItemFolder"
+        android:layout_width="@dimen/size_image_item"
+        android:layout_height="@dimen/size_image_item"
+        android:layout_marginStart="@dimen/margin_all"
+        android:padding="@dimen/margin_small"
+        android:src="@mipmap/ic_folder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imvItemNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_all"
+        android:padding="@dimen/margin_small"
+        android:src="@drawable/ic_setting_arrow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/vlItemFolderName"
+        style="@style/Text_Title_Item"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:ellipsize="middle"
+        android:singleLine="true"
+        app:layout_constraintEnd_toStartOf="@id/imvItemNext"
+        app:layout_constraintStart_toEndOf="@id/imvItemFolder"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/vlItemSizeFolder"
+        style="@style/Text_Item_Date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp2"
+        android:drawablePadding="@dimen/margin_small"
+        android:ellipsize="end"
+        android:lines="1"
+        android:maxLines="1"
+        app:drawableStartCompat="@drawable/ic_size_folder"
+        app:layout_constraintEnd_toEndOf="@id/vlItemFolderName"
+        app:layout_constraintStart_toStartOf="@id/vlItemFolderName"
+        app:layout_constraintTop_toBottomOf="@id/vlItemFolderName" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

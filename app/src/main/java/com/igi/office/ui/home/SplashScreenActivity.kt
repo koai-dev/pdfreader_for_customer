@@ -49,12 +49,12 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                 override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                     Logger.showLog("---fullScreenContentCallback--onAdFailedToShowFullScreenContent : " + adError.message)
                     mInterstitialAd = null
-                    if (countRetry < 5) {
-                        countRetry++
-                        loadInterstAds()
-                    } else {
-                        gotoMainScreen()
-                    }
+//                    if (countRetry < 2) {
+//                        countRetry++
+//                        loadInterstAds()
+//                    } else {
+//                        gotoMainScreen()
+//                    }
                 }
 
                 override fun onAdShowedFullScreenContent() {
@@ -115,7 +115,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 Logger.showLog("---onAdFailedToLoad: " + adError?.message + "---countRetry: $countRetry")
                 mInterstitialAd = null
-                if (countRetry < 5) {
+                if (countRetry < 2) {
                     countRetry++
                     loadInterstAds()
                 } else {
@@ -127,6 +127,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                 Logger.showLog("---onAdLoaded--Success")
                 mInterstitialAd = interstitialAd
                 showInterstitial()
+//                gotoMainScreen()
             }
         })
     }

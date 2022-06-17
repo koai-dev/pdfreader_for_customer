@@ -14,12 +14,15 @@
 
     <string name="title_my_file">My Files</string>
     <string name="title_favorite">Favorite</string>
-    <string name="title_browse">Browse</string>
+    <string name="title_browse">Folder</string>
 
     <string name="msg_no_internet">Không có kết nối mạng, vui lòng kiểm tra lại wifi/3G!</string>
     <string name="msg_connect_server_error">Không thể kết nối đến server!</string>
     <string name="msg_socket_time_out">Quá thời gian kết nối đến server!</string>
     <string name="msg_unknown_host">Unknown Host Exception!</string>
     <string name="msg_request_failed">Đã có lỗi xảy ra, vui lòng thử lại sau!</string>
+    <string name="vl_size_folder">%d file</string>
+    <string name="msg_recent_empty">You didn\'t read any file recently</string>
+    <string name="msg_import_please_wait">Importing… Please wait</string>
 
 </resources>

@@ -12,6 +12,7 @@ import androidx.documentfile.provider.DocumentFile
 import com.igi.office.R
 import com.igi.office.common.Logger
 import com.igi.office.common.MultiClickPreventer
+import com.igi.office.common.RxBus
 import com.igi.office.databinding.DialogDeleteFileBinding
 import com.igi.office.myinterface.OnDialogItemClickListener
 import com.igi.office.ui.home.model.MyFilesModel
@@ -37,7 +38,9 @@ class DeleteFileDialog(
         bind.btnYes.setOnClickListener {
             MultiClickPreventer.preventMultiClick(it)
             if (deleteFile()) {
+                myFileModel.isDelete = true
                 onDialogItemClickListener.onClickItemConfirm(myFileModel)
+                RxBus.publish(myFileModel)
             } else {
                 Logger.showToast(mContext, mContext.getString(R.string.msg_delete_file_failed))
             }

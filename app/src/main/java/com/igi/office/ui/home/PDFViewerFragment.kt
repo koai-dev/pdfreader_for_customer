@@ -5,24 +5,27 @@ import android.net.Uri
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.inputmethod.EditorInfo
 import android.widget.SeekBar
+import android.widget.TextView
 import android.widget.Toast
 import com.aspose.words.Document
 import com.aspose.words.DocumentBuilder
 import com.aspose.words.License
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener
+import com.github.barteksc.pdfviewer.listener.OnPageScrollListener
+import com.github.barteksc.pdfviewer.listener.OnTapListener
 import com.github.barteksc.pdfviewer.util.FitPolicy
 import com.google.android.material.slider.Slider
 import com.igi.office.R
-import com.igi.office.common.AppKeys
-import com.igi.office.common.Logger
-import com.igi.office.common.listenClickViews
-import com.igi.office.common.visible
+import com.igi.office.common.*
 import com.igi.office.databinding.FragmentPdfViewerBinding
+import com.igi.office.myinterface.OnDialogItemClickListener
+import com.igi.office.myinterface.OnPopupMenuItemClickListener
 import com.igi.office.ui.base.BaseFragment
+import com.igi.office.ui.home.dialog.DeleteFileDialog
+import com.igi.office.ui.home.dialog.RenameFileDialog
 import com.igi.office.ui.home.model.MyFilesModel
 import java.io.*
 import java.util.*
@@ -36,6 +39,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
     private val outputPDF = File(storageDir, "Converted_PDF.pdf")
     private var myFileModel: MyFilesModel? = null
     private var isFirst = true
+    private var isTouchSlider = true
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPdfViewerBinding
         get() = FragmentPdfViewerBinding::inflate
@@ -120,13 +124,19 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         binding.seekbarJumpToPage.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
             @SuppressLint("RestrictedApi")
             override fun onStartTrackingTouch(slider: Slider) {
+                Logger.showLog("Thuytv-----onStartTrackingTouch")
             }
 
             @SuppressLint("RestrictedApi")
             override fun onStopTrackingTouch(slider: Slider) {
+                Logger.showLog("Thuytv-----onStopTrackingTouch--isTouchSlider: $isTouchSlider")
+//                if (isTouchSlider) {
                 val page = binding.seekbarJumpToPage.value.toInt()
-                binding.pdfViewer.jumpTo(page-1)
+                binding.pdfViewer.jumpTo(page - 1)
                 binding.vlJumpPage.text = getString(R.string.vl_page, page)
+//                } else {
+//                    isTouchSlider = true
+//                }
             }
         })
 //        binding.seekbarJumpToPage.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -145,47 +155,146 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
 //            }
 //
 //        })
+        binding.vlJumpPage.setOnClickListener {
+            MultiClickPreventer.preventMultiClick(it)
+            binding.groupPageViewer.gone()
+            binding.llJumpToPageEdit.visible()
+            getBaseActivity()?.showKeyboard()
+            binding.edtJumpPage.requestFocus()
+        }
+        binding.edtJumpPage.setOnEditorActionListener(object : TextView.OnEditorActionListener{
+            override fun onEditorAction(p0: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                Logger.showLog("Thuytv----actionId : $actionId ---action: ${event?.action}---keyCode: ${event?.keyCode}")
+                if (actionId == EditorInfo.IME_ACTION_DONE || event?.action == KeyEvent.ACTION_DOWN
+                    || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
+                    binding.pdfViewer.jumpTo(getEdittextNumber() - 1)
+                    binding.groupPageViewer.visible()
+                    binding.llJumpToPageEdit.gone()
+                    getBaseActivity()?.hideKeyboard()
+                    return true
+                }
+                return false
+            }
+
+        })
+    }
+
+    private fun getEdittextNumber(): Int {
+        if (binding.edtJumpPage.text.toString().isNullOrEmpty()) return 0
+        return binding.edtJumpPage.text.toString().toInt()
     }
 
     private fun openFDPFile(uriPath: String?) {
 //        val scrollHandle = DefaultScrollHandle(context, false)
 //        scrollHandle.show()
         uriPath?.apply {
-            binding.pdfViewer.fromFile(File(uriPath)).defaultPage(0)
+            binding.pdfViewer.fromFile(File(uriPath))
                 .spacing(10)
                 .enableSwipe(true)
                 .enableDoubletap(true)
                 .swipeHorizontal(false)
-                .onPageChange(onPageChangeListener)
+                .fitEachPage(true)
                 .pageFitPolicy(FitPolicy.WIDTH)
-//            .scrollHandle(scrollHandle)
+                .onPageChange(onPageChangeListener)
+                .onPageScroll(onPageScrollListener)
+                .pageFitPolicy(FitPolicy.WIDTH)
+                .scrollHandle(MyScrollHandle(context, false))
+                .onTap(onTapListener)
                 .load()
         }
 //        OnPageChangeListener
 //    binding.pdfView.jumpTo(1)
     }
+    private val onPageScrollListener = OnPageScrollListener { page, positionOffset ->}
 
     private val onPageChangeListener = OnPageChangeListener { page, pageCount ->
         if (binding.groupPageViewer.visibility == View.GONE) {
             binding.groupPageViewer.visible()
         }
-        binding.vlPageAndTotalPage.text = getString(R.string.vl_total_page, page + 1, pageCount)
-        binding.vlJumpPage.text = getString(R.string.vl_page, page + 1)
-        binding.seekbarJumpToPage.value = (page + 1).toFloat()
+        val mPage = page + 1
+        binding.vlPageAndTotalPage.text = getString(R.string.vl_total_page, mPage, pageCount)
+        binding.vlJumpPage.text = getString(R.string.vl_page, mPage)
+        binding.edtJumpPage.setText(mPage.toString())
+        isTouchSlider = false
+        binding.seekbarJumpToPage.value = mPage.toFloat()
         if (isFirst) {
             binding.seekbarJumpToPage.valueTo = pageCount.toFloat()
             binding.vlTotalPage.text = "/ $pageCount"
+            binding.vlJumpTotalPageEdit.text = "/ $pageCount"
             isFirst = false
         }
     }
-
+    private val onTapListener = OnTapListener {
+        if(binding.llToolbarPdf.visibility == View.GONE){
+            binding.llToolbarPdf.visible()
+            binding.groupPageViewer.visible()
+        }else{
+            binding.llToolbarPdf.gone()
+            binding.groupPageViewer.gone()
+        }
+        true
+    }
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.imvPdfBack -> {
                 getBaseActivity()?.finish()
             }
             R.id.imvPdfMore -> {
+                showPopupMenu(binding.imvPdfMore, R.menu.menu_more_detail_file, object : OnPopupMenuItemClickListener {
+                    override fun onClickItemPopupMenu(menuItem: MenuItem?) {
+                        when (menuItem?.itemId) {
+                            R.id.menu_rename -> {
+                                getBaseActivity()?.apply {
+                                    RenameFileDialog(this, myFileModel!!, object : OnDialogItemClickListener {
+                                        override fun onClickItemConfirm(mData: MyFilesModel) {
+                                            binding.ttToolbarPdf.text = mData.name
+//                                            sharedPreferences.updateRecentFile(mData)
+//                                            sharedPreferences.updateFavoriteFile(mData)
+//                                            if (mData.extensionName?.lowercase() == "pdf") {
+//                                                RxBus.publish(EventsBus.RELOAD_PDF_FILE)
+//                                            } else if (mData.extensionName?.lowercase() == "docx" || mData.extensionName?.lowercase() == "doc") {
+//                                                RxBus.publish(EventsBus.RELOAD_WORD_FILE)
+//                                            } else if (mData.extensionName?.lowercase() == "xlsx" || mData.extensionName?.lowercase() == "xls") {
+//                                                RxBus.publish(EventsBus.RELOAD_EXCEL_FILE)
+//                                            } else if (mData.extensionName?.lowercase() == "pptx" || mData.extensionName?.lowercase() == "ppt") {
+//                                                RxBus.publish(EventsBus.RELOAD_POWER_POINT_FILE)
+//                                            }
+                                        }
 
+                                    }).show()
+                                }
+                            }
+                            R.id.menu_favorite -> {
+                                getBaseActivity()?.sharedPreferences?.setFavoriteFile(myFileModel!!)
+                                RxBus.publish(EventsBus.RELOAD_FAVORITE)
+                            }
+                            R.id.menu_share -> {
+                                myFileModel?.uriPath?.let { File(it) }?.let { shareFile(it) }
+                            }
+                            R.id.menu_delete -> {
+                                getBaseActivity()?.apply {
+                                    val deleteFileDialog = DeleteFileDialog(this, myFileModel!!, object : OnDialogItemClickListener {
+                                        override fun onClickItemConfirm(mData: MyFilesModel) {
+//                                            sharedPreferences.removeFavoriteFile(myFileModel!!)
+//                                            sharedPreferences.removeRecentFile(myFileModel!!)
+//                                            RxBus.publish(EventsBus.RELOAD_ALL_FILE)
+//                                            RxBus.publish(myFileModel!!)
+                                            finish()
+                                        }
+
+                                    })
+                                    deleteFileDialog.show()
+                                }
+                            }
+                            R.id.menu_print -> {
+                                myFileModel?.apply {
+                                    getBaseActivity()?.printFile(this)
+                                }
+                            }
+                        }
+                    }
+
+                })
             }
         }
     }

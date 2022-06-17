@@ -41,6 +41,7 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
         lstLanguage.add(LanguageModel(AppConfig.ID_LANGUAGE_KOREA, false, getString(R.string.vl_korean), R.mipmap.ic_language_korean))
         lstLanguage.add(LanguageModel(AppConfig.ID_LANGUAGE_NETHERLANDS, false, getString(R.string.vl_netherlands), R.mipmap.ic_language_netherlands))
         lstLanguage.add(LanguageModel(AppConfig.ID_LANGUAGE_JAPAN, false, getString(R.string.vl_japan), R.mipmap.ic_language_japan))
+        lstLanguage.add(LanguageModel(AppConfig.ID_LANGUAGE_GERMANY, false, getString(R.string.vl_germany), R.mipmap.ic_language_japan))
         val mLanguage = sharedPreferences.getLanguage()
         for (item in lstLanguage) {
             if (item.idLanguage == mLanguage) {

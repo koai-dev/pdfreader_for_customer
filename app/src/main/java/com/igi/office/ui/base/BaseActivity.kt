@@ -11,12 +11,16 @@ import android.net.NetworkRequest
 import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.print.PrintAttributes
+import android.print.PrintManager
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.google.android.gms.ads.MobileAds
 import com.igi.office.common.*
+import com.igi.office.ui.home.model.MyFilesModel
+import java.io.File
 import java.util.*
 
 
@@ -29,6 +33,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
 
     private var broadcastReceiver: ConnectivityReceiver? = null
     lateinit var sharedPreferences: SharePreferenceUtils
+    private var primaryBaseActivity : Context? = null
 
     @Suppress("UNCHECKED_CAST")
     protected val binding: VB
@@ -66,6 +71,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
     }
 
     override fun attachBaseContext(newBase: Context) {
+        primaryBaseActivity = newBase
         val localeToSwitchTo = SharePreferenceUtils(newBase).getLanguage()
         val localeUpdatedContext: ContextWrapper = LanguageUtils.updateLocale(newBase, Locale(localeToSwitchTo))
         super.attachBaseContext(localeUpdatedContext)
@@ -132,5 +138,18 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         }
         fragmentTransaction.replace(containerId, fragment)
         fragmentTransaction.commit()
+    }
+
+    fun printFile(myFilesModel: MyFilesModel) {
+        val printManager: PrintManager = primaryBaseActivity?.getSystemService(Context.PRINT_SERVICE) as PrintManager
+        try {
+            myFilesModel.uriPath?.apply {
+                val file = File(this)
+                val printAdapter = PdfDocumentAdapter(file.absolutePath, myFilesModel.name ?: "")
+                printManager.print("Document", printAdapter, PrintAttributes.Builder().build())
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

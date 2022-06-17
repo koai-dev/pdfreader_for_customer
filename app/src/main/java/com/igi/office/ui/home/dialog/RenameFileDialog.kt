@@ -11,11 +11,9 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.documentfile.provider.DocumentFile
+import com.google.gson.Gson
 import com.igi.office.R
-import com.igi.office.common.Logger
-import com.igi.office.common.MultiClickPreventer
-import com.igi.office.common.invisible
-import com.igi.office.common.visible
+import com.igi.office.common.*
 import com.igi.office.databinding.DialogDeleteFileBinding
 import com.igi.office.databinding.DialogRenameFileBinding
 import com.igi.office.myinterface.OnDialogItemClickListener
@@ -29,7 +27,7 @@ class RenameFileDialog(
     val mContext: Context, private val myFileModel: MyFilesModel,
     private val onDialogItemClickListener: OnDialogItemClickListener
 ) : Dialog(mContext, R.style.AlertDialogStyle) {
-
+    private var oldName: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -38,6 +36,7 @@ class RenameFileDialog(
         val bind: DialogRenameFileBinding = DialogRenameFileBinding.inflate(LayoutInflater.from(context))
         setContentView(bind.root)
         val strExtension = "." + myFileModel.extensionName
+        oldName = myFileModel.name
         bind.edtRenameFile.setText(myFileModel.name?.replace(strExtension, ""))
 
         bind.btnConfirm.setOnClickListener {
@@ -48,7 +47,13 @@ class RenameFileDialog(
                 val isRenameFile = renameFile(strName + strExtension)
                 if (isRenameFile) {
                     myFileModel.name = strName + strExtension
+                    val mUrilOldPath = myFileModel.uriPath
+                    myFileModel.uriOldPath = mUrilOldPath
+                    myFileModel.uriPath = mUrilOldPath?.replace(oldName ?: "", strName + strExtension)
+                    myFileModel.isRename = true
+                    Logger.showLog("Thuytv------RenameDialog: " + Gson().toJson(myFileModel))
                     onDialogItemClickListener.onClickItemConfirm(mData = myFileModel)
+                    RxBus.publish(myFileModel)
                     dismiss()
                 } else {
                     bind.vlError.visible()

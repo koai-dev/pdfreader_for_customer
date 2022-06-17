@@ -17,12 +17,13 @@ object AppConfig {
 
     const val ID_LANGUAGE_ENGLISH = "en"
     const val ID_LANGUAGE_CHINA = "cn"
-    const val ID_LANGUAGE_INDIA = "in"
+    const val ID_LANGUAGE_INDIA = "hi"
     const val ID_LANGUAGE_FRANCE = "fr"
     const val ID_LANGUAGE_SPAIN = "es"
     const val ID_LANGUAGE_PORTUGAL = "pt"
-    const val ID_LANGUAGE_INDONESIA = "id"
+    const val ID_LANGUAGE_INDONESIA = "in"
     const val ID_LANGUAGE_KOREA = "kr"
     const val ID_LANGUAGE_NETHERLANDS = "nl"
     const val ID_LANGUAGE_JAPAN = "ja"
+    const val ID_LANGUAGE_GERMANY = "de"
 }

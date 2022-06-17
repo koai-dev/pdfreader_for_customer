@@ -24,7 +24,7 @@
         android:id="@+id/imvTypeAdapter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_double_all"
+        android:layout_marginEnd="@dimen/dp15"
         android:padding="@dimen/margin_all"
         android:src="@drawable/ic_grid_type"
         app:layout_constraintBottom_toBottomOf="@id/ttFavoriteFile"

@@ -1,21 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:clickable="true"
-    android:focusable="true"
     android:background="@color/color_bg"
+    android:clickable="true"
+    android:fillViewport="true"
+    android:focusable="true"
     tools:context=".ui.home.SettingFragment">
-    <Button
-        android:id="@+id/btnChangeColor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="Change Color"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_all">
+
+        <Button
+            style="@style/Button_Confirm_All"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/padding_bottom_list"
+            android:text="SUBS" />
+
+        <LinearLayout
+            android:id="@+id/llSettingLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_all"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/margin_all"
+            android:paddingBottom="@dimen/margin_all">
+
+            <ImageView
+                android:layout_width="@dimen/size_image_setting"
+                android:layout_height="@dimen/size_image_setting"
+                android:src="@drawable/ic_setting_languages" />
+
+            <TextView
+                style="@style/Text_Setting_View"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_all"
+                android:layout_weight="1"
+                android:text="@string/tt_language" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_setting_arrow" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSettingTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/margin_all"
+            android:paddingBottom="@dimen/margin_all">
+
+            <ImageView
+                android:layout_width="@dimen/size_image_setting"
+                android:layout_height="@dimen/size_image_setting"
+                android:src="@drawable/ic_setting_theme" />
+
+            <TextView
+                style="@style/Text_Setting_View"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_all"
+                android:layout_weight="1"
+                android:text="@string/tt_theme" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_setting_arrow" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSettingRate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/margin_all"
+            android:paddingBottom="@dimen/margin_all">
+
+            <ImageView
+                android:layout_width="@dimen/size_image_setting"
+                android:layout_height="@dimen/size_image_setting"
+                android:src="@drawable/ic_setting_rate_app" />
+
+            <TextView
+                style="@style/Text_Setting_View"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_all"
+                android:layout_weight="1"
+                android:text="@string/tt_rate_application" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_setting_arrow" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSettingShare"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/margin_all"
+            android:paddingBottom="@dimen/margin_all">
+
+            <ImageView
+                android:layout_width="@dimen/size_image_setting"
+                android:layout_height="@dimen/size_image_setting"
+                android:src="@drawable/ic_setting_share" />
+
+            <TextView
+                style="@style/Text_Setting_View"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_all"
+                android:layout_weight="1"
+                android:text="@string/tt_share_app" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_setting_arrow" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSettingTerm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/margin_all"
+            android:paddingBottom="@dimen/margin_all">
+
+            <ImageView
+                android:layout_width="@dimen/size_image_setting"
+                android:layout_height="@dimen/size_image_setting"
+                android:src="@drawable/ic_setting_term" />
+
+            <TextView
+                style="@style/Text_Setting_View"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_all"
+                android:layout_weight="1"
+                android:text="@string/tt_term_codition" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_setting_arrow" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -102,6 +102,19 @@ class SharePreferenceUtils(context: Context?) {
             ?: AppConfig.THEME_1
     }
 
+    fun updateRecentFile(data: MyFilesModel) {
+        val lstRecent = getRecentFile()
+        if (lstRecent.contains(data)) {
+            val indexFile = lstRecent.indexOf(data)
+            lstRecent[indexFile] = data
+            val strData = Gson().toJson(lstRecent.take(100))
+            setValueString(KEY_RECENT_FILE, strData)
+        }else{
+            lstRecent.add(data)
+        }
+
+    }
+
     fun removeRecentFile(data: MyFilesModel) {
         val lstRecent = getRecentFile()
         if (lstRecent.contains(data)) {
@@ -129,6 +142,16 @@ class SharePreferenceUtils(context: Context?) {
             object : TypeToken<ArrayList<MyFilesModel>>() {}.type
         )
             ?: ArrayList()
+    }
+
+    fun updateFavoriteFile(data: MyFilesModel) {
+        val lstRecent = getFavoriteFile()
+        if (lstRecent.contains(data)) {
+            val indexFile = lstRecent.indexOf(data)
+            lstRecent[indexFile] = data
+            val strData = Gson().toJson(lstRecent.take(100))
+            setValueString(KEY_FAVORITE_FILE, strData)
+        }
     }
 
     fun removeFavoriteFile(data: MyFilesModel) {

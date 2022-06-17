@@ -1,13 +1,17 @@
 package com.igi.office
 
+import android.Manifest
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -17,7 +21,19 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker
 import androidx.core.view.GravityCompat
+import androidx.documentfile.provider.DocumentFile
+import com.anggrayudi.storage.SimpleStorageHelper
+import com.anggrayudi.storage.callback.StorageAccessCallback
+import com.anggrayudi.storage.file.StorageType
+import com.anggrayudi.storage.permission.ActivityPermissionRequest
+import com.anggrayudi.storage.permission.PermissionCallback
+import com.anggrayudi.storage.permission.PermissionReport
+import com.anggrayudi.storage.permission.PermissionResult
+import com.igi.office.common.Logger
 import com.igi.office.databinding.ActivityMainBinding
 import com.igi.office.ui.base.BaseActivity
 import java.util.*
@@ -61,6 +77,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 //        )
 //        binding.navView.itemTextColor = iconColorStates
 //        binding.navView.itemIconTintList = iconColorStates
+
     }
 
     override fun initEvents() {

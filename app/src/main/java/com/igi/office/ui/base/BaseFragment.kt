@@ -1,17 +1,26 @@
 package com.igi.office.ui.base
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.print.PrintAttributes
+import android.print.PrintManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewbinding.ViewBinding
+import com.igi.office.R
 import com.igi.office.common.*
 import com.igi.office.myinterface.OnPopupMenuItemClickListener
+import com.igi.office.ui.home.model.MyFilesModel
 import io.reactivex.disposables.Disposable
+import java.io.File
+import java.net.URLConnection
 import java.util.*
 
 /**
@@ -98,4 +107,37 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
             eventsBusDisposableTheme?.dispose()
         }
     }
+
+    fun shareFile(file: File) {
+//        val intentShareFile = Intent(Intent.ACTION_SEND)
+//        intentShareFile.type = URLConnection.guessContentTypeFromName(file.name)
+//        intentShareFile.putExtra(
+//            Intent.EXTRA_STREAM,
+//            Uri.parse("content://" + file.absolutePath)
+//        )
+//        startActivity(Intent.createChooser(intentShareFile, getString(R.string.tt_share_file)))
+
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = URLConnection.guessContentTypeFromName(file.name)
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            putExtra(
+                Intent.EXTRA_SUBJECT,
+                getString(R.string.vl_share_document)
+            )
+            putExtra(
+                Intent.EXTRA_TEXT,
+                getString(R.string.vl_share_document_content)
+            )
+            val fileURI = FileProvider.getUriForFile(
+                getBaseActivity()!!, getBaseActivity()!!.packageName + ".provider",
+                file
+            )
+            putExtra(Intent.EXTRA_STREAM, fileURI)
+        }
+        startActivity(shareIntent)
+    }
+
+
 }
