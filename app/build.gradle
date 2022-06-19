@@ -10,7 +10,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.igi.office"
+        applicationId "com.cocna.pdffilereader"
         minSdk 21
         targetSdk 32
         versionCode 1
@@ -25,13 +25,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
-            resValue "string", "BASE_URL_API", BASE_URL_API
         }
         debug {
             minifyEnabled false
             shrinkResources false
 
-            resValue "string", "BASE_URL_API", BASE_URL_API
         }
     }
     compileOptions {
@@ -61,6 +59,8 @@ dependencies {
 //    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+
 
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
@@ -74,12 +74,8 @@ dependencies {
 
     implementation platform('com.google.firebase:firebase-bom:30.1.0')
     implementation 'com.google.firebase:firebase-crashlytics'
-    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.code.gson:gson:2.8.9'
-
-
-    implementation files('libs/aspose-words-1.12-android-jdk16.jar')
-    implementation files('libs/aw-classes_dex2jar.jar')
 
 //    implementation (group: 'com.aspose', name: 'aspose-words', version: '20.6', classifier: 'android.via.java')
 //    implementation files('libs/aspose-words-17.2.0-android.jar')

@@ -19,8 +19,9 @@
     <string name="msg_request_failed" translatable="false">Đã có lỗi xảy ra, vui lòng thử lại sau!</string>
 
     <!--    <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>-->
-    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-5990537255633736/8138915053</string>
-    <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-5990537255633736/2695016689</string>
+    <string name="id_ad_banner_main" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="id_interstitial_ad_splash" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="id_interstitial_ad_background" translatable="false">ca-app-pub-3940256099942544/3419835294</string>
 
     <string name="tt_request_store_permission">External storage permission</string>
     <string name="vl_request_store_permission_content">Manage External storage permission is needed for this app work, please enable it in device settings</string>
@@ -104,5 +105,7 @@
     <string name="vl_size_folder">%d file</string>
     <string name="msg_recent_empty">You didn\'t read any file recently</string>
     <string name="msg_import_please_wait">Importing… Please wait</string>
+
+    <string name="ad_attribution" translatable="false">Ad</string>
 
 </resources>

@@ -1,0 +1,66 @@
+<com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:minHeight="50dp"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/margin_all"
+        android:paddingBottom="@dimen/margin_all">
+
+        <ImageView
+            android:id="@+id/ad_app_icon"
+            android:layout_width="@dimen/size_image_item"
+            android:layout_height="@dimen/size_image_item"
+            android:layout_marginStart="@dimen/margin_all"
+            android:adjustViewBounds="true"
+            android:padding="@dimen/margin_small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tt_item_ad"
+            style="@style/AdAttribution"
+            android:padding="@dimen/dp2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/ad_call_to_action"
+            style="@style/Button_Confirm_All"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_image_home"
+            android:layout_marginStart="@dimen/margin_all"
+            android:layout_marginEnd="@dimen/margin_all"
+            android:gravity="center"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_menu_home"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/ad_headline"
+            style="@style/Text_Title_Item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/ad_call_to_action"
+            app:layout_constraintStart_toEndOf="@id/ad_app_icon"
+            app:layout_constraintTop_toTopOf="@id/ad_app_icon" />
+
+        <TextView
+            android:id="@+id/ad_advertiser"
+            style="@style/Text_Item_Date"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            app:layout_constraintEnd_toEndOf="@id/ad_headline"
+            app:layout_constraintStart_toStartOf="@id/ad_headline"
+            app:layout_constraintTop_toBottomOf="@id/ad_headline" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.gms.ads.nativead.NativeAdView>

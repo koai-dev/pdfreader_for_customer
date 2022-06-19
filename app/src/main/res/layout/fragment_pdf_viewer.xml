@@ -44,6 +44,17 @@
 
     </LinearLayout>
 
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adViewBannerViewer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="FULL_BANNER"
+        ads:adUnitId="@string/id_ad_banner_main"
+        ads:layout_constraintBottom_toBottomOf="parent"
+        ads:layout_constraintStart_toStartOf="parent" />
+
     <LinearLayout
         android:id="@+id/llJumpToPage"
         android:layout_width="match_parent"
@@ -53,7 +64,7 @@
         android:orientation="horizontal"
         android:paddingStart="@dimen/margin_all"
         android:paddingEnd="@dimen/margin_all"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toTopOf="@id/adViewBannerViewer">
 
         <!--        <androidx.appcompat.widget.AppCompatSeekBar-->
         <!--            android:id="@+id/seekbarJumpToPage"-->

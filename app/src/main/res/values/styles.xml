@@ -94,18 +94,20 @@
         <item name="android:textSize">@dimen/text_size_sp15</item>
         <item name="android:fontFamily">@font/googlesans_regular</item>
     </style>
+
     <style name="Text_Content_Language">
         <item name="android:textColor">@color/color_black</item>
         <item name="android:textSize">@dimen/text_size_sp16</item>
         <item name="android:fontFamily">@font/googlesans_regular</item>
     </style>
+
     <style name="Button_Confirm_All">
         <item name="android:textColor">@color/color_white</item>
         <item name="android:textSize">@dimen/text_size_sp15</item>
         <item name="android:fontFamily">@font/googlesans_regular</item>
         <item name="textAllCaps">false</item>
         <item name="android:background">@drawable/bg_button_all</item>
-        <item name="android:stateListAnimator" >@null</item>
+        <item name="android:stateListAnimator">@null</item>
     </style>
 
     <style name="Button_Ignore_All">
@@ -116,17 +118,20 @@
         <item name="android:background">@drawable/bg_border_button_all</item>
         <item name="android:stateListAnimator">@null</item>
     </style>
+
     <style name="AlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
         <!-- Used for the buttons -->
-<!--        <item name="colorAccent">@color/color_white</item>-->
+        <!--        <item name="colorAccent">@color/color_white</item>-->
         <!-- Used for the title and text -->
-<!--        <item name="android:textColorPrimary">@android:color/black</item>-->
+        <!--        <item name="android:textColorPrimary">@android:color/black</item>-->
     </style>
+
     <style name="Text_Content_Edittext">
         <item name="android:textColor">@color/rgb_34515E</item>
         <item name="android:textSize">@dimen/text_size_sp16</item>
         <item name="android:fontFamily">@font/googlesans_medium</item>
     </style>
+
     <style name="Text_Edittext_Search">
         <item name="android:textColor">@color/text_color_search_home</item>
         <item name="android:textSize">@dimen/text_size_sp12</item>
@@ -138,11 +143,13 @@
         <item name="android:drawableStart">@drawable/ic_search_home</item>
         <item name="android:drawablePadding">@dimen/margin_all</item>
     </style>
+
     <style name="Text_Page_View">
         <item name="android:textColor">@color/text_rgb_102027</item>
         <item name="android:textSize">@dimen/text_size_sp14</item>
         <item name="android:fontFamily">@font/googlesans_regular</item>
     </style>
+
     <style name="Text_Setting_View">
         <item name="android:textColor">@color/color_0C0C0D</item>
         <item name="android:textSize">@dimen/text_size_sp16</item>
@@ -153,24 +160,40 @@
     <style name="MyTheme1" parent="Theme.PdfReader">
         <item name="home_bottom_selected">@color/rgb_F44336</item>
     </style>
+
     <style name="MyTheme2" parent="Theme.PdfReader">
         <item name="home_bottom_selected">@color/rgb_6F6AF8</item>
     </style>
+
     <style name="MyTheme3" parent="Theme.PdfReader">
         <item name="home_bottom_selected">@color/rgb_2B85FF</item>
     </style>
+
     <style name="MyTheme4" parent="Theme.PdfReader">
         <item name="home_bottom_selected">@color/rgb_ED6316</item>
     </style>
+
     <style name="MyTheme5" parent="Theme.PdfReader">
         <item name="home_bottom_selected">@color/rgb_433EA6</item>
     </style>
+
     <style name="MyTheme6" parent="Theme.PdfReader">
         <item name="home_bottom_selected">@color/rgb_167E30</item>
     </style>
+
     <style name="MyTheme7" parent="Theme.PdfReader">
         <item name="home_bottom_selected">@color/rgb_0F4743</item>
     </style>
     <!--define theme end-->
+
+    <style name="AdAttribution">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">@dimen/text_size_menu_home</item>
+        <item name="android:text">@string/ad_attribution</item>
+        <item name="android:background">#FFCC66</item>
+    </style>
 
 </resources>
