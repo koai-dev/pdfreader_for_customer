@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 
+@Suppress("DEPRECATION")
 class ConnectivityReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {

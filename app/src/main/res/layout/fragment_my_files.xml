@@ -13,18 +13,41 @@
         android:id="@+id/llButtonHome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:gravity="center"
+        android:orientation="vertical"
         android:padding="@dimen/margin_all"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/ttValuePdf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/googlesans_regular"
+            android:text="@string/tt_have_pdf_file"
+            android:textColor="@color/rgb_62757F"
+            android:textSize="@dimen/text_size_sp15" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnClickToRead"
+            style="@style/Button_Confirm_All"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_button"
+            android:layout_marginTop="@dimen/margin_all"
+            android:backgroundTint="@color/rgb_F44336"
+            android:drawableEnd="@drawable/ic_arrow_right_white"
+            android:paddingStart="@dimen/margin_all"
+            android:paddingEnd="@dimen/margin_all"
+            android:text="@string/btn_click_here_read" />
+
         <LinearLayout
             android:id="@+id/llMyFile"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="@dimen/size_image_home"
@@ -47,7 +70,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="@dimen/size_image_home"
@@ -70,7 +94,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="@dimen/size_image_home"
@@ -93,7 +118,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="@dimen/size_image_home"
@@ -116,7 +142,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="@dimen/size_image_home"
@@ -150,7 +177,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_double_all"
         android:padding="@dimen/margin_small"
-        android:src="@drawable/ic_three_dots"
+        android:src="@drawable/ic_filter_all"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/imvReloadRecent" />
 
@@ -171,9 +198,36 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="@dimen/margin_all"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imvReloadRecent" />
+
+    <LinearLayout
+        android:id="@+id/llEmptyRecent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/margin_all"
+        android:gravity="center|top"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imvReloadRecent">
+
+        <ImageView
+            android:layout_width="@dimen/size_image_empty"
+            android:layout_height="@dimen/size_image_empty"
+            android:layout_marginTop="@dimen/margin_double_all"
+            android:src="@mipmap/ic_recent_empty" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/googlesans_regular"
+            android:text="@string/msg_recent_empty"
+            android:textColor="@color/rgb_62757F"
+            android:textSize="@dimen/text_size_sp16" />
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/prbLoadingFile"

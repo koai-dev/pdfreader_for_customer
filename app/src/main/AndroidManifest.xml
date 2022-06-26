@@ -56,6 +56,9 @@
         <activity
             android:name="com.cocna.pdffilereader.ui.setting.ChangeThemeActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+        <activity
+            android:name="com.cocna.pdffilereader.ui.setting.PrivatePolicyFragment"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
 
         <receiver
             android:name="com.cocna.pdffilereader.common.ConnectivityReceiver"

@@ -34,4 +34,18 @@ data class MyFilesModel(
         }
         return ((this.uriPath == (other as MyFilesModel).uriPath) || (this.uriOldPath == (other as MyFilesModel).uriPath))
     }
+
+    override fun hashCode(): Int {
+        var result = name?.hashCode() ?: 0
+        result = 31 * result + (uriPath?.hashCode() ?: 0)
+        result = 31 * result + (uriOldPath?.hashCode() ?: 0)
+        result = 31 * result + (lastModified?.hashCode() ?: 0)
+        result = 31 * result + (extensionName?.hashCode() ?: 0)
+        result = 31 * result + (length?.hashCode() ?: 0)
+        result = 31 * result + (isRename?.hashCode() ?: 0)
+        result = 31 * result + (isDelete?.hashCode() ?: 0)
+        result = 31 * result + (folderName?.hashCode() ?: 0)
+        result = 31 * result + (lstChildFile?.hashCode() ?: 0)
+        return result
+    }
 }

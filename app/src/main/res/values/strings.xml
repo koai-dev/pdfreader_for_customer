@@ -1,22 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">PdfReader</string>
-    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
-    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
-    <string name="nav_header_title" translatable="false">Android Studio</string>
-    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
-    <string name="nav_header_desc" translatable="false">Navigation header</string>
-    <string name="action_settings" translatable="false">Settings</string>
-
-    <string name="menu_home" translatable="false">Home</string>
-    <string name="menu_gallery" translatable="false">Gallery</string>
-    <string name="menu_slideshow" translatable="false">Slideshow</string>
-
-
-    <string name="msg_no_internet" translatable="false">Không có kết nối mạng, vui lòng kiểm tra lại wifi/3G!</string>
-    <string name="msg_connect_server_error" translatable="false">Không thể kết nối đến server!</string>
-    <string name="msg_socket_time_out" translatable="false">Quá thời gian kết nối đến server!</string>
-    <string name="msg_unknown_host" translatable="false">Unknown Host Exception!</string>
-    <string name="msg_request_failed" translatable="false">Đã có lỗi xảy ra, vui lòng thử lại sau!</string>
 
     <!--    <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>-->
     <string name="id_ad_banner_main" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
@@ -77,7 +60,8 @@
     <string name="tt_theme">Theme</string>
     <string name="tt_rate_application">Rate Application</string>
     <string name="tt_share_app">Share App</string>
-    <string name="tt_term_codition">Term &amp; Codition</string>
+    <string name="tt_term_codition">Privacy Policy</string>
+    <string name="tt_have_pdf_file">You have %d PDF file</string>
 
     <string name="tt_language">Language</string>
     <string name="vl_english">English</string>
@@ -105,7 +89,10 @@
     <string name="vl_size_folder">%d file</string>
     <string name="msg_recent_empty">You didn\'t read any file recently</string>
     <string name="msg_import_please_wait">Importing… Please wait</string>
+    <string name="btn_click_here_read">Click here to read now!</string>
 
     <string name="ad_attribution" translatable="false">Ad</string>
+    <string name="vl_loading" translatable="false">LOADING… </string>
+    <string name="vl_well_comeback" translatable="false">Well Comeback</string>
 
 </resources>

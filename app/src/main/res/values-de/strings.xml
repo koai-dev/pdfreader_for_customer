@@ -49,7 +49,8 @@
     <string name="tt_theme">Thema</string>
     <string name="tt_rate_application">Ratenanwendung</string>
     <string name="tt_share_app">App teilen</string>
-    <string name="tt_term_codition">Begriff &amp; Kodition</string>
+    <string name="tt_term_codition">Datenschutz-Bestimmungen</string>
+    <string name="tt_have_pdf_file">Sie haben %d PDF-Datei</string>
     <string name="tt_language">Sprache</string>
     <string name="vl_english">Englisch</string>
     <string name="vl_china">China</string>
@@ -69,6 +70,8 @@
     <string name="vl_share_document">Teilen von Dokument</string>
     <string name="vl_share_document_content">Teilen Sie das Dokument mit Ihren Freunden</string>
     <string name="vl_size_folder">%d Datei</string>
-    <string name="msg_import_please_wait">Importieren... Bitte warten</string>
+    <string name="msg_import_please_wait">Importieren… Bitte warten</string>
     <string name="msg_recent_empty">Sie haben in letzter Zeit keine Datei gelesen</string>
+    <string name="btn_click_here_read">Klicken Sie hier, um jetzt zu lesen!</string>
+
 </resources>

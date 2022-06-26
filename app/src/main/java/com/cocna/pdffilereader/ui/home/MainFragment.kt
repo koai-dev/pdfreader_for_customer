@@ -2,6 +2,7 @@ package com.cocna.pdffilereader.ui.home
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -14,7 +15,10 @@ import com.cocna.pdffilereader.common.gone
 import com.cocna.pdffilereader.common.visible
 import com.cocna.pdffilereader.databinding.FragmentMainBinding
 import com.cocna.pdffilereader.ui.base.BaseFragment
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 
+@Suppress("DEPRECATION")
 class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMainBinding = FragmentMainBinding::inflate
@@ -26,6 +30,28 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     private lateinit var favoriteFragment: FavoriteFragment
     private lateinit var browseFragment: BrowseFragment
     private var idViewSelected: Int? = null
+
+    private lateinit var adView: AdView
+
+    private var initialLayoutComplete = false
+    // Determine the screen width (less decorations) to use for the ad width.
+    // If the ad hasn't been laid out, default to the full screen width.
+    private val adSize: AdSize
+        get() {
+            val display = getBaseActivity()?.windowManager?.defaultDisplay
+            val outMetrics = DisplayMetrics()
+            display?.getMetrics(outMetrics)
+
+            val density = outMetrics.density
+
+            var adWidthPixels = binding.adViewContainer.width.toFloat()
+            if (adWidthPixels == 0f) {
+                adWidthPixels = outMetrics.widthPixels.toFloat()
+            }
+
+            val adWidth = (adWidthPixels / density).toInt()
+            return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(requireContext(), adWidth)
+        }
 
     override fun initData() {
         myFilesFragment = MyFilesFragment()
@@ -40,7 +66,17 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         hideShowFragment(myFilesFragment, settingFragment, favoriteFragment, browseFragment)
         binding.navigationBottom.itemIconTintList = null
         idViewSelected = R.id.navigation_my_file
-        loadBannerAds()
+
+        adView = AdView(requireContext())
+        binding.adViewContainer.addView(adView)
+        // Since we're loading the banner based on the adContainerView size, we need to wait until this
+        // view is laid out before we can get the width.
+        binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
+            if (!initialLayoutComplete) {
+                initialLayoutComplete = true
+                loadBannerAds()
+            }
+        }
     }
 
     override fun initEvents() {
@@ -152,22 +188,33 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 //        return@OnNavigationItemSelectedListener true
 //    }
     private fun loadBannerAds() {
+        adView.adUnitId = getString(R.string.id_ad_banner_main)
+        adView.setAdSize(adSize)
+
+        // Create an ad request.
         val adRequest = AdRequest.Builder().build()
-        binding.adViewBannerMain.loadAd(adRequest)
+
+        // Start loading the ad in the background.
+        adView.loadAd(adRequest)
+//        val adRequest = AdRequest.Builder().build()
+//        binding.adViewBannerMain.loadAd(adRequest)
+
     }
 
     override fun onPause() {
-        binding.adViewBannerMain.pause()
+        adView.pause()
         super.onPause()
     }
 
+    /** Called when returning to the activity  */
     override fun onResume() {
-        binding.adViewBannerMain.resume()
         super.onResume()
+        adView.resume()
     }
 
+    /** Called before the activity is destroyed  */
     override fun onDestroy() {
-        binding.adViewBannerMain.destroy()
+        adView.destroy()
         super.onDestroy()
     }
 }

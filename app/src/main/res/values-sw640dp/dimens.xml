@@ -74,6 +74,12 @@
   <dimen name="size_image_setting">
     44.44dp
   </dimen>
+  <dimen name="size_image_empty">
+    426.67dp
+  </dimen>
+  <dimen name="height_button">
+    71.11dp
+  </dimen>
   <dimen name="text_size_title">
     32.0sp
   </dimen>

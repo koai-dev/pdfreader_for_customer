@@ -48,7 +48,8 @@
     <string name="tt_theme">Thème</string>
     <string name="tt_rate_application">Tariser la demande</string>
     <string name="tt_share_app">Partager l\'application</string>
-    <string name="tt_term_codition">Terme et codition</string>
+    <string name="tt_term_codition">Politique de confidentialité</string>
+    <string name="tt_have_pdf_file">Vous avez %d  fichier PDF</string>
     <string name="tt_language">Langue</string>
     <string name="vl_english">Anglais</string>
     <string name="vl_china">Chine</string>
@@ -67,7 +68,9 @@
     <string name="vl_sprint">Sprint</string>
     <string name="vl_share_document">Partager un document</string>
     <string name="vl_share_document_content">Partagez le document avec vos amis</string>
-    <string name="msg_import_please_wait">Importation... Veuillez patienter</string>
+    <string name="msg_import_please_wait">Importation… Veuillez patienter</string>
     <string name="vl_size_folder">%d dossier</string>
     <string name="msg_recent_empty">Vous n\'avez lu aucun fichier récemment</string>
+    <string name="btn_click_here_read">Cliquez ici pour lire maintenant!</string>
+
 </resources>

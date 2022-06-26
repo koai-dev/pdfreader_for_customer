@@ -44,7 +44,8 @@
     <string name="tt_theme">Thema</string>
     <string name="tt_rate_application">Beoordeel toepassing</string>
     <string name="tt_share_app">Deel app</string>
-    <string name="tt_term_codition">Term &amp;  coditie</string>
+    <string name="tt_term_codition">Privacybeleid</string>
+    <string name="tt_have_pdf_file">Je hebt %d PDF-bestand</string>
     <string name="tt_language">Taal</string>
     <string name="vl_english">Engels</string>
     <string name="vl_china">China</string>
@@ -67,7 +68,9 @@
     <string name="tt_request_store_permission">Externe opslagvergunning</string>
     <string name="vl_request_store_permission_content">Beheer externe opslagvergunning is nodig voor deze app -werk, schakel deze in in apparaatinstellingen</string>
     <string name="vl_request_read_permission_content">Lees externe opslagvergunning nodig voor deze app werk, schakel deze in in apparaatinstellingen</string>
-    <string name="msg_import_please_wait">Importeren... Even geduld a.u.b.</string>
+    <string name="msg_import_please_wait">Importeren… Even geduld a.u.b.</string>
     <string name="msg_recent_empty">Je hebt de laatste tijd geen bestand gelezen</string>
     <string name="vl_size_folder">%d het dossier</string>
+    <string name="btn_click_here_read">Klik hier om nu te lezen!</string>
+
 </resources>

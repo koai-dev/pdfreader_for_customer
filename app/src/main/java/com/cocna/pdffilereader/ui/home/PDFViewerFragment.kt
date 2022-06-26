@@ -2,6 +2,7 @@ package com.cocna.pdffilereader.ui.home
 
 import android.annotation.SuppressLint
 import android.os.Environment
+import android.util.DisplayMetrics
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
@@ -20,6 +21,8 @@ import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.home.dialog.DeleteFileDialog
 import com.cocna.pdffilereader.ui.home.dialog.RenameFileDialog
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import java.io.*
 
 
@@ -32,18 +35,47 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
     private var myFileModel: MyFilesModel? = null
     private var isFirst = true
     private var isTouchSlider = true
+    private lateinit var adView: AdView
 
+    private var initialLayoutComplete = false
+    // Determine the screen width (less decorations) to use for the ad width.
+    // If the ad hasn't been laid out, default to the full screen width.
+    private val adSize: AdSize
+        get() {
+            val display = getBaseActivity()?.windowManager?.defaultDisplay
+            val outMetrics = DisplayMetrics()
+            display?.getMetrics(outMetrics)
+
+            val density = outMetrics.density
+
+            var adWidthPixels = binding.adViewContainer.width.toFloat()
+            if (adWidthPixels == 0f) {
+                adWidthPixels = outMetrics.widthPixels.toFloat()
+            }
+
+            val adWidth = (adWidthPixels / density).toInt()
+            return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(requireContext(), adWidth)
+        }
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPdfViewerBinding
         get() = FragmentPdfViewerBinding::inflate
 
     override fun initData() {
-        loadBannerAds()
         myFileModel = arguments?.getParcelable(AppKeys.KEY_BUNDLE_DATA)
 
         myFileModel?.apply {
             binding.ttToolbarPdf.text = name
             if (extensionName?.lowercase() == "pdf") {
                 openFDPFile(uriPath)
+            }
+        }
+        adView = AdView(requireContext())
+        binding.adViewContainer.addView(adView)
+        // Since we're loading the banner based on the adContainerView size, we need to wait until this
+        // view is laid out before we can get the width.
+        binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
+            if (!initialLayoutComplete) {
+                initialLayoutComplete = true
+                loadBannerAds()
             }
         }
     }
@@ -180,8 +212,9 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
 //    binding.pdfView.jumpTo(1)
     }
 
-    private val onPageScrollListener = OnPageScrollListener { page, positionOffset -> }
+    private val onPageScrollListener = OnPageScrollListener { _, _ -> }
 
+    @SuppressLint("SetTextI18n")
     private val onPageChangeListener = OnPageChangeListener { page, pageCount ->
         if (binding.groupPageViewer.visibility == View.GONE) {
             binding.groupPageViewer.visible()
@@ -276,22 +309,33 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
     }
 
     private fun loadBannerAds() {
+        adView.adUnitId = getString(R.string.id_ad_banner_main)
+        adView.setAdSize(adSize)
+
+        // Create an ad request.
         val adRequest = AdRequest.Builder().build()
-        binding.adViewBannerViewer.loadAd(adRequest)
+
+        // Start loading the ad in the background.
+        adView.loadAd(adRequest)
+//        val adRequest = AdRequest.Builder().build()
+//        binding.adViewBannerMain.loadAd(adRequest)
+
     }
 
     override fun onPause() {
-        binding.adViewBannerViewer.pause()
+        adView.pause()
         super.onPause()
     }
 
+    /** Called when returning to the activity  */
     override fun onResume() {
-        binding.adViewBannerViewer.resume()
         super.onResume()
+        adView.resume()
     }
 
+    /** Called before the activity is destroyed  */
     override fun onDestroy() {
-        binding.adViewBannerViewer.destroy()
+        adView.destroy()
         super.onDestroy()
     }
 }

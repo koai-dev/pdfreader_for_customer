@@ -12,7 +12,6 @@ object PermissionUtil {
 
     @SuppressLint("NewApi")
     fun checkExternalStoragePermission(context: Context): Boolean {
-        var permissionGranted: Boolean = false
         return (sdk29andMore {
             Environment.isExternalStorageManager()
         } ?: {

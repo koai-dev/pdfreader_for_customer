@@ -44,7 +44,8 @@
     <string name="tt_theme">Theme</string>
     <string name="tt_rate_application">Rate Application</string>
     <string name="tt_share_app">Share App</string>
-    <string name="tt_term_codition">Term &amp; Codition</string>
+    <string name="tt_term_codition">Política de privacidad</string>
+    <string name="tt_have_pdf_file">Tienes %d archivo PDF</string>
     <string name="tt_language">Language</string>
     <string name="vl_english">English</string>
     <string name="vl_china">China</string>
@@ -69,5 +70,7 @@
     <string name="vl_request_read_permission_content">Se necesita un permiso de almacenamiento externo para este trabajo de aplicación, habilitarlo en la configuración del dispositivo</string>
     <string name="vl_size_folder">%d archivar</string>
     <string name="msg_recent_empty">No has leído ningún archivo recientemente</string>
-    <string name="msg_import_please_wait">Importando... Por favor espere</string>
+    <string name="msg_import_please_wait">Importando… Por favor espere</string>
+    <string name="btn_click_here_read">Haga clic aquí para leer ahora!</string>
+
 </resources>

@@ -44,7 +44,8 @@
     <string name="tt_theme">主题</string>
     <string name="tt_rate_application">费率申请</string>
     <string name="tt_share_app">共享应用程序</string>
-    <string name="tt_term_codition">术语和代码</string>
+    <string name="tt_term_codition">隐私政策</string>
+    <string name="tt_have_pdf_file">您有 %d 个 PDF 文件</string>
     <string name="tt_language">语</string>
     <string name="vl_english">英语</string>
     <string name="vl_china">中国</string>
@@ -69,5 +70,8 @@
     <string name="vl_share_document_content">与您的朋友分享文件</string>
     <string name="vl_size_folder">%d 档案</string>
     <string name="msg_recent_empty">您最近没有阅读任何文件</string>
-    <string name="msg_import_please_wait">正在导入...请稍候</string>
+    <string name="msg_import_please_wait">正在导入…请稍候</string>
+
+    <string name="btn_click_here_read">点击这里立即阅读！</string>
+
 </resources>

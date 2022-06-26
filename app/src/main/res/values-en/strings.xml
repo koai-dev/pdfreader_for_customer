@@ -1,28 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PdfReader</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="tt_request_store_permission">External storage permission</string>
+    <string name="vl_request_store_permission_content">Manage External storage permission is needed for this app work, please enable it in device settings</string>
+    <string name="vl_request_read_permission_content">Read External storage permission is needed for this app work, please enable it in device settings</string>
+    <string name="btn_continue">Continue</string>
 
-    <string name="title_my_file">My Files</string>
+
+    <string name="title_my_file">My File</string>
     <string name="title_favorite">Favorite</string>
     <string name="title_browse">Folder</string>
+    <string name="title_setting">Setting</string>
 
-    <string name="msg_no_internet">Không có kết nối mạng, vui lòng kiểm tra lại wifi/3G!</string>
-    <string name="msg_connect_server_error">Không thể kết nối đến server!</string>
-    <string name="msg_socket_time_out">Quá thời gian kết nối đến server!</string>
-    <string name="msg_unknown_host">Unknown Host Exception!</string>
-    <string name="msg_request_failed">Đã có lỗi xảy ra, vui lòng thử lại sau!</string>
+    <string name="menu_size">Size</string>
+    <string name="menu_name_a_z">Name A-Z</string>
+    <string name="menu_name_z_a">Name Z-A</string>
+    <string name="menu_date_modified">Date modified</string>
+    <string name="menu_date_added">Date added</string>
+
+    <string name="menu_rename">Rename</string>
+    <string name="menu_favorite">Favorite</string>
+    <string name="menu_unfavorite">UnFavorite</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_print">Print</string>
+
+    <string name="vl_hint_search_file">Search file</string>
+    <string name="vl_recent_file">Recent file</string>
+    <string name="vl_favorite_file">Favorite file</string>
+    <string name="vl_home_my_file">All File (%d)</string>
+    <string name="vl_home_pdf">PDF (%d)</string>
+    <string name="vl_home_word">Word (%d)</string>
+    <string name="vl_home_excel">Excel (%d)</string>
+    <string name="vl_home_power_point">Power Point (%d)</string>
+    <string name="tt_all_file">All File</string>
+    <string name="tt_pdf_file">PDF File</string>
+    <string name="tt_word_file">Word File</string>
+    <string name="tt_excel_file">Excel File</string>
+    <string name="tt_power_point_file">Power Point File</string>
+
+    <string name="tt_delete_file">Delete File</string>
+    <string name="tt_delete_file_content">Are you sure to delete?</string>
+    <string name="btn_yes">Yes</string>
+    <string name="btn_confirm">Confirm</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="tt_rename_file">Rename File</string>
+    <string name="tt_rename_file_content">Enter a new file name</string>
+    <string name="msg_rename_file_empty">File name cannot empty</string>
+    <string name="msg_rename_file_failed">Rename file failed</string>
+    <string name="msg_delete_file_failed">Delete file failed</string>
+
+    <string name="tt_change_theme">Change theme</string>
+    <string name="tt_share_file">Share File</string>
+    <string name="tt_theme">Theme</string>
+    <string name="tt_rate_application">Rate Application</string>
+    <string name="tt_share_app">Share App</string>
+    <string name="tt_term_codition">Privacy Policy</string>
+    <string name="tt_have_pdf_file">You have %d PDF file</string>
+
+    <string name="tt_language">Language</string>
+    <string name="vl_english">English</string>
+    <string name="vl_china">China</string>
+    <string name="vl_india">India</string>
+    <string name="vl_france">France</string>
+    <string name="vl_spain">Spain</string>
+    <string name="vl_portugal">Portugal</string>
+    <string name="vl_indonesia">Indonesia</string>
+    <string name="vl_korean">Korean</string>
+    <string name="vl_netherlands">Netherlands</string>
+    <string name="vl_japan">Japan</string>
+    <string name="vl_germany">Germany</string>
+
+    <string name="vl_share_application">Share Application</string>
+    <string name="vl_share_application_content">Share the application with you friends</string>
+    <string name="vl_jump_to">Jump to:</string>
+    <string name="vl_sprint">Sprint</string>
+    <string name="vl_share_document">Share Document</string>
+    <string name="vl_share_document_content">Share the document with you friends</string>
+
+    <string name="vl_total_page" translatable="false">%1d/%2d</string>
+    <string name="vl_page" translatable="false">[%1d]</string>
+
     <string name="vl_size_folder">%d file</string>
     <string name="msg_recent_empty">You didn\'t read any file recently</string>
     <string name="msg_import_please_wait">Importing… Please wait</string>
+    <string name="btn_click_here_read">Click here to read now!</string>
+
 
 </resources>

@@ -1,4 +1,5 @@
 @file:JvmName("ViewExtensions")
+@file:Suppress("DEPRECATION")
 
 package com.cocna.pdffilereader.common
 

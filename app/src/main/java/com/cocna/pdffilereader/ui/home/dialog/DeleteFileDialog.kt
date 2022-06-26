@@ -3,6 +3,7 @@ package com.cocna.pdffilereader.ui.home.dialog
 import android.app.Dialog
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Window
@@ -27,7 +28,11 @@ class DeleteFileDialog(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window?.setBackgroundDrawable(ColorDrawable(context.resources.getColor(android.R.color.transparent)))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window?.setBackgroundDrawable(ColorDrawable(context.resources.getColor(android.R.color.transparent, context.theme)))
+        }else{
+            window?.setBackgroundDrawable(ColorDrawable(context.resources.getColor(android.R.color.transparent)))
+        }
 //        window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
 
         val bind: DialogDeleteFileBinding = DialogDeleteFileBinding.inflate(LayoutInflater.from(context))

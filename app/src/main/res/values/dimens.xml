@@ -26,6 +26,8 @@
     <dimen name="height_page">24dp</dimen>
     <dimen name="height_thump_seekbar">15dp</dimen>
     <dimen name="size_image_setting">25dp</dimen>
+    <dimen name="size_image_empty">240dp</dimen>
+    <dimen name="height_button">40dp</dimen>
 
     <dimen name="text_size_title">18sp</dimen>
     <dimen name="text_size_content">13sp</dimen>

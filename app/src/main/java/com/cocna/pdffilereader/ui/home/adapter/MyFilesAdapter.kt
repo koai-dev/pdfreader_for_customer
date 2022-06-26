@@ -182,7 +182,7 @@ class MyFilesAdapter(
                     // OnUnifiedNativeAdLoadedListener implementation.
                     // If this callback occurs after the activity is destroyed, you must call
                     // destroy and return or you may get a memory leak.
-                    var activityDestroyed = false
+//                    var activityDestroyed = false
 //                    activityDestroyed = isDestroyed
 //                    if (activityDestroyed || isFinishing || isChangingConfigurations) {
 //                        nativeAd.destroy()

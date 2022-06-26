@@ -49,7 +49,8 @@
     <string name="tt_theme">Tema</string>
     <string name="tt_rate_application">Nilai Aplikasi</string>
     <string name="tt_share_app">Bagikan aplikasi</string>
-    <string name="tt_term_codition">Istilah &amp; kodisi</string>
+    <string name="tt_term_codition">Kebijakan pribadi</string>
+    <string name="tt_have_pdf_file">Anda memiliki %d file PDF</string>
     <string name="tt_language">Bahasa</string>
     <string name="vl_english">Bahasa inggris</string>
     <string name="vl_china">Cina</string>
@@ -68,7 +69,9 @@
     <string name="vl_sprint">Sprint</string>
     <string name="vl_share_document">Bagikan dokumen</string>
     <string name="vl_share_document_content">Bagikan dokumen dengan teman -teman Anda</string>
-    <string name="msg_import_please_wait">Mengimpor... Harap tunggu</string>
+    <string name="msg_import_please_wait">Mengimpor… Harap tunggu</string>
     <string name="msg_recent_empty">Anda tidak membaca file apa pun baru-baru ini</string>
     <string name="vl_size_folder">%d berkas</string>
+    <string name="btn_click_here_read">Klik di sini untuk membaca sekarang!</string>
+
 </resources>

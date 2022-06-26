@@ -3,6 +3,7 @@ package com.cocna.pdffilereader.ui.home.dialog
 import android.app.Dialog
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -28,8 +29,11 @@ class RenameFileDialog(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window?.setBackgroundDrawable(ColorDrawable(context.resources.getColor(android.R.color.transparent)))
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window?.setBackgroundDrawable(ColorDrawable(context.resources.getColor(android.R.color.transparent, context.theme)))
+        }else{
+            window?.setBackgroundDrawable(ColorDrawable(context.resources.getColor(android.R.color.transparent)))
+        }
         val bind: DialogRenameFileBinding = DialogRenameFileBinding.inflate(LayoutInflater.from(context))
         setContentView(bind.root)
         val strExtension = "." + myFileModel.extensionName

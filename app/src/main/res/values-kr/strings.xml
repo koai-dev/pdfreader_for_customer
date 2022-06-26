@@ -48,7 +48,8 @@
     <string name="tt_theme">주제</string>
     <string name="tt_rate_application">요율 응용 프로그램</string>
     <string name="tt_share_app">앱 공유</string>
-    <string name="tt_term_codition">용어 및 코드</string>
+    <string name="tt_term_codition">개인 정보 정책</string>
+    <string name="tt_have_pdf_file">%d 개의 PDF 파일이 있습니다.</string>
     <string name="tt_language">언어</string>
     <string name="vl_english">영어</string>
     <string name="vl_china">중국</string>
@@ -67,6 +68,9 @@
     <string name="vl_sprint">스프린트</string>
     <string name="vl_share_document">문서를 공유하십시오</string>
     <string name="vl_share_document_content">친구들과 문서를 공유하십시오</string>
-    <string name="msg_import_please_wait">가져오는 중... 잠시만 기다려 주십시오.</string>
+    <string name="msg_import_please_wait">가져오는 중… 잠시만 기다려 주십시오.</string>
     <string name="msg_recent_empty">최근에 파일을 읽지 않았습니다.</string>
+    <string name="vl_size_folder">%d 파일</string>
+    <string name="btn_click_here_read">지금 읽으려면 여기를 클릭하십시오!</string>
+
 </resources>

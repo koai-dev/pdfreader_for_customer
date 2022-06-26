@@ -21,6 +21,7 @@ import java.util.*
 /**
  * Created by Thuytv on 09/06/2022.
  */
+@Suppress("DEPRECATION")
 abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     private var _binding: ViewBinding? = null
     abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
@@ -29,7 +30,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
     @Suppress("UNCHECKED_CAST")
     protected val binding: VB
-        get(){
+        get() {
             return _binding as VB
         }
 
@@ -68,7 +69,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     }
 
     fun getBaseActivity(): BaseActivity<*>? {
-        return activity as BaseActivity<*>
+        return activity as? BaseActivity<*>
     }
 
     fun setAppLocale(context: Context, language: String) {

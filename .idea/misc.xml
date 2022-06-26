@@ -39,7 +39,9 @@
         <entry key="app/src/main/res/layout/content_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/dialog_confirm_file.xml" value="0.16041666666666668" />
         <entry key="app/src/main/res/layout/dialog_delete_file.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/dialog_progress_bar.xml" value="0.225" />
         <entry key="app/src/main/res/layout/dialog_rename_file.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/dialog_well_comeback.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_browse.xml" value="0.19583333333333333" />
         <entry key="app/src/main/res/layout/fragment_favorite.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.146875" />
@@ -48,6 +50,7 @@
         <entry key="app/src/main/res/layout/fragment_my_file_detail.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_my_files.xml" value="0.19583333333333333" />
         <entry key="app/src/main/res/layout/fragment_pdf_viewer.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/fragment_private_policy.xml" value="0.14583333333333334" />
         <entry key="app/src/main/res/layout/fragment_recent.xml" value="0.19583333333333333" />
         <entry key="app/src/main/res/layout/fragment_setting.xml" value="0.2015625" />
         <entry key="app/src/main/res/layout/fragment_slideshow.xml" value="0.19583333333333333" />

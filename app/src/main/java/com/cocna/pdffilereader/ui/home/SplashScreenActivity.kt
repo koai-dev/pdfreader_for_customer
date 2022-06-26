@@ -6,10 +6,13 @@ import android.view.LayoutInflater
 import com.google.android.gms.ads.*
 import com.cocna.pdffilereader.MainActivity
 import com.cocna.pdffilereader.PdfApplication
+import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.ActivitySplassScreenBinding
 import com.cocna.pdffilereader.ui.base.BaseActivity
+import com.cocna.pdffilereader.ui.base.OnCallbackLoadAds
 import com.cocna.pdffilereader.ui.setting.LanguageActivity
+import com.google.android.gms.ads.interstitial.InterstitialAd
 import java.util.*
 
 /**
@@ -28,21 +31,39 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
         if ((sharedPreferences.getValueLong(SharePreferenceUtils.KEY_TIME_INSTALL) ?: 0) <= 0) {
             Logger.showLog("Thuytv----------KEY_TIME_INSTALL")
             sharedPreferences.setValueLong(SharePreferenceUtils.KEY_TIME_INSTALL, System.currentTimeMillis())
-        }else{
+        } else {
             val isSend3Days = sharedPreferences.getValueBoolean(SharePreferenceUtils.KEY_SEND_EVENT_3DAYS)
             val isSend7Days = sharedPreferences.getValueBoolean(SharePreferenceUtils.KEY_SEND_EVENT_7DAYS)
-            if(isSend3Days == false && Common.checkDayUseApp(this, 3)){
+            if (isSend3Days == false && Common.checkDayUseApp(this, 3)) {
                 Logger.showLog("Thuytv----------KEY_EVENT_FB_APP_3DAYS")
                 sharedPreferences.setValueBoolean(SharePreferenceUtils.KEY_SEND_EVENT_3DAYS, true)
                 logEventFirebase(AppConfig.KEY_EVENT_FB_APP_3DAYS, AppConfig.KEY_EVENT_FB_APP_3DAYS)
             }
-            if(isSend7Days == false && Common.checkDayUseApp(this, 7)){
+            if (isSend7Days == false && Common.checkDayUseApp(this, 7)) {
                 Logger.showLog("Thuytv----------KEY_EVENT_FB_APP_7DAYS")
                 sharedPreferences.setValueBoolean(SharePreferenceUtils.KEY_SEND_EVENT_7DAYS, true)
                 logEventFirebase(AppConfig.KEY_EVENT_FB_APP_7DAYS, AppConfig.KEY_EVENT_FB_APP_7DAYS)
             }
         }
-        createTimer(5L)
+        loadInterstAds(getString(R.string.id_interstitial_ad_splash), object : OnCallbackLoadAds {
+            override fun onCallbackActionLoadAds(isSuccess: Boolean) {
+                val application = application as? PdfApplication
+                if (application == null) {
+                    gotoMainScreen()
+                    return
+                }
+
+                // Show the app open ad.
+                application.showAdIfAvailable(
+                    this@SplashScreenActivity,
+                    object : PdfApplication.OnShowAdCompleteListener {
+                        override fun onShowAdComplete() {
+                            gotoMainScreen()
+                        }
+                    })
+            }
+        })
+//        createTimer(3L)
     }
 
     override fun initEvents() {

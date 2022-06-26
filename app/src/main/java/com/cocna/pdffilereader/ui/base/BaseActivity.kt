@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.cocna.pdffilereader.ui.base
 
 import android.content.Context
@@ -10,6 +12,8 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.print.PrintAttributes
 import android.print.PrintManager
 import android.view.LayoutInflater
@@ -21,6 +25,7 @@ import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.cocna.pdffilereader.common.*
+import com.cocna.pdffilereader.ui.home.dialog.WellComeBackDialog
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -79,9 +84,11 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
             Common.IS_SEND_FIREBASE = true
             logEventFirebase(AppConfig.KEY_EVENT_FB_APP_2MINS, AppConfig.KEY_EVENT_FB_APP_2MINS)
         }
-        if (Common.IS_BACK_FROM_BACKGROUND == true) {
-            Common.IS_BACK_FROM_BACKGROUND = false
-            loadInterstAds(getString(R.string.id_interstitial_ad_background))
+        Logger.showLog("Thuytv-----onResume------" + Common.IS_BACK_FROM_BACKGROUND)
+        if (Common.IS_BACK_FROM_BACKGROUND == false) {
+            Common.IS_BACK_FROM_BACKGROUND = true
+//            loadInterstAds(getString(R.string.id_interstitial_ad_background), null)
+            WellComeBackDialog().show(supportFragmentManager, "WELL_COMEBACK")
         }
     }
 
@@ -176,32 +183,35 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         }
     }
 
-    fun loadInterstAds(uuidAds: String) {
+    fun loadInterstAds(uuidAds: String, onCallbackLoadAds: OnCallbackLoadAds?) {
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(this, uuidAds, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
-                Logger.showLog("---onAdFailedToLoad: " + adError?.message + "---countRetry: $countRetry")
+                Logger.showLog("---onAdFailedToLoad: " + adError.message + "---countRetry: $countRetry")
                 mInterstitialAd = null
                 if (countRetry < 2) {
                     countRetry++
-                    loadInterstAds(uuidAds)
+                    loadInterstAds(uuidAds, onCallbackLoadAds)
+                } else {
+                    onCallbackLoadAds?.onCallbackActionLoadAds(false)
                 }
             }
 
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 Logger.showLog("---onAdLoaded--Success")
                 mInterstitialAd = interstitialAd
-                showInterstitial()
+                showInterstitial(onCallbackLoadAds)
             }
         })
     }
 
-    private fun showInterstitial() {
+    private fun showInterstitial(onCallbackLoadAds: OnCallbackLoadAds?) {
         // Show the ad if it"s ready. Otherwise toast and reload the ad.
         if (mInterstitialAd != null) {
             mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
                     Logger.showLog("--fullScreenContentCallback-onAdDismissedFullScreenContent")
+                    onCallbackLoadAds?.onCallbackActionLoadAds(true)
                 }
 
                 override fun onAdFailedToShowFullScreenContent(adError: AdError) {
@@ -215,6 +225,8 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
                 }
             }
             mInterstitialAd!!.show(this)
+        } else {
+            onCallbackLoadAds?.onCallbackActionLoadAds(false)
         }
     }
 

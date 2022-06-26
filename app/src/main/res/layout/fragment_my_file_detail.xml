@@ -52,7 +52,7 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/margin_small"
             android:padding="@dimen/margin_all"
-            android:src="@drawable/ic_three_dots" />
+            android:src="@drawable/ic_filter_all" />
     </LinearLayout>
 
     <LinearLayout

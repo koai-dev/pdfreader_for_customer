@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -24,6 +25,7 @@ private const val AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712"
 class PdfApplication : MultiDexApplication(), Application.ActivityLifecycleCallbacks, LifecycleObserver {
     private lateinit var appOpenAdManager: AppOpenAdManager
     private var currentActivity: Activity? = null
+    private var countDownTimer: CountDownTimer? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -40,10 +42,12 @@ class PdfApplication : MultiDexApplication(), Application.ActivityLifecycleCallb
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onMoveToForeground() {
         // Show the ad (if available) when the app moves to foreground.
-        Logger.showLog("Thuytv------onMoveToForeground")
-        if (Common.IS_BACK_FROM_BACKGROUND == false) {
-            Common.IS_BACK_FROM_BACKGROUND = true
-        }
+        Logger.showLog("Thuytv------onMoveToForeground : "+ Common.IS_BACK_FROM_BACKGROUND)
+        countDownTimer?.cancel()
+        countDownTimer = null
+//        if (Common.IS_BACK_FROM_BACKGROUND == false) {
+//            Common.IS_BACK_FROM_BACKGROUND = true
+//        }
         currentActivity?.let {
             Logger.showLog("Thuytv------onMoveToForeground-2222")
             appOpenAdManager.showAdIfAvailable(it)
@@ -53,8 +57,20 @@ class PdfApplication : MultiDexApplication(), Application.ActivityLifecycleCallb
     @Suppress("DEPRECATION")
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onAppBackgrounded() {
-        Common.IS_BACK_FROM_BACKGROUND = false
-        Logger.showLog("Thuytv------onAppBackgrounded")
+        if (countDownTimer == null) {
+            countDownTimer = object : CountDownTimer(1 * 1000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    Logger.showLog("Thuytv------millisUntilFinished: $millisUntilFinished ---IS_BACK_FROM_BACKGROUND: " + Common.IS_BACK_FROM_BACKGROUND)
+                }
+
+                override fun onFinish() {
+                    Common.IS_BACK_FROM_BACKGROUND = false
+                    countDownTimer = null
+                    Logger.showLog("Thuytv------onAppBackgrounded")
+                }
+            }
+            countDownTimer?.start()
+        }
     }
 
     /** ActivityLifecycleCallback methods. */

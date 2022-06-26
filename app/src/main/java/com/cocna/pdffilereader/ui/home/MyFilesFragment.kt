@@ -19,12 +19,14 @@ import com.anggrayudi.storage.file.*
 import com.google.gson.Gson
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
+import com.cocna.pdffilereader.databinding.DialogProgressBarBinding
 import com.cocna.pdffilereader.databinding.FragmentMyFilesBinding
 import com.cocna.pdffilereader.myinterface.OnDialogItemClickListener
 import com.cocna.pdffilereader.myinterface.OnPopupMenuItemClickListener
 import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.home.adapter.MyFilesAdapter
 import com.cocna.pdffilereader.ui.home.dialog.DeleteFileDialog
+import com.cocna.pdffilereader.ui.home.dialog.ProgressDialog
 import com.cocna.pdffilereader.ui.home.dialog.RenameFileDialog
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import io.reactivex.disposables.Disposable
@@ -60,16 +62,18 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
         setupRecycleView()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             executeWithPerm {
-                binding.prbLoadingFile.visible()
+//                binding.prbLoadingFile.visible()
+                val dialogProgress = ProgressDialog(requireContext())
+                dialogProgress.show()
                 Handler(Looper.myLooper()!!).postDelayed({
-                    getAllFilePdf(false)
+                    getAllFilePdf(false,dialogProgress)
                 }, 500)
             }
         }
     }
 
     override fun initEvents() {
-        listenClickViews(binding.llMyFile, binding.llPdf, binding.llWord, binding.llExcel, binding.llPowerPoint, binding.imvReloadRecent, binding.imvRecentMore)
+        listenClickViews(binding.llMyFile, binding.btnClickToRead, binding.llWord, binding.llExcel, binding.llPowerPoint, binding.imvReloadRecent, binding.imvRecentMore)
     }
 
     override fun onClick(v: View?) {
@@ -78,7 +82,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
 //            R.id.llMyFile -> {
 //                gotoMyFileDetail(lstAllFile, getString(R.string.tt_all_file))
 //            }
-            R.id.llPdf -> {
+            R.id.btnClickToRead -> {
                 gotoMyFileDetail(lstFilePdf, getString(R.string.tt_pdf_file))
             }
 //            R.id.llWord -> {
@@ -109,6 +113,13 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
     private fun setupRecycleView() {
         val lstRecent = getBaseActivity()?.sharedPreferences?.getRecentFile()
         Logger.showLog("Thuytv------lstRecent: " + Gson().toJson(lstRecent))
+        if (lstRecent.isNullOrEmpty()) {
+            binding.llEmptyRecent.visible()
+            binding.rcvRecentFile.gone()
+        } else {
+            binding.llEmptyRecent.gone()
+            binding.rcvRecentFile.visible()
+        }
         mRecentAdapter = MyFilesAdapter(context, lstRecent ?: ArrayList(), 0, object : MyFilesAdapter.OnItemClickListener {
             override fun onClickItem(documentFile: MyFilesModel) {
                 val bundle = Bundle()
@@ -209,21 +220,18 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
 
     }
 
-    private fun getAllFilePdf(isReload: Boolean) {
+    private fun getAllFilePdf(isReload: Boolean, dialogProgress: ProgressDialog) {
         var root = DocumentFileCompat.getRootDocumentFile(requireContext(), "primary", true)
         if (root == null) {
             root = DocumentFile.fromFile(File(PATH_DEFAULT_STORE))
         }
         val mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")!!
         val pdfArray = root.search(true, DocumentFileType.FILE, arrayOf(mime))
-        Log.e("lstFilePdf", pdfArray?.size.toString())
-        if ((pdfArray?.size ?: 0) > 0) {
-//            mRecentAdapter.updateData(pdfArray as ArrayList<DocumentFile>)
+        if (pdfArray.isNotEmpty()) {
             if (isReload) {
-//                lstAllFile.removeAll(lstFilePdf.toSet())
                 lstFilePdf.clear()
             }
-            for (item in pdfArray!!) {
+            for (item in pdfArray) {
                 val model =
                     MyFilesModel(
                         name = item.name,
@@ -237,11 +245,12 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
 //                lstAllFile.add(model)
             }
         }
-        binding.vlHomePdf.text = getString(R.string.vl_home_pdf, lstFilePdf.size)
+        binding.ttValuePdf.text = getString(R.string.tt_have_pdf_file, lstFilePdf.size)
 //        if (!isReload) {
 //            getAllFileWord(isReload)
 //        }
-        binding.prbLoadingFile.gone()
+//        binding.prbLoadingFile.gone()
+        dialogProgress.dismiss()
     }
 //
 //    private fun getAllFileWord(isReload: Boolean) {
@@ -447,6 +456,13 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
         val lstRecent = getBaseActivity()?.sharedPreferences?.getRecentFile()
         lstRecent?.apply {
             getBaseActivity()?.runOnUiThread {
+                if (lstRecent.isNullOrEmpty()) {
+                    binding.llEmptyRecent.visible()
+                    binding.rcvRecentFile.gone()
+                } else {
+                    binding.llEmptyRecent.gone()
+                    binding.rcvRecentFile.visible()
+                }
                 mRecentAdapter?.updateData(this)
             }
         }
@@ -459,14 +475,14 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                 when (menuItem?.itemId) {
                     R.id.menu_all_size -> {
                         lstRecent?.apply {
-                            sortWith(Comparator { o1, o2 -> o1.length!!.compareTo(o2.length!!) })
+                            sortWith { o1, o2 -> o1.length!!.compareTo(o2.length!!) }
                             mRecentAdapter?.updateData(this)
                         }
 
                     }
                     R.id.menu_all_name_a_z -> {
                         lstRecent?.apply {
-                            sortWith(Comparator { o1, o2 -> o1.name!!.compareTo(o2.name!!) })
+                            sortWith { o1, o2 -> o1.name!!.compareTo(o2.name!!) }
                             mRecentAdapter?.updateData(this)
                         }
                     }

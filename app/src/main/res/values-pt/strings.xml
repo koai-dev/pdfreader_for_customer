@@ -48,7 +48,8 @@
     <string name="tt_theme">Tema</string>
     <string name="tt_rate_application">Aplicação de avaliação</string>
     <string name="tt_share_app">Compartilhe o aplicativo</string>
-    <string name="tt_term_codition">Termo &amp;  Codition</string>
+    <string name="tt_term_codition">Política de Privacidade</string>
+    <string name="tt_have_pdf_file">Você tem %d arquivo PDF</string>
     <string name="tt_language">Linguagem</string>
     <string name="vl_english">Inglês</string>
     <string name="vl_china">China</string>
@@ -67,7 +68,9 @@
     <string name="vl_sprint">Corrida</string>
     <string name="vl_share_document">Compartilhe documento</string>
     <string name="vl_share_document_content">Compartilhe o documento com seus amigos</string>
-    <string name="msg_import_please_wait">Importando... Aguarde</string>
+    <string name="msg_import_please_wait">Importando… Aguarde</string>
     <string name="msg_recent_empty">Você não leu nenhum arquivo recentemente</string>
     <string name="vl_size_folder">%d Arquivo</string>
+    <string name="btn_click_here_read">Clique aqui para ler agora!</string>
+
 </resources>

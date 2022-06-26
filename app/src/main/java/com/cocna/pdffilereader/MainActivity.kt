@@ -9,7 +9,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
 
     override fun initData() {
-        loadInterstAds(getString(R.string.id_interstitial_ad_splash))
+//        loadInterstAds(getString(R.string.id_interstitial_ad_splash), null)
     }
 
     override fun initEvents() {
