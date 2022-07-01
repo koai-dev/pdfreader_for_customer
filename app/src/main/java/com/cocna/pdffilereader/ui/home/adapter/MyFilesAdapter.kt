@@ -30,37 +30,64 @@ class MyFilesAdapter(
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
     private val ID_AD_NATIVE_FILE = "ca-app-pub-3940256099942544/2247696110"
-    var currentNativeAd: NativeAd? = null
     var mFileFilterList = ArrayList<MyFilesModel>()
+    var mFileListWithAds = ArrayList<MyFilesModel>()
+    private var adsPosition = 0
 
     companion object {
         const val TYPE_VIEW_FILE = 0
         const val TYPE_VIEW_ADS = 1
+        const val TYPE_VIEW_ADS_GRID = 4
         const val TYPE_VIEW_FILE_GRID = 2
         const val TYPE_VIEW_FOLDER = 3
     }
 
     init {
-        mFileFilterList = lstData
+//        mFileFilterList = lstData
+        updateDataAds(lstData)
+    }
+
+    private fun updateDataAds(mListData: ArrayList<MyFilesModel>): ArrayList<MyFilesModel> {
+        if (mListData.isNotEmpty()) {
+            mFileListWithAds.clear()
+            adsPosition = 0
+            for (item in mListData) {
+                if (adsPosition == 5) {
+                    val adsFile = MyFilesModel()
+                    adsFile.isAds = true
+                    mFileListWithAds.add(adsFile)
+                    adsPosition = 0
+                }
+                item.isAds = false
+                mFileListWithAds.add(item)
+                adsPosition++
+            }
+        }
+//        else if (typeAdapter == TYPE_VIEW_FILE_GRID || typeAdapter == TYPE_VIEW_FOLDER) {
+//            mFileListWithAds.clear()
+//            mFileListWithAds.addAll(mListData)
+//        }
+        return mFileListWithAds
     }
 
     fun updateData(mlstData: ArrayList<MyFilesModel>) {
         lstData = mlstData
-        mFileFilterList = lstData
+//        mFileFilterList = lstData
+        updateDataAds(lstData)
         notifyDataSetChanged()
     }
 
     fun renameData(mData: MyFilesModel) {
-        val indexItem = mFileFilterList.indexOf(mData)
+        val indexItem = mFileListWithAds.indexOf(mData)
         if (indexItem > -1) {
-            mFileFilterList[indexItem] = mData
+            mFileListWithAds[indexItem] = mData
             notifyItemChanged(indexItem)
         }
     }
 
     fun deleteData(mData: MyFilesModel) {
-        val indexItem = mFileFilterList.indexOf(mData)
-        mFileFilterList.remove(mData)
+        val indexItem = mFileListWithAds.indexOf(mData)
+        mFileListWithAds.remove(mData)
         notifyItemRemoved(indexItem)
     }
 
@@ -70,9 +97,14 @@ class MyFilesAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-//        if (position > 0 && position % 4 == 0) return TYPE_VIEW_ADS
-        if ((mFileFilterList[position].lstChildFile?.size ?: 0) > 0) return TYPE_VIEW_FOLDER
-        if (position > 0 && position % 5 == 0 && typeAdapter != TYPE_VIEW_FILE_GRID) return TYPE_VIEW_ADS
+        if ((mFileListWithAds[position].lstChildFile?.size ?: 0) > 0) return TYPE_VIEW_FOLDER
+        if (mFileListWithAds[position].isAds == true) {
+            if (typeAdapter == TYPE_VIEW_FILE_GRID) {
+                return TYPE_VIEW_ADS_GRID
+            } else {
+                return TYPE_VIEW_ADS
+            }
+        }
         return typeAdapter
     }
 
@@ -83,7 +115,8 @@ class MyFilesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            TYPE_VIEW_ADS -> AdsItemView(parent.inflate(com.cocna.pdffilereader.R.layout.item_view_ads))
+            TYPE_VIEW_ADS -> AdsItemView(parent.inflate(R.layout.item_view_ads))
+            TYPE_VIEW_ADS_GRID -> AdsItemGridView(parent.inflate(R.layout.item_view_ads))
             TYPE_VIEW_FILE_GRID -> GridItemView(parent.inflate(R.layout.item_view_files_grid))
             TYPE_VIEW_FOLDER -> MyFolderItemView(parent.inflate(R.layout.item_view_my_folder))
             else -> MyFilesItemView(parent.inflate(R.layout.item_view_my_files))
@@ -92,15 +125,16 @@ class MyFilesAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is MyFilesItemView -> holder.bind(mFileFilterList[position])
-            is GridItemView -> holder.bind(mFileFilterList[position])
+            is MyFilesItemView -> holder.bind(mFileListWithAds[position])
+            is GridItemView -> holder.bind(mFileListWithAds[position])
             is AdsItemView -> holder.bind()
-            is MyFolderItemView -> holder.bind(mFileFilterList[position])
+            is AdsItemGridView -> holder.bind()
+            is MyFolderItemView -> holder.bind(mFileListWithAds[position])
         }
     }
 
     override fun getItemCount(): Int {
-        return mFileFilterList.size
+        return mFileListWithAds.size
     }
 
     inner class MyFilesItemView(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -167,7 +201,7 @@ class MyFilesAdapter(
                 imageView.setImageResource(R.drawable.ic_powpoint_file)
             }
             else -> {
-                imageView.setImageResource(R.drawable.ic_doc_file)
+                imageView.setImageResource(R.drawable.ic_pdf_file)
             }
         }
     }
@@ -179,22 +213,9 @@ class MyFilesAdapter(
                 val builder = AdLoader.Builder(mContext, ID_AD_NATIVE_FILE)
 
                 builder.forNativeAd { nativeAd ->
-                    // OnUnifiedNativeAdLoadedListener implementation.
-                    // If this callback occurs after the activity is destroyed, you must call
-                    // destroy and return or you may get a memory leak.
-//                    var activityDestroyed = false
-//                    activityDestroyed = isDestroyed
-//                    if (activityDestroyed || isFinishing || isChangingConfigurations) {
-//                        nativeAd.destroy()
-//                        return@forNativeAd
-//                    }
-                    // You must call destroy on old ads when you are done with them,
-                    // otherwise you will have a memory leak.
-//                    currentNativeAd?.destroy()
-//                    currentNativeAd = nativeAd
                     val adView = LayoutInflater.from(mContext)
                         .inflate(R.layout.ads_unfield_item_file, null) as NativeAdView
-                    populateNativeAdView(nativeAd, adView)
+                    populateNativeAdView(nativeAd, adView, true)
                     binding.frameAdsFrame.removeAllViews()
                     binding.frameAdsFrame.addView(adView)
                 }
@@ -203,18 +224,14 @@ class MyFilesAdapter(
 //            .setStartMuted(start_muted_checkbox.isChecked)
 //                    .build()
 
-                val adOptions = NativeAdOptions.Builder()
-//                    .setVideoOptions(videoOptions)
-                    .build()
-
-                builder.withNativeAdOptions(adOptions)
+//                val adOptions = NativeAdOptions.Builder()
+////                    .setVideoOptions(videoOptions)
+//                    .build()
+//
+//                builder.withNativeAdOptions(adOptions)
 
                 val adLoader = builder.withAdListener(object : AdListener() {
                     override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                        val error =
-                            """
-           domain: ${loadAdError.domain}, code: ${loadAdError.code}, message: ${loadAdError.message}
-          """"
                     }
                 }).build()
 
@@ -225,13 +242,39 @@ class MyFilesAdapter(
         }
     }
 
-    private fun populateNativeAdView(nativeAd: NativeAd, adView: NativeAdView) {
+    inner class AdsItemGridView(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind() {
+            val binding = ItemViewAdsBinding.bind(itemView)
+            mContext?.apply {
+                val builder = AdLoader.Builder(mContext, ID_AD_NATIVE_FILE)
+
+                builder.forNativeAd { nativeAd ->
+                    val adView = LayoutInflater.from(mContext)
+                        .inflate(R.layout.ads_unfield_item_file_grid, null) as NativeAdView
+                    populateNativeAdView(nativeAd, adView, false)
+                    binding.frameAdsFrame.removeAllViews()
+                    binding.frameAdsFrame.addView(adView)
+                }
+                val adLoader = builder.withAdListener(object : AdListener() {
+                    override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                    }
+                }).build()
+
+                adLoader.loadAd(AdRequest.Builder().build())
+            }
+
+
+        }
+    }
+
+    private fun populateNativeAdView(nativeAd: NativeAd, adView: NativeAdView, isListView: Boolean) {
 
         adView.iconView = adView.findViewById(R.id.ad_app_icon)
         adView.callToActionView = adView.findViewById(R.id.ad_call_to_action)
         adView.headlineView = adView.findViewById(R.id.ad_headline)
-        adView.advertiserView = adView.findViewById(R.id.ad_advertiser)
-
+        if (isListView) {
+            adView.advertiserView = adView.findViewById(R.id.ad_advertiser)
+        }
         // The headline and media content are guaranteed to be in every UnifiedNativeAd.
         (adView.headlineView as TextView).text = nativeAd.headline
 
@@ -250,14 +293,14 @@ class MyFilesAdapter(
             )
             adView.iconView?.visibility = View.VISIBLE
         }
-
-        if (nativeAd.advertiser == null) {
-            adView.advertiserView?.visibility = View.INVISIBLE
-        } else {
-            (adView.advertiserView as TextView).text = nativeAd.advertiser
-            adView.advertiserView?.visibility = View.VISIBLE
+        if (isListView) {
+            if (nativeAd.advertiser == null) {
+                adView.advertiserView?.visibility = View.INVISIBLE
+            } else {
+                (adView.advertiserView as TextView).text = nativeAd.advertiser
+                adView.advertiserView?.visibility = View.VISIBLE
+            }
         }
-
         // This method tells the Google Mobile Ads SDK that you have finished populating your
         // native ad view with this native ad.
         adView.setNativeAd(nativeAd)
@@ -269,7 +312,7 @@ class MyFilesAdapter(
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val charSearch = constraint.toString()
                 if (charSearch.isEmpty()) {
-                    mFileFilterList = lstData
+                    mFileFilterList = updateDataAds(lstData)
                 } else {
                     val resultList = ArrayList<MyFilesModel>()
                     for (row in lstData) {
@@ -286,7 +329,7 @@ class MyFilesAdapter(
 
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                mFileFilterList = results?.values as ArrayList<MyFilesModel>
+                mFileListWithAds = results?.values as ArrayList<MyFilesModel>
                 notifyDataSetChanged()
             }
         }

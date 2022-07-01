@@ -13,7 +13,7 @@ class MyFileDetailActivity : BaseActivity<ActivityBaseBinding>() {
         get() = ActivityBaseBinding::inflate
 
     override fun initData() {
-        replaceFragment(MyFileDetailFragment(), intent.extras, R.id.layout_container)
+//        replaceFragment(MyFileDetailFragment(), intent.extras, R.id.layout_container)
     }
 
     override fun initEvents() {

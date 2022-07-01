@@ -72,5 +72,6 @@
     <string name="vl_size_folder">%d dossier</string>
     <string name="msg_recent_empty">Vous n\'avez lu aucun fichier récemment</string>
     <string name="btn_click_here_read">Cliquez ici pour lire maintenant!</string>
+    <string name="vl_history_file">Fichier historique (%d)</string>
 
 </resources>

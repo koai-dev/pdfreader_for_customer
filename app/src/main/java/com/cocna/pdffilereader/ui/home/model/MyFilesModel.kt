@@ -26,7 +26,9 @@ data class MyFilesModel(
     @field:SerializedName("folder_name")
     var folderName: String? = null,
     @field:SerializedName("list_child_file")
-    var lstChildFile: ArrayList<MyFilesModel>? = null
+    var lstChildFile: ArrayList<MyFilesModel>? = null,
+    @field:SerializedName("is_ads")
+    var isAds: Boolean? = null,
 ) : Parcelable {
     override fun equals(other: Any?): Boolean {
         if (other == null) {

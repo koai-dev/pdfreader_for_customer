@@ -73,5 +73,6 @@
     <string name="msg_recent_empty">最近ファイルを読んでいません</string>
     <string name="vl_size_folder">%d ファイル</string>
     <string name="btn_click_here_read">今すぐ読むにはここをクリックしてください！</string>
+    <string name="vl_history_file">履歴ファイル（(%d)</string>
 
 </resources>

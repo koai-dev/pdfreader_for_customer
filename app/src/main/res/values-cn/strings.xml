@@ -73,5 +73,6 @@
     <string name="msg_import_please_wait">正在导入…请稍候</string>
 
     <string name="btn_click_here_read">点击这里立即阅读！</string>
+    <string name="vl_history_file">历史文件 (%d)</string>
 
 </resources>

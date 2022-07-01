@@ -73,5 +73,6 @@
     <string name="msg_recent_empty">आपने हाल ही में कोई फ़ाइल नहीं पढ़ी</string>
     <string name="msg_import_please_wait">आयात किया जा रहा है… कृपया प्रतीक्षा करें</string>
     <string name="btn_click_here_read">अभी पढ़ने के लिए यहां क्लिक करें!</string>
+    <string name="vl_history_file">इतिहास फ़ाइल (%d)</string>
 
 </resources>

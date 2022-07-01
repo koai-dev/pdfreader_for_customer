@@ -72,5 +72,6 @@
     <string name="msg_recent_empty">Je hebt de laatste tijd geen bestand gelezen</string>
     <string name="vl_size_folder">%d het dossier</string>
     <string name="btn_click_here_read">Klik hier om nu te lezen!</string>
+    <string name="vl_history_file">Geschiedenisbestand (%d)</string>
 
 </resources>

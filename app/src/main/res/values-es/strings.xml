@@ -72,5 +72,6 @@
     <string name="msg_recent_empty">No has leído ningún archivo recientemente</string>
     <string name="msg_import_please_wait">Importando… Por favor espere</string>
     <string name="btn_click_here_read">Haga clic aquí para leer ahora!</string>
+    <string name="vl_history_file">Archivo de historial (%d)</string>
 
 </resources>

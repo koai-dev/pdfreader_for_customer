@@ -72,5 +72,6 @@
     <string name="msg_recent_empty">최근에 파일을 읽지 않았습니다.</string>
     <string name="vl_size_folder">%d 파일</string>
     <string name="btn_click_here_read">지금 읽으려면 여기를 클릭하십시오!</string>
+    <string name="vl_history_file">기록 파일 (%d)</string>
 
 </resources>

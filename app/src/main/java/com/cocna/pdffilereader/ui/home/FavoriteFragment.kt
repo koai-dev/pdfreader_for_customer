@@ -175,7 +175,8 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>() {
                             mFavoriteAdapter?.renameData(it)
                         }
                     }
-                } else if (it.isDelete == true) {
+                }
+                if (it.isDelete == true) {
                     val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile()
                     if (lstFavorite?.contains(it) == true) {
                         getBaseActivity()?.sharedPreferences?.removeFavoriteFile(it)

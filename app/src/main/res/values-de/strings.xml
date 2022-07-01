@@ -73,5 +73,6 @@
     <string name="msg_import_please_wait">Importieren… Bitte warten</string>
     <string name="msg_recent_empty">Sie haben in letzter Zeit keine Datei gelesen</string>
     <string name="btn_click_here_read">Klicken Sie hier, um jetzt zu lesen!</string>
+    <string name="vl_history_file">Verlaufsdatei (%d)</string>
 
 </resources>

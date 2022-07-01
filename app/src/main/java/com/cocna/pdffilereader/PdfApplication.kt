@@ -49,7 +49,6 @@ class PdfApplication : MultiDexApplication(), Application.ActivityLifecycleCallb
 //            Common.IS_BACK_FROM_BACKGROUND = true
 //        }
         currentActivity?.let {
-            Logger.showLog("Thuytv------onMoveToForeground-2222")
             appOpenAdManager.showAdIfAvailable(it)
         }
     }
@@ -58,7 +57,7 @@ class PdfApplication : MultiDexApplication(), Application.ActivityLifecycleCallb
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onAppBackgrounded() {
         if (countDownTimer == null) {
-            countDownTimer = object : CountDownTimer(1 * 1000, 1000) {
+            countDownTimer = object : CountDownTimer(30 * 1000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     Logger.showLog("Thuytv------millisUntilFinished: $millisUntilFinished ---IS_BACK_FROM_BACKGROUND: " + Common.IS_BACK_FROM_BACKGROUND)
                 }

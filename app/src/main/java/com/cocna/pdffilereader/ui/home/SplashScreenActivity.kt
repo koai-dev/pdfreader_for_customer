@@ -45,6 +45,12 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                 logEventFirebase(AppConfig.KEY_EVENT_FB_APP_7DAYS, AppConfig.KEY_EVENT_FB_APP_7DAYS)
             }
         }
+
+//        createTimer(3L)
+    }
+
+    override fun onResume() {
+        super.onResume()
         loadInterstAds(getString(R.string.id_interstitial_ad_splash), object : OnCallbackLoadAds {
             override fun onCallbackActionLoadAds(isSuccess: Boolean) {
                 val application = application as? PdfApplication
@@ -63,7 +69,6 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                     })
             }
         })
-//        createTimer(3L)
     }
 
     override fun initEvents() {

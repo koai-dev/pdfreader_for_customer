@@ -29,7 +29,7 @@
     <string name="vl_hint_search_file">Search file</string>
     <string name="vl_recent_file">Recent file</string>
     <string name="vl_favorite_file">Favorite file</string>
-    <string name="vl_home_my_file">All File (%d)</string>
+    <string name="vl_home_my_file">All PDF File (%d)</string>
     <string name="vl_home_pdf">PDF (%d)</string>
     <string name="vl_home_word">Word (%d)</string>
     <string name="vl_home_excel">Excel (%d)</string>
@@ -86,6 +86,7 @@
     <string name="msg_recent_empty">You didn\'t read any file recently</string>
     <string name="msg_import_please_wait">Importing… Please wait</string>
     <string name="btn_click_here_read">Click here to read now!</string>
+    <string name="vl_history_file">History File (%d)</string>
 
 
 </resources>

@@ -1,87 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_bg"
+    android:background="@color/color_bg_menu"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/llToolbarAll"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_toolbar_all"
-        android:background="@color/color_bg_toolbar"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/imvAllBack"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="@dimen/margin_all"
-            android:src="@drawable/ic_back_all" />
-
-        <TextView
-            android:id="@+id/ttToolbar"
-            style="@style/Text_Title_All"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/margin_all"
-            android:layout_weight="1"
-            android:gravity="center|start"
-            android:text="All File" />
-
-        <ImageView
-            android:id="@+id/imvTypeAdapter"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="@dimen/margin_all"
-            android:src="@drawable/ic_grid_type" />
-
-        <ImageView
-            android:id="@+id/imvToolbarSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="@dimen/margin_all"
-            android:src="@drawable/ic_search_normal" />
-
-        <ImageView
-            android:id="@+id/imvToolbarMore"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:padding="@dimen/margin_all"
-            android:src="@drawable/ic_filter_all" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llToolbarSearch"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_toolbar_all"
-        android:background="@color/color_bg_toolbar"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/edtSearch"
-            style="@style/Text_Edittext_Search"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/margin_all"
-            android:layout_weight="1" />
-
-        <ImageView
-            android:id="@+id/imvCloseSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_all"
-            android:padding="@dimen/margin_all"
-            android:src="@drawable/ic_close_search" />
-    </LinearLayout>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvAllFile"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_all" />
 </LinearLayout>

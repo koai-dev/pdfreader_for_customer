@@ -73,5 +73,6 @@
     <string name="msg_recent_empty">Anda tidak membaca file apa pun baru-baru ini</string>
     <string name="vl_size_folder">%d berkas</string>
     <string name="btn_click_here_read">Klik di sini untuk membaca sekarang!</string>
+    <string name="vl_history_file">Berkas Riwayat (%d)</string>
 
 </resources>
