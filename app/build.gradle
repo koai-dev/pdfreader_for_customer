@@ -18,9 +18,6 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk { debugSymbolLevel 'SYMBOL_TABLE' }
-
-        vectorDrawables.useSupportLibrary = true
-        manifestPlaceholders = [pdftronLicenseKey:PDFTRON_LICENSE_KEY]
     }
     buildTypes {
         release {
@@ -71,8 +68,4 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.code.gson:gson:2.8.9'
-
-
-    implementation "com.pdftron:pdftron:9.2.3"
-    implementation "com.pdftron:tools:9.2.3"
 }

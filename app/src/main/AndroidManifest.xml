@@ -63,9 +63,6 @@
         <activity
             android:name=".ui.home.PdfPreviewActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
-        <activity
-            android:name=".ui.test.DemoOfficeActivity"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
 
         <receiver
             android:name=".common.ConnectivityReceiver"
@@ -83,10 +80,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
-        <meta-data
-            android:name="pdftron_license_key"
-            android:value="${pdftronLicenseKey}"/>
     </application>
 
 </manifest>

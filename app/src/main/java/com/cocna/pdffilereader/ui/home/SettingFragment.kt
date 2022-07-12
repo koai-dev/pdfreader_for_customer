@@ -14,7 +14,6 @@ import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.setting.ChangeThemeActivity
 import com.cocna.pdffilereader.ui.setting.LanguageActivity
 import com.cocna.pdffilereader.ui.setting.PrivatePolicyFragment
-import com.cocna.pdffilereader.ui.test.DemoOfficeActivity
 
 /**
  * Created by Thuytv on 09/06/2022.
@@ -45,8 +44,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(), View.OnClickList
                 gotoRatingApp()
             }
             R.id.llSettingTerm -> {
-//                getBaseActivity()?.onNextScreen(PrivatePolicyFragment::class.java, null, false)
-                getBaseActivity()?.onNextScreen(DemoOfficeActivity::class.java, null, false)
+                getBaseActivity()?.onNextScreen(PrivatePolicyFragment::class.java, null, false)
             }
         }
     }

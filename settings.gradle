@@ -12,10 +12,6 @@ dependencyResolutionManagement {
         mavenCentral()
         gradlePluginPortal()
         maven { url 'https://jitpack.io' }
-        maven { url "https://repository.aspose.com/repo/" }
-        maven {
-            url "https://pdftron-maven.s3.amazonaws.com/release"
-        }
         flatDir { dir "libs" }
     }
 }
