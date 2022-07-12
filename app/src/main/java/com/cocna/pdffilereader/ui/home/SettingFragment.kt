@@ -1,7 +1,6 @@
 package com.cocna.pdffilereader.ui.home
 
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
@@ -51,7 +50,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(), View.OnClickList
     }
 
     private fun gotoRatingApp() {
-        val packageName = getBaseActivity()?.packageName ?: "com.cocna.pdffilereader"
+        val packageName = getBaseActivity()?.packageName ?: "com.cocna.pdfreader.viewpdf"
         val uri = Uri.parse("market://details?id=$packageName")
         val goToMarket = Intent(Intent.ACTION_VIEW, uri)
         goToMarket.addFlags(
@@ -71,7 +70,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(), View.OnClickList
     }
 
     private fun shareApplication() {
-        val packageName = getBaseActivity()?.packageName ?: "com.cocna.pdffilereader"
+        val packageName = getBaseActivity()?.packageName ?: "com.cocna.pdfreader.viewpdf"
         val strPath = "https://play.google.com/store/apps/details?id=$packageName"
         val shareIntent = Intent()
         shareIntent.action = Intent.ACTION_SEND

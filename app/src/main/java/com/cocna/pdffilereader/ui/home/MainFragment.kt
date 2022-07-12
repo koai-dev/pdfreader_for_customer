@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.AdRequest
 import com.google.android.material.navigation.NavigationBarView
 import com.cocna.pdffilereader.R
+import com.cocna.pdffilereader.common.AppConfig
+import com.cocna.pdffilereader.common.InterstitialUtils
 import com.cocna.pdffilereader.common.gone
 import com.cocna.pdffilereader.common.visible
 import com.cocna.pdffilereader.databinding.FragmentMainBinding
@@ -34,6 +36,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     private lateinit var adView: AdView
 
     private var initialLayoutComplete = false
+
     // Determine the screen width (less decorations) to use for the ad width.
     // If the ad hasn't been laid out, default to the full screen width.
     private val adSize: AdSize
@@ -76,6 +79,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                 initialLayoutComplete = true
                 loadBannerAds()
             }
+        }
+        getBaseActivity()?.apply {
+            InterstitialUtils.sharedInstance?.loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE, this)
+//            loadNativeAds(binding.frameAdsNative, AppConfig.ID_ADS_NATIVE_TOP_BAR)
         }
     }
 
@@ -188,7 +195,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 //        return@OnNavigationItemSelectedListener true
 //    }
     private fun loadBannerAds() {
-        adView.adUnitId = getString(R.string.id_ad_banner_main)
+        adView.adUnitId = AppConfig.ID_ADS_BANNER_MAIN
         adView.setAdSize(adSize)
 
         // Create an ad request.

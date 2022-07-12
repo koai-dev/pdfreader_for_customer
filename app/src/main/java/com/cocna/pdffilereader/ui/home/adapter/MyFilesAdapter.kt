@@ -19,6 +19,7 @@ import com.cocna.pdffilereader.databinding.ItemViewMyFilesBinding
 import com.cocna.pdffilereader.databinding.ItemViewMyFolderBinding
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.cocna.pdffilereader.R
+import com.cocna.pdffilereader.common.AppConfig
 
 /**
  * Created by Thuytv on 10/06/2022.
@@ -29,7 +30,6 @@ class MyFilesAdapter(
     private var typeAdapter: Int,
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
-    private val ID_AD_NATIVE_FILE = "ca-app-pub-3940256099942544/2247696110"
     var mFileFilterList = ArrayList<MyFilesModel>()
     var mFileListWithAds = ArrayList<MyFilesModel>()
     private var adsPosition = 0
@@ -62,6 +62,8 @@ class MyFilesAdapter(
                 mFileListWithAds.add(item)
                 adsPosition++
             }
+        } else {
+            mFileListWithAds = ArrayList()
         }
 //        else if (typeAdapter == TYPE_VIEW_FILE_GRID || typeAdapter == TYPE_VIEW_FOLDER) {
 //            mFileListWithAds.clear()
@@ -210,7 +212,7 @@ class MyFilesAdapter(
         fun bind() {
             val binding = ItemViewAdsBinding.bind(itemView)
             mContext?.apply {
-                val builder = AdLoader.Builder(mContext, ID_AD_NATIVE_FILE)
+                val builder = AdLoader.Builder(mContext, AppConfig.ID_ADS_NATIVE_FILE)
 
                 builder.forNativeAd { nativeAd ->
                     val adView = LayoutInflater.from(mContext)
@@ -246,7 +248,7 @@ class MyFilesAdapter(
         fun bind() {
             val binding = ItemViewAdsBinding.bind(itemView)
             mContext?.apply {
-                val builder = AdLoader.Builder(mContext, ID_AD_NATIVE_FILE)
+                val builder = AdLoader.Builder(mContext, AppConfig.ID_ADS_NATIVE_FILE)
 
                 builder.forNativeAd { nativeAd ->
                     val adView = LayoutInflater.from(mContext)

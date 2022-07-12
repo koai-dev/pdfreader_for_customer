@@ -41,7 +41,7 @@
                 style="@style/Text_Setting_View"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/margin_all"
+                android:layout_marginStart="@dimen/margin_double_all"
                 android:layout_weight="1"
                 android:text="@string/tt_language" />
 
@@ -55,6 +55,7 @@
             android:id="@+id/llSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_all"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingTop="@dimen/margin_all"
@@ -69,7 +70,7 @@
                 style="@style/Text_Setting_View"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/margin_all"
+                android:layout_marginStart="@dimen/margin_double_all"
                 android:layout_weight="1"
                 android:text="@string/tt_theme" />
 
@@ -83,6 +84,7 @@
             android:id="@+id/llSettingRate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_all"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingTop="@dimen/margin_all"
@@ -97,7 +99,7 @@
                 style="@style/Text_Setting_View"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/margin_all"
+                android:layout_marginStart="@dimen/margin_double_all"
                 android:layout_weight="1"
                 android:text="@string/tt_rate_application" />
 
@@ -111,6 +113,7 @@
             android:id="@+id/llSettingShare"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_all"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingTop="@dimen/margin_all"
@@ -125,7 +128,7 @@
                 style="@style/Text_Setting_View"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/margin_all"
+                android:layout_marginStart="@dimen/margin_double_all"
                 android:layout_weight="1"
                 android:text="@string/tt_share_app" />
 
@@ -139,6 +142,7 @@
             android:id="@+id/llSettingTerm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_all"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingTop="@dimen/margin_all"
@@ -153,7 +157,7 @@
                 style="@style/Text_Setting_View"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/margin_all"
+                android:layout_marginStart="@dimen/margin_double_all"
                 android:layout_weight="1"
                 android:text="@string/tt_term_codition" />
 

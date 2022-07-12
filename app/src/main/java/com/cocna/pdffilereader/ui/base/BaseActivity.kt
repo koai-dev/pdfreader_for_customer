@@ -17,6 +17,11 @@ import android.os.Looper
 import android.print.PrintAttributes
 import android.print.PrintManager
 import android.view.LayoutInflater
+import android.view.View
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
@@ -27,6 +32,8 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.ui.home.dialog.WellComeBackDialog
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -50,6 +57,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
     private var broadcastReceiver: ConnectivityReceiver? = null
     lateinit var sharedPreferences: SharePreferenceUtils
     private var primaryBaseActivity: Context? = null
+    private var currentNativeAd: NativeAd? = null
 
     @Suppress("UNCHECKED_CAST")
     protected val binding: VB
@@ -93,6 +101,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
     }
 
     override fun onDestroy() {
+        currentNativeAd?.destroy()
         super.onDestroy()
         _binding = null
         unregisterReceiver(broadcastReceiver)
@@ -188,13 +197,15 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         InterstitialAd.load(this, uuidAds, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 Logger.showLog("---onAdFailedToLoad: " + adError.message + "---countRetry: $countRetry")
-                mInterstitialAd = null
-                if (countRetry < 2) {
-                    countRetry++
-                    loadInterstAds(uuidAds, onCallbackLoadAds)
-                } else {
-                    onCallbackLoadAds?.onCallbackActionLoadAds(false)
-                }
+                Handler(Looper.myLooper()!!).postDelayed({
+                    mInterstitialAd = null
+                    if (countRetry < 2) {
+                        countRetry++
+                        loadInterstAds(uuidAds, onCallbackLoadAds)
+                    } else {
+                        onCallbackLoadAds?.onCallbackActionLoadAds(false)
+                    }
+                }, AppConfig.DELAY_TIME_RETRY_ADS)
             }
 
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
@@ -234,5 +245,68 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         firebaseAnalytics.logEvent(eventName) {
             param(FirebaseAnalytics.Param.ITEM_NAME, method)
         }
+    }
+
+    fun loadNativeAds(frameAdsNative: FrameLayout, uuidAds: String) {
+        val builder = AdLoader.Builder(this, uuidAds)
+
+        builder.forNativeAd { nativeAd ->
+            var activityDestroyed = false
+            activityDestroyed = isDestroyed
+            if (activityDestroyed || isFinishing || isChangingConfigurations) {
+                nativeAd.destroy()
+                return@forNativeAd
+            }
+            // You must call destroy on old ads when you are done with them,
+            // otherwise you will have a memory leak.
+            currentNativeAd?.destroy()
+            currentNativeAd = nativeAd
+
+            val adView = LayoutInflater.from(this)
+                .inflate(R.layout.ads_unfield_item_file, null) as NativeAdView
+            populateNativeAdView(nativeAd, adView)
+            frameAdsNative.removeAllViews()
+            frameAdsNative.addView(adView)
+        }
+        val adLoader = builder.withAdListener(object : AdListener() {
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+            }
+        }).build()
+
+        adLoader.loadAd(AdRequest.Builder().build())
+    }
+
+    private fun populateNativeAdView(nativeAd: NativeAd, adView: NativeAdView) {
+
+        adView.iconView = adView.findViewById(R.id.ad_app_icon)
+        adView.callToActionView = adView.findViewById(R.id.ad_call_to_action)
+        adView.headlineView = adView.findViewById(R.id.ad_headline)
+        adView.advertiserView = adView.findViewById(R.id.ad_advertiser)
+        // The headline and media content are guaranteed to be in every UnifiedNativeAd.
+        (adView.headlineView as TextView).text = nativeAd.headline
+
+        if (nativeAd.callToAction == null) {
+            adView.callToActionView?.visibility = View.INVISIBLE
+        } else {
+            adView.callToActionView?.visibility = View.VISIBLE
+            (adView.callToActionView as Button).text = nativeAd.callToAction
+        }
+
+        if (nativeAd.icon == null) {
+            adView.iconView?.visibility = View.GONE
+        } else {
+            (adView.iconView as ImageView).setImageDrawable(
+                nativeAd.icon?.drawable
+            )
+            adView.iconView?.visibility = View.VISIBLE
+        }
+        if (nativeAd.advertiser == null) {
+            adView.advertiserView?.visibility = View.INVISIBLE
+        } else {
+            (adView.advertiserView as TextView).text = nativeAd.advertiser
+            adView.advertiserView?.visibility = View.VISIBLE
+        }
+        adView.setNativeAd(nativeAd)
+
     }
 }

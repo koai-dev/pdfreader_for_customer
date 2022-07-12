@@ -41,7 +41,6 @@
             android:layout_marginEnd="@dimen/margin_all"
             android:padding="@dimen/margin_all"
             android:src="@drawable/ic_three_dots" />
-
     </LinearLayout>
 
     <FrameLayout
@@ -102,14 +101,20 @@
             android:layout_marginStart="@dimen/dp2"
             android:layout_marginEnd="@dimen/margin_all" />
     </LinearLayout>
-
+    <FrameLayout
+        android:id="@+id/frame_ads_native_pdf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/llToolbarPdf"/>
     <com.github.barteksc.pdfviewer.PDFView
         android:id="@+id/pdfViewer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/llJumpToPage"
-        app:layout_constraintTop_toBottomOf="@id/llToolbarPdf" />
+        app:layout_constraintTop_toBottomOf="@id/frame_ads_native_pdf" />
+
     <!--    <com.itsrts.pptviewer.PPTViewer-->
     <!--        android:id="@+id/pptViewer"-->
     <!--        android:layout_width="match_parent"-->
@@ -185,5 +190,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_preview_page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_26000000"
+        android:orientation="horizontal"
+        android:padding="@dimen/margin_all"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/llJumpToPage">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_preview_page"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_rcv_preview" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

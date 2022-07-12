@@ -27,6 +27,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
 //        val testDeviceIds = Arrays.asList("B8D2F4981BD1CDC61FB420D2A9CC64E0")
 //        val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
 //        MobileAds.setRequestConfiguration(configuration)
+
         Common.TIME_USE_APP_START = System.currentTimeMillis()
         if ((sharedPreferences.getValueLong(SharePreferenceUtils.KEY_TIME_INSTALL) ?: 0) <= 0) {
             Logger.showLog("Thuytv----------KEY_TIME_INSTALL")
@@ -47,28 +48,16 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
         }
 
 //        createTimer(3L)
+        loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL, object : OnCallbackLoadAds {
+            override fun onCallbackActionLoadAds(isSuccess: Boolean) {
+                gotoMainScreen()
+            }
+        })
     }
 
     override fun onResume() {
         super.onResume()
-        loadInterstAds(getString(R.string.id_interstitial_ad_splash), object : OnCallbackLoadAds {
-            override fun onCallbackActionLoadAds(isSuccess: Boolean) {
-                val application = application as? PdfApplication
-                if (application == null) {
-                    gotoMainScreen()
-                    return
-                }
 
-                // Show the app open ad.
-                application.showAdIfAvailable(
-                    this@SplashScreenActivity,
-                    object : PdfApplication.OnShowAdCompleteListener {
-                        override fun onShowAdComplete() {
-                            gotoMainScreen()
-                        }
-                    })
-            }
-        })
     }
 
     override fun initEvents() {
@@ -100,14 +89,14 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                     return
                 }
 
-                // Show the app open ad.
-                application.showAdIfAvailable(
-                    this@SplashScreenActivity,
-                    object : PdfApplication.OnShowAdCompleteListener {
-                        override fun onShowAdComplete() {
-                            gotoMainScreen()
-                        }
-                    })
+//                // Show the app open ad.
+//                application.showAdIfAvailable(
+//                    this@SplashScreenActivity,
+//                    object : PdfApplication.OnShowAdCompleteListener {
+//                        override fun onShowAdComplete() {
+//                            gotoMainScreen()
+//                        }
+//                    })
             }
         }
         countDownTimer.start()

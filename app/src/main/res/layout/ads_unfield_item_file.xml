@@ -42,7 +42,8 @@
             android:gravity="center"
             android:textAllCaps="false"
             android:textColor="@color/text_color_all"
-            android:textSize="@dimen/text_size_menu_home"
+            android:textSize="@dimen/text_size_sp12"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

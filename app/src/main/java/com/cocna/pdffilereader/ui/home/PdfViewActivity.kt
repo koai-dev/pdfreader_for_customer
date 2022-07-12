@@ -3,6 +3,7 @@ package com.cocna.pdffilereader.ui.home
 import android.view.LayoutInflater
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.AppConfig
+import com.cocna.pdffilereader.common.InterstitialUtils
 import com.cocna.pdffilereader.common.visible
 import com.cocna.pdffilereader.databinding.ActivityBaseBinding
 import com.cocna.pdffilereader.ui.base.BaseActivity
@@ -17,7 +18,13 @@ class PdfViewActivity : BaseActivity<ActivityBaseBinding>() {
 
     override fun initData() {
         binding.prbLoadingMain.visible()
-        loadInterstAds(getString(R.string.id_interstitial_ad_splash), object : OnCallbackLoadAds{
+//        loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL, object : OnCallbackLoadAds{
+//            override fun onCallbackActionLoadAds(isSuccess: Boolean) {
+//                replaceFragment(PDFViewerFragment(), intent.extras, R.id.layout_container)
+//                logEventFirebase(AppConfig.KEY_EVENT_FB_OPEN_PDF, AppConfig.KEY_EVENT_FB_OPEN_PDF)
+//            }
+//        })
+        InterstitialUtils.sharedInstance?.showInterstitial(AppConfig.ID_ADS_INTERSTITIAL_FILE, this, object : OnCallbackLoadAds {
             override fun onCallbackActionLoadAds(isSuccess: Boolean) {
                 replaceFragment(PDFViewerFragment(), intent.extras, R.id.layout_container)
                 logEventFirebase(AppConfig.KEY_EVENT_FB_OPEN_PDF, AppConfig.KEY_EVENT_FB_OPEN_PDF)

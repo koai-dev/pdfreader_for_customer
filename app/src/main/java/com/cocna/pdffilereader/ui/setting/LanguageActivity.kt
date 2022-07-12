@@ -24,7 +24,6 @@ import com.cocna.pdffilereader.R
  * Created by Thuytv on 09/06/2022.
  */
 class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
-    private val ID_AD_NATIVE_LANGUAGE = "ca-app-pub-3940256099942544/2247696110"
     var currentNativeAd: NativeAd? = null
     override val bindingInflater: (LayoutInflater) -> ActivityLanguageBinding
         get() = ActivityLanguageBinding::inflate
@@ -49,7 +48,7 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
         lstLanguage.add(LanguageModel(AppConfig.ID_LANGUAGE_KOREA, false, getString(R.string.vl_korean), R.mipmap.ic_language_korean))
         lstLanguage.add(LanguageModel(AppConfig.ID_LANGUAGE_NETHERLANDS, false, getString(R.string.vl_netherlands), R.mipmap.ic_language_netherlands))
         lstLanguage.add(LanguageModel(AppConfig.ID_LANGUAGE_JAPAN, false, getString(R.string.vl_japan), R.mipmap.ic_language_japan))
-        lstLanguage.add(LanguageModel(AppConfig.ID_LANGUAGE_GERMANY, false, getString(R.string.vl_germany), R.mipmap.ic_language_japan))
+        lstLanguage.add(LanguageModel(AppConfig.ID_LANGUAGE_GERMANY, false, getString(R.string.vl_germany), R.mipmap.ic_language_germany))
         val mLanguage = sharedPreferences.getLanguage()
         for (item in lstLanguage) {
             if (item.idLanguage == mLanguage) {
@@ -206,7 +205,7 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
      */
     private fun refreshAd() {
 
-        val builder = AdLoader.Builder(this, ID_AD_NATIVE_LANGUAGE)
+        val builder = AdLoader.Builder(this, AppConfig.ID_ADS_NATIVE_LANGUAGE)
 
         builder.forNativeAd { nativeAd ->
             // OnUnifiedNativeAdLoadedListener implementation.
@@ -241,15 +240,6 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
 
         val adLoader = builder.withAdListener(object : AdListener() {
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                val error =
-                    """
-           domain: ${loadAdError.domain}, code: ${loadAdError.code}, message: ${loadAdError.message}
-          """"
-//                refresh_button.isEnabled = true
-                Toast.makeText(
-                    baseContext, "Failed to load native ad with error $error",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
         }).build()
 

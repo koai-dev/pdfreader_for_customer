@@ -14,9 +14,9 @@
         android:maxSdkVersion="29" />
 
     <application
-        android:name="com.cocna.pdffilereader.PdfApplication"
-        android:allowBackup="true"
-        android:fullBackupContent="@xml/backup_rules"
+        android:name=".PdfApplication"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -24,9 +24,10 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.PdfReader"
-        tools:ignore="DataExtractionRules">
+        tools:ignore="DataExtractionRules,AllowBackup,GoogleAppIndexingWarning"
+        tools:replace="android:allowBackup">
         <activity
-            android:name="com.cocna.pdffilereader.ui.home.SplashScreenActivity"
+            android:name=".ui.home.SplashScreenActivity"
             android:exported="true"
             android:hardwareAccelerated="true"
             android:label="@string/app_name"
@@ -39,33 +40,36 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.cocna.pdffilereader.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
-            android:name="com.cocna.pdffilereader.ui.setting.LanguageActivity"
+            android:name=".ui.setting.LanguageActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
 
 
         <activity
-            android:name="com.cocna.pdffilereader.ui.home.PdfViewActivity"
+            android:name=".ui.home.PdfViewActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
-            android:name="com.cocna.pdffilereader.ui.home.MyFileDetailActivity"
+            android:name=".ui.home.MyFileDetailActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
-            android:name="com.cocna.pdffilereader.ui.setting.ChangeThemeActivity"
+            android:name=".ui.setting.ChangeThemeActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
-            android:name="com.cocna.pdffilereader.ui.setting.PrivatePolicyFragment"
+            android:name=".ui.setting.PrivatePolicyFragment"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+        <activity
+            android:name=".ui.home.PdfPreviewActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
 
         <receiver
-            android:name="com.cocna.pdffilereader.common.ConnectivityReceiver"
+            android:name=".common.ConnectivityReceiver"
             android:enabled="true" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-5990537255633736~1187473836" />
+            android:value="ca-app-pub-5660050540886911~9726121017" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

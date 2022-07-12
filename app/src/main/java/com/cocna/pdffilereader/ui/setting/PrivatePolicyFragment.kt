@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import com.cocna.pdffilereader.R
+import com.cocna.pdffilereader.common.AppConfig
 import com.cocna.pdffilereader.common.MultiClickPreventer
 import com.cocna.pdffilereader.databinding.FragmentPrivatePolicyBinding
 import com.cocna.pdffilereader.ui.base.BaseActivity
@@ -77,7 +78,7 @@ class PrivatePolicyFragment : BaseActivity<FragmentPrivatePolicyBinding>() {
     }
 
     private fun loadBannerAds() {
-        adView.adUnitId = getString(R.string.id_ad_banner_main)
+        adView.adUnitId = AppConfig.ID_ADS_BANNER_MAIN
         adView.setAdSize(adSize)
 
         // Create an ad request.

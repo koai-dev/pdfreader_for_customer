@@ -67,16 +67,33 @@ class HistoryFragment(private val onCallbackTittleTab: OnCallbackTittleTab) : Ba
 //            }
 //        }
     }
-
+@Suppress("DEPRECATION")
+private fun setBackgroundColor(isEmpty: Boolean){
+    if(isEmpty){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            binding.llHistory.setBackgroundColor(resources.getColor(R.color.color_bg_menu, getBaseActivity()?.theme))
+        }else{
+            binding.llHistory.setBackgroundColor(resources.getColor(R.color.color_bg_menu))
+        }
+    }else{
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            binding.llHistory.setBackgroundColor(resources.getColor(R.color.color_bg, getBaseActivity()?.theme))
+        }else{
+            binding.llHistory.setBackgroundColor(resources.getColor(R.color.color_bg))
+        }
+    }
+}
     private fun setupRecycleView() {
         val lstRecent = getBaseActivity()?.sharedPreferences?.getRecentFile()
         Logger.showLog("Thuytv------lstRecent: " + Gson().toJson(lstRecent))
         if (lstRecent.isNullOrEmpty()) {
             binding.llEmptyRecent.visible()
             binding.rcvRecentFile.gone()
+            setBackgroundColor(true)
         } else {
             binding.llEmptyRecent.gone()
             binding.rcvRecentFile.visible()
+            setBackgroundColor(false)
         }
         mRecentAdapter = MyFilesAdapter(context, lstRecent ?: ArrayList(), 0, object : MyFilesAdapter.OnItemClickListener {
             override fun onClickItem(documentFile: MyFilesModel) {
@@ -148,6 +165,7 @@ class HistoryFragment(private val onCallbackTittleTab: OnCallbackTittleTab) : Ba
                     if (sizeRecent == 0) {
                         binding.llEmptyRecent.visible()
                         binding.rcvRecentFile.gone()
+                        setBackgroundColor(true)
                     }
                     Logger.showLog("Thuytv------History----onCallbackUpdateTab: " + sizeRecent)
                     onCallbackTittleTab.onCallbackUpdateTab(sizeRecent)
@@ -163,9 +181,11 @@ class HistoryFragment(private val onCallbackTittleTab: OnCallbackTittleTab) : Ba
                 if (lstRecent.isNullOrEmpty()) {
                     binding.llEmptyRecent.visible()
                     binding.rcvRecentFile.gone()
+                    setBackgroundColor(true)
                 } else {
                     binding.llEmptyRecent.gone()
                     binding.rcvRecentFile.visible()
+                    setBackgroundColor(false)
                 }
                 mRecentAdapter?.updateData(this)
                 onCallbackTittleTab.onCallbackUpdateTab(this.size)

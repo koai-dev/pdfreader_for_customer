@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.cocna.pdffilereader.R
+import com.cocna.pdffilereader.common.AppConfig
 import com.cocna.pdffilereader.common.Logger
 import com.cocna.pdffilereader.databinding.DialogWellComebackBinding
 import com.google.android.gms.ads.AdError
@@ -75,15 +77,17 @@ class WellComeBackDialog : DialogFragment() {
     private fun loadInterstAds() {
         val adRequest = AdRequest.Builder().build()
         activity?.run {
-            InterstitialAd.load(this, getString(R.string.id_interstitial_ad_background), adRequest, object : InterstitialAdLoadCallback() {
+            InterstitialAd.load(this, AppConfig.ID_ADS_INTERSTITIAL_BACKGROUND, adRequest, object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
-                    mInterstitialAd = null
-                    if (countRetry < 2) {
-                        countRetry++
-                        loadInterstAds()
-                    } else {
-                        dismiss()
-                    }
+                    Handler(Looper.myLooper()!!).postDelayed({
+                        mInterstitialAd = null
+                        if (countRetry < 2) {
+                            countRetry++
+                            loadInterstAds()
+                        } else {
+                            dismiss()
+                        }
+                    }, AppConfig.DELAY_TIME_RETRY_ADS)
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {

@@ -43,6 +43,7 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
                     val bundle = Bundle()
                     bundle.putParcelableArrayList(AppKeys.KEY_BUNDLE_DATA, documentFile.lstChildFile)
                     bundle.putString(AppKeys.KEY_BUNDLE_SCREEN, getString(R.string.tt_pdf_file))
+                    bundle.putBoolean(AppKeys.KEY_BUNDLE_ACTION, true)
                     getBaseActivity()?.onNextScreen(MyFileDetailActivity::class.java, bundle, false)
                 } else {
                     val bundle = Bundle()

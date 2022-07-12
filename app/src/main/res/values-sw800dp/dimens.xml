@@ -80,6 +80,15 @@
   <dimen name="height_button">
     88.89dp
   </dimen>
+  <dimen name="width_preview">
+    146.67dp
+  </dimen>
+  <dimen name="height_preview">
+    197.78dp
+  </dimen>
+  <dimen name="height_rcv_preview">
+    266.67dp
+  </dimen>
   <dimen name="text_size_title">
     40.0sp
   </dimen>

@@ -281,10 +281,12 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
 //                lstAllFile.add(model)
             }
         }
-//        binding.ttValuePdf.text = getString(R.string.tt_have_pdf_file, lstFilePdf.size)
         myFileDetailFragment.updateData(lstFilePdf)
         mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
-        dialogProgress.dismiss()
+        Handler(Looper.myLooper()!!).postDelayed({
+            dialogProgress.dismiss()
+        }, 1000)
+
     }
 
     fun onSearchFile(strName: String) {
