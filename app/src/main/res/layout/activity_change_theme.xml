@@ -42,20 +42,24 @@
             android:src="@drawable/ic_checked" />
 
     </LinearLayout>
-
+    <FrameLayout
+        android:id="@+id/ad_frame_theme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvThemeApp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/height_toolbar_all"
+        android:layout_marginBottom="@dimen/margin_all"
         android:padding="@dimen/margin_all"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ad_frame_theme"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/size_image_home"
         android:padding="@dimen/margin_all"
         android:src="@drawable/imv_theme_01"
         app:layout_constraintBottom_toTopOf="@id/rcvThemeApp"

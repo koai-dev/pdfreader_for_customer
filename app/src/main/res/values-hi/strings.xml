@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--India-->
-    <string name="app_name">PdfReader</string>
     <string name="title_my_file">मेरी फाइल</string>
     <string name="title_favorite">पसंदीदा</string>
     <string name="title_browse">फ़ोल्डर</string>

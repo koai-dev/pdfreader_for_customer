@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Indonesia-->
-    <string name="app_name">PdfReader</string>
     <string name="title_my_file">File saya</string>
     <string name="title_favorite">Favorit</string>
     <string name="title_browse">Jelajahi</string>

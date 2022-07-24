@@ -55,11 +55,6 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-
-    }
-
     override fun initEvents() {
     }
 

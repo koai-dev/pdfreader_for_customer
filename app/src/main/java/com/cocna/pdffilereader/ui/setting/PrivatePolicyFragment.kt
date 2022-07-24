@@ -5,13 +5,13 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.AppConfig
+import com.cocna.pdffilereader.common.Common
 import com.cocna.pdffilereader.common.MultiClickPreventer
 import com.cocna.pdffilereader.databinding.FragmentPrivatePolicyBinding
 import com.cocna.pdffilereader.ui.base.BaseActivity
+import com.cocna.pdffilereader.ui.home.model.AdsLogModel
 import com.github.barteksc.pdfviewer.util.FitPolicy
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.*
 
 
 /**
@@ -86,7 +86,13 @@ class PrivatePolicyFragment : BaseActivity<FragmentPrivatePolicyBinding>() {
 
         // Start loading the ad in the background.
         adView.loadAd(adRequest)
-
+        adView.adListener = object : AdListener(){
+            override fun onAdFailedToLoad(loadAdsError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdsError)
+                setLogDataToFirebase(AdsLogModel(adsId = AppConfig.ID_ADS_BANNER_MAIN, adsName = "Ads Banner Policy", message = loadAdsError.message,
+                    deviceName = Common.getDeviceName(this@PrivatePolicyFragment)))
+            }
+        }
     }
 
     override fun onPause() {

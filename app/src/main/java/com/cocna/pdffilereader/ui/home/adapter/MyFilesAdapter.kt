@@ -20,6 +20,8 @@ import com.cocna.pdffilereader.databinding.ItemViewMyFolderBinding
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.AppConfig
+import com.cocna.pdffilereader.ui.home.model.AdsLogModel
+import com.google.firebase.database.FirebaseDatabase
 
 /**
  * Created by Thuytv on 10/06/2022.
@@ -234,6 +236,8 @@ class MyFilesAdapter(
 
                 val adLoader = builder.withAdListener(object : AdListener() {
                     override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                        setLogDataToFirebase(AdsLogModel(adsId = AppConfig.ID_ADS_NATIVE_FILE, adsName = "Ads Native File", message = loadAdError.message,
+                            deviceName = Common.getDeviceName(mContext)))
                     }
                 }).build()
 
@@ -241,6 +245,14 @@ class MyFilesAdapter(
             }
 
 
+        }
+    }
+    private fun setLogDataToFirebase(adsLogModel: AdsLogModel) {
+        try {
+            val reference = FirebaseDatabase.getInstance().getReference("AdsError")
+            reference.push().setValue(adsLogModel)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PdfReader</string>
     <string name="title_my_file">내 파일</string>
     <string name="title_favorite">가장 좋아하는</string>
     <string name="title_browse">폴더</string>

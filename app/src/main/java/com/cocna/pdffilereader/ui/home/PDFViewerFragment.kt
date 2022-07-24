@@ -22,14 +22,13 @@ import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.home.adapter.PreviewAdapter
 import com.cocna.pdffilereader.ui.home.dialog.DeleteFileDialog
 import com.cocna.pdffilereader.ui.home.dialog.RenameFileDialog
+import com.cocna.pdffilereader.ui.home.model.AdsLogModel
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener
 import com.github.barteksc.pdfviewer.listener.OnRenderListener
 import com.github.barteksc.pdfviewer.listener.OnTapListener
 import com.github.barteksc.pdfviewer.util.FitPolicy
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.*
 import com.google.android.material.slider.Slider
 import com.shockwave.pdfium.PdfDocument
 import com.shockwave.pdfium.PdfiumCore
@@ -53,6 +52,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
     private var previewAdapter: PreviewAdapter? = null
 
     private var initialLayoutComplete = false
+    private var startTime: Long = 0L
 
     // Determine the screen width (less decorations) to use for the ad width.
     // If the ad hasn't been laid out, default to the full screen width.
@@ -78,7 +78,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
 
     override fun initData() {
         myFileModel = arguments?.getParcelable(AppKeys.KEY_BUNDLE_DATA)
-
+        startTime = System.currentTimeMillis()
         myFileModel?.apply {
             binding.ttToolbarPdf.text = name
             if (extensionName?.lowercase() == "pdf") {
@@ -97,6 +97,10 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                 initialLayoutComplete = true
                 loadBannerAds()
             }
+        }
+        Logger.showLog("Thuytv-------isCurrentNetwork: " + getBaseActivity()?.isCurrentNetwork)
+        if (getBaseActivity()?.isCurrentNetwork == false) {
+            getBaseActivity()?.enabaleNetwork()
         }
 //        getBaseActivity()?.loadNativeAds(binding.frameAdsNativePdf, AppConfig.ID_ADS_NATIVE_TOP_BAR_PDF)
     }
@@ -126,7 +130,9 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                 override fun run() {
                     getBaseActivity()?.runOnUiThread {
 //                        previewAdapter?.updateCurrentPage(currentPage)
-                        binding.rcvPreviewPage.scrollToPosition(currentPage)
+                        if (previewAdapter != null && isVisible && getBaseActivity()?.isFinishing == false) {
+                            binding.rcvPreviewPage.scrollToPosition(currentPage)
+                        }
                     }
 
                 }
@@ -233,7 +239,6 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         when (v?.id) {
             R.id.imvPdfBack -> {
                 getBaseActivity()?.finish()
-//                openPreviewPdf()
             }
             R.id.imvPdfMore -> {
                 var lstPopupMenu = R.menu.menu_more_detail_file
@@ -302,8 +307,17 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
 
         // Start loading the ad in the background.
         adView.loadAd(adRequest)
-//        val adRequest = AdRequest.Builder().build()
-//        binding.adViewBannerMain.loadAd(adRequest)
+        adView.adListener = object : AdListener() {
+            override fun onAdFailedToLoad(loadAdsError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdsError)
+                getBaseActivity()?.setLogDataToFirebase(
+                    AdsLogModel(
+                        adsId = AppConfig.ID_ADS_BANNER_READER, adsName = "Ads Banner PDF", message = loadAdsError.message,
+                        deviceName = Common.getDeviceName(getBaseActivity())
+                    )
+                )
+            }
+        }
 
     }
 
@@ -323,6 +337,11 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         adView.destroy()
         super.onDestroy()
         recycleMemory()
+        val endTime = System.currentTimeMillis()
+        Logger.showLog("Thuytv----onDestroy: " + ((endTime - startTime) >= 10 * 1000))
+        if ((endTime - startTime) >= 10 * 1000) {
+            getBaseActivity()?.loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_BACK_FILE, null)
+        }
     }
 
     var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -344,19 +363,27 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
 
     private fun loadDataFile() {
         loadPdfFile()
-        val totalCount = pdfiumCore?.getPageCount(pdfDocument) ?: 0
-        previewAdapter =
-            PreviewAdapter(getBaseActivity(), pdfiumCore!!, pdfDocument!!, myFileModel?.name ?: "", totalCount, currentPage, object : PreviewAdapter.OnItemClickListener {
-                override fun onClickItem(position: Int) {
-                    binding.pdfViewer.jumpTo(position)
-                }
-            })
-        binding.rcvPreviewPage.apply {
-            layoutManager = LinearLayoutManager(getBaseActivity(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = previewAdapter
+        if (pdfiumCore != null && pdfDocument != null) {
+            val totalCount = pdfiumCore?.getPageCount(pdfDocument) ?: 0
+            previewAdapter =
+                PreviewAdapter(
+                    getBaseActivity(),
+                    pdfiumCore!!,
+                    pdfDocument!!,
+                    myFileModel?.name ?: "",
+                    totalCount,
+                    currentPage,
+                    object : PreviewAdapter.OnItemClickListener {
+                        override fun onClickItem(position: Int) {
+                            binding.pdfViewer.jumpTo(position)
+                        }
+                    })
+            binding.rcvPreviewPage.apply {
+                layoutManager = LinearLayoutManager(getBaseActivity(), LinearLayoutManager.HORIZONTAL, false)
+                adapter = previewAdapter
+            }
+            binding.rcvPreviewPage.scrollToPosition(currentPage)
         }
-        binding.rcvPreviewPage.scrollToPosition(currentPage)
-
     }
 
     private fun loadPdfFile() {
@@ -365,7 +392,9 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                 val file = File(this)
                 val pfd = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
                 pdfiumCore = PdfiumCore(getBaseActivity())
-                pdfDocument = pdfiumCore!!.newDocument(pfd)
+                if (pdfiumCore != null) {
+                    pdfDocument = pdfiumCore!!.newDocument(pfd)
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PdfReader</string>
     <string name="title_my_file">Meu arquivo</string>
     <string name="title_favorite">Favorito</string>
     <string name="title_browse">Navegar</string>

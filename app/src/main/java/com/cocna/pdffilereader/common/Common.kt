@@ -1,6 +1,8 @@
 package com.cocna.pdffilereader.common
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -12,6 +14,8 @@ object Common {
     var TIME_USE_APP_START: Long? = null
     var IS_SEND_FIREBASE: Boolean = false
     var IS_BACK_FROM_BACKGROUND: Boolean? = null
+    var countShowAdsOpenResume: Int = 0
+    var countShowAdsPdf: Int = 0
 
     @JvmStatic
     fun covertTimeLongToString(time: Long?): String {
@@ -51,5 +55,23 @@ object Common {
             return mDays >= days
         }
         return false
+    }
+
+    fun getVersionApp(context: Context?): String {
+        try {
+            val pInfo = context?.packageManager?.getPackageInfo(context.packageName ?: "", 0)
+            return pInfo?.versionName ?: ""
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        return ""
+    }
+
+    fun getDeviceName(context: Context?): String {
+        try {
+            return Build.BRAND + "-" + Build.MODEL + " Version: " + Build.VERSION.SDK_INT + "--Version App: " + getVersionApp(context)
+        } catch (e: Exception) {
+            return ""
+        }
     }
 }

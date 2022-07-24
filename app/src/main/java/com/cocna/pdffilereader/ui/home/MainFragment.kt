@@ -8,17 +8,13 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.google.android.gms.ads.AdRequest
 import com.google.android.material.navigation.NavigationBarView
 import com.cocna.pdffilereader.R
-import com.cocna.pdffilereader.common.AppConfig
-import com.cocna.pdffilereader.common.InterstitialUtils
-import com.cocna.pdffilereader.common.gone
-import com.cocna.pdffilereader.common.visible
+import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.FragmentMainBinding
 import com.cocna.pdffilereader.ui.base.BaseFragment
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
+import com.cocna.pdffilereader.ui.home.model.AdsLogModel
+import com.google.android.gms.ads.*
 
 @Suppress("DEPRECATION")
 class MainFragment : BaseFragment<FragmentMainBinding>() {
@@ -80,10 +76,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                 loadBannerAds()
             }
         }
-        getBaseActivity()?.apply {
-            InterstitialUtils.sharedInstance?.loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE, this)
-//            loadNativeAds(binding.frameAdsNative, AppConfig.ID_ADS_NATIVE_TOP_BAR)
-        }
+//        getBaseActivity()?.apply {
+//            InterstitialUtils.sharedInstance?.loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE, this)
+////            loadNativeAds(binding.frameAdsNative, AppConfig.ID_ADS_NATIVE_TOP_BAR)
+//        }
     }
 
     override fun initEvents() {
@@ -203,8 +199,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
         // Start loading the ad in the background.
         adView.loadAd(adRequest)
-//        val adRequest = AdRequest.Builder().build()
-//        binding.adViewBannerMain.loadAd(adRequest)
+        adView.adListener = object : AdListener(){
+            override fun onAdFailedToLoad(loadAdsError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdsError)
+                getBaseActivity()?.setLogDataToFirebase(AdsLogModel(adsId = AppConfig.ID_ADS_BANNER_MAIN, adsName = "Ads Banner Main", message = loadAdsError.message,
+                deviceName = Common.getDeviceName(getBaseActivity())))
+            }
+        }
 
     }
 

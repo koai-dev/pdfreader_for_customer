@@ -10,15 +10,13 @@ import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.cocna.pdffilereader.MainActivity
-import com.cocna.pdffilereader.common.AppConfig
-import com.cocna.pdffilereader.common.AppKeys
-import com.cocna.pdffilereader.common.MultiClickPreventer
-import com.cocna.pdffilereader.common.invisible
 import com.cocna.pdffilereader.databinding.ActivityLanguageBinding
 import com.cocna.pdffilereader.ui.base.BaseActivity
 import com.cocna.pdffilereader.ui.setting.adapter.ChangeLanguageAdapter
 import com.cocna.pdffilereader.ui.setting.model.LanguageModel
 import com.cocna.pdffilereader.R
+import com.cocna.pdffilereader.common.*
+import com.cocna.pdffilereader.ui.home.model.AdsLogModel
 
 /**
  * Created by Thuytv on 09/06/2022.
@@ -240,6 +238,12 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
 
         val adLoader = builder.withAdListener(object : AdListener() {
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                setLogDataToFirebase(
+                    AdsLogModel(
+                        adsId = AppConfig.ID_ADS_NATIVE_LANGUAGE, adsName = "Ads Native Language", message = loadAdError.message,
+                        deviceName = Common.getDeviceName(this@LanguageActivity)
+                    )
+                )
             }
         }).build()
 

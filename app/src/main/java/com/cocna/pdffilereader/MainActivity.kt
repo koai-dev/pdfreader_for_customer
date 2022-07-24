@@ -1,15 +1,16 @@
 package com.cocna.pdffilereader
 
 import android.view.LayoutInflater
-import com.cocna.pdffilereader.databinding.ActivityMainBinding
+import com.cocna.pdffilereader.databinding.ActivityBaseBinding
 import com.cocna.pdffilereader.ui.base.BaseActivity
+import com.cocna.pdffilereader.ui.home.MainFragment
 
-class MainActivity : BaseActivity<ActivityMainBinding>() {
-    override val bindingInflater: (LayoutInflater) -> ActivityMainBinding = ActivityMainBinding::inflate
+class MainActivity : BaseActivity<ActivityBaseBinding>() {
+    override val bindingInflater: (LayoutInflater) -> ActivityBaseBinding = ActivityBaseBinding::inflate
 
 
     override fun initData() {
-//        loadInterstAds(getString(R.string.id_interstitial_ad_splash), null)
+        replaceFragment(MainFragment(), intent.extras, R.id.layout_container)
     }
 
     override fun initEvents() {

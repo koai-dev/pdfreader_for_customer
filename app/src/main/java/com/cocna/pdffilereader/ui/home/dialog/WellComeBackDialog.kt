@@ -1,5 +1,6 @@
 package com.cocna.pdffilereader.ui.home.dialog
 
+import android.app.Application
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -14,22 +15,29 @@ import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.cocna.pdffilereader.PdfApplication
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.AppConfig
+import com.cocna.pdffilereader.common.Common
 import com.cocna.pdffilereader.common.Logger
 import com.cocna.pdffilereader.databinding.DialogWellComebackBinding
+import com.cocna.pdffilereader.ui.base.BaseActivity
+import com.cocna.pdffilereader.ui.home.model.AdsLogModel
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 
 /**
  * Created by Thuytv on 26/06/2022.
  */
-class WellComeBackDialog : DialogFragment() {
+class WellComeBackDialog(private val mApplication: Application?, private val mActivity: BaseActivity<*>) : DialogFragment() {
     private var _binding: DialogWellComebackBinding? = null
     private var mInterstitialAd: InterstitialAd? = null
     private var countRetry: Int = 0
@@ -55,7 +63,8 @@ class WellComeBackDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        loadInterstAds()
+//        loadInterstAds()
+        loadOpenResumeAds()
         dialog?.run {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.MATCH_PARENT
@@ -74,20 +83,49 @@ class WellComeBackDialog : DialogFragment() {
         _binding = null
     }
 
+    private fun loadOpenResumeAds() {
+        val pdfApplication = mApplication as? PdfApplication
+        // If the application is not an instance of MyApplication, log an error message and
+        // start the MainActivity without showing the app open ad.
+        if (pdfApplication == null) {
+            Logger.showLog("Failed to cast application to MyApplication.")
+            dismiss()
+            return
+        }
+
+        // Show the app open ad.
+        pdfApplication.showAdIfAvailable(
+            mActivity,
+            object : PdfApplication.OnShowAdCompleteListener {
+                override fun onShowAdComplete() {
+                    if (isVisible && dialog?.isShowing == true) {
+                        dismiss()
+                    }
+                }
+            })
+    }
+
     private fun loadInterstAds() {
         val adRequest = AdRequest.Builder().build()
         activity?.run {
             InterstitialAd.load(this, AppConfig.ID_ADS_INTERSTITIAL_BACKGROUND, adRequest, object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
-                    Handler(Looper.myLooper()!!).postDelayed({
-                        mInterstitialAd = null
-                        if (countRetry < 2) {
-                            countRetry++
-                            loadInterstAds()
-                        } else {
-                            dismiss()
-                        }
-                    }, AppConfig.DELAY_TIME_RETRY_ADS)
+                    setLogDataToFirebase(
+                        AdsLogModel(
+                            adsId = AppConfig.ID_ADS_INTERSTITIAL_BACKGROUND,
+                            adsName = "Ads Interstitial Resume Load",
+                            message = adError.message, deviceName = Common.getDeviceName(this@run)
+                        )
+                    )
+//                    Handler(Looper.myLooper()!!).postDelayed({
+                    mInterstitialAd = null
+//                        if (countRetry < 2) {
+//                            countRetry++
+//                            loadInterstAds()
+//                        } else {
+                    dismiss()
+//                        }
+//                    }, AppConfig.DELAY_TIME_RETRY_ADS)
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
@@ -109,6 +147,17 @@ class WellComeBackDialog : DialogFragment() {
 
                 override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                     mInterstitialAd = null
+
+                    if (isVisible && activity != null) {
+                        setLogDataToFirebase(
+                            AdsLogModel(
+                                adsId = AppConfig.ID_ADS_INTERSTITIAL_BACKGROUND,
+                                adsName = "Ads Interstitial Resume Show",
+                                message = adError.message, deviceName = Common.getDeviceName(activity!!)
+                            )
+                        )
+                        dismiss()
+                    }
                 }
 
                 override fun onAdShowedFullScreenContent() {
@@ -120,6 +169,15 @@ class WellComeBackDialog : DialogFragment() {
             }
         } else {
             dismiss()
+        }
+    }
+
+    private fun setLogDataToFirebase(adsLogModel: AdsLogModel) {
+        try {
+            val reference = FirebaseDatabase.getInstance().getReference("AdsError")
+            reference.push().setValue(adsLogModel)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

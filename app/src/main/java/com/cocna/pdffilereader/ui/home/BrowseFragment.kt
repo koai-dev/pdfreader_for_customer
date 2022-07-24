@@ -16,6 +16,7 @@ import com.google.gson.Gson
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.AppKeys
 import com.cocna.pdffilereader.common.Logger
+import com.cocna.pdffilereader.common.PermissionUtil
 import com.cocna.pdffilereader.common.RxBus
 import com.cocna.pdffilereader.databinding.FragmentBrowseBinding
 import com.cocna.pdffilereader.ui.base.BaseFragment
@@ -61,7 +62,9 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
             adapter = mFolderAdapter
         }
         Handler(Looper.myLooper()!!).postDelayed({
-            getAllFileInDevice()
+            if (PermissionUtil.checkExternalStoragePermission(requireContext())) {
+                getAllFileInDevice()
+            }
         }, 1000)
     }
 
@@ -69,42 +72,47 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
     }
 
     private fun getAllFileInDevice() {
-        val root = DocumentFile.fromFile(File(PATH_DEFAULT_STORE))
-        val mimePDF = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")!!
-        for (item in root.listFiles()) {
-            if (!item.isFile) {
-                val rootFile = item.search(true, DocumentFileType.FILE, arrayOf(mimePDF))
-                if (rootFile.isNotEmpty()) {
-                    val lstChildFile: ArrayList<MyFilesModel> = ArrayList()
-                    for (mFile in rootFile) {
-                        val model =
-                            MyFilesModel(
-                                name = mFile.name,
-                                uriPath = mFile.uri.path,
-                                uriOldPath = mFile.uri.path,
-                                lastModified = mFile.lastModified(),
-                                extensionName = mFile.extension,
-                                length = mFile.length()
-                            )
-                        lstChildFile.add(model)
+        Thread {
+            Logger.showLog("Thuytv---------getAllFileInDevice")
+            val root = DocumentFile.fromFile(File(PATH_DEFAULT_STORE))
+            val mimePDF = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")!!
+            for (item in root.listFiles()) {
+                if (!item.isFile) {
+                    val rootFile = item.search(true, DocumentFileType.FILE, arrayOf(mimePDF))
+                    if (rootFile.isNotEmpty()) {
+                        val lstChildFile: ArrayList<MyFilesModel> = ArrayList()
+                        for (mFile in rootFile) {
+                            val model =
+                                MyFilesModel(
+                                    name = mFile.name,
+                                    uriPath = mFile.uri.path,
+                                    uriOldPath = mFile.uri.path,
+                                    lastModified = mFile.lastModified(),
+                                    extensionName = mFile.extension,
+                                    length = mFile.length()
+                                )
+                            lstChildFile.add(model)
+                        }
+                        val mFolder = MyFilesModel(folderName = item.name, lstChildFile = lstChildFile)
+                        lstAllFolder.add(mFolder)
                     }
-                    val mFolder = MyFilesModel(folderName = item.name, lstChildFile = lstChildFile)
-                    lstAllFolder.add(mFolder)
+                } else if (item.extension.lowercase() == "pdf") {
+                    val model =
+                        MyFilesModel(
+                            name = item.name,
+                            uriPath = item.uri.path,
+                            uriOldPath = item.uri.path,
+                            lastModified = item.lastModified(),
+                            extensionName = item.extension,
+                            length = item.length()
+                        )
+                    lstAllFolder.add(model)
                 }
-            } else if (item.extension.lowercase() == "pdf") {
-                val model =
-                    MyFilesModel(
-                        name = item.name,
-                        uriPath = item.uri.path,
-                        uriOldPath = item.uri.path,
-                        lastModified = item.lastModified(),
-                        extensionName = item.extension,
-                        length = item.length()
-                    )
-                lstAllFolder.add(model)
             }
-        }
-        mFolderAdapter.updateData(lstAllFolder)
+            getBaseActivity()?.runOnUiThread {
+                mFolderAdapter.updateData(lstAllFolder)
+            }
+        }.start()
     }
 
     override fun onDestroy() {
@@ -145,6 +153,7 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
             }
         }
     }
+
     fun onSearchFolder(strName: String) {
         mFolderAdapter.filter.filter(strName)
     }

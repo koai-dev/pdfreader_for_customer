@@ -10,12 +10,16 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.print.PrintAttributes
+import android.print.PrintDocumentAdapter
+import android.print.PrintJob
 import android.print.PrintManager
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -26,20 +30,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.cocna.pdffilereader.R
+import com.cocna.pdffilereader.common.*
+import com.cocna.pdffilereader.print.PDFDocumentAdapter
+import com.cocna.pdffilereader.print.PrintJobMonitorService
+import com.cocna.pdffilereader.ui.home.dialog.WellComeBackDialog
+import com.cocna.pdffilereader.ui.home.model.AdsLogModel
+import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import com.cocna.pdffilereader.common.*
-import com.cocna.pdffilereader.ui.home.dialog.WellComeBackDialog
-import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import java.io.File
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -53,33 +60,37 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
 
     private var mInterstitialAd: InterstitialAd? = null
     private var countRetry: Int = 0
+    private var mUUIDAds: String? = null
 
     private var broadcastReceiver: ConnectivityReceiver? = null
     lateinit var sharedPreferences: SharePreferenceUtils
     private var primaryBaseActivity: Context? = null
     private var currentNativeAd: NativeAd? = null
+    private var mOnCallbackLoadAds: OnCallbackLoadAds? = null
+    var isCurrentNetwork = true
 
     @Suppress("UNCHECKED_CAST")
     protected val binding: VB
         get() = _binding as VB
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        ThemeUtils.onActivityCreateSetTheme(this)
         super.onCreate(savedInstanceState)
-        _binding = bindingInflater.invoke(layoutInflater)
-        firebaseAnalytics = Firebase.analytics
-        setContentView(requireNotNull(_binding).root)
-        onHandleNetworkListener()
-        MobileAds.initialize(this) { }
-        broadcastReceiver = ConnectivityReceiver()
-        registerReceiver(
-            broadcastReceiver,
-            IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-        )
-        sharedPreferences = SharePreferenceUtils(this)
-        initData()
-        initEvents()
-
+        if (!isFinishing && !isDestroyed) {
+            ThemeUtils.onActivityCreateSetTheme(this)
+            _binding = bindingInflater.invoke(layoutInflater)
+            firebaseAnalytics = Firebase.analytics
+            setContentView(requireNotNull(_binding).root)
+            onHandleNetworkListener()
+            MobileAds.initialize(this) { }
+            broadcastReceiver = ConnectivityReceiver()
+            registerReceiver(
+                broadcastReceiver,
+                IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+            )
+            sharedPreferences = SharePreferenceUtils(this)
+            initData()
+            initEvents()
+        }
     }
 
     abstract fun initData()
@@ -88,15 +99,17 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         super.onResume()
         ConnectivityReceiver.connectivityReceiverListener = this
         if (Common.checkTimeUseApp() && !Common.IS_SEND_FIREBASE) {
-            Logger.showLog("Thuytv-----main_in_app_2mins")
             Common.IS_SEND_FIREBASE = true
             logEventFirebase(AppConfig.KEY_EVENT_FB_APP_2MINS, AppConfig.KEY_EVENT_FB_APP_2MINS)
         }
-        Logger.showLog("Thuytv-----onResume------" + Common.IS_BACK_FROM_BACKGROUND)
         if (Common.IS_BACK_FROM_BACKGROUND == false) {
             Common.IS_BACK_FROM_BACKGROUND = true
 //            loadInterstAds(getString(R.string.id_interstitial_ad_background), null)
-            WellComeBackDialog().show(supportFragmentManager, "WELL_COMEBACK")
+            WellComeBackDialog(application, this).show(supportFragmentManager, "WELL_COMEBACK")
+        } else if (mInterstitialAd != null) {
+            Handler(Looper.myLooper()!!).postDelayed({
+                showInterstitial(mUUIDAds, mOnCallbackLoadAds)
+            }, 500)
         }
     }
 
@@ -126,7 +139,19 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
     }
 
     override fun onNetworkConnectionChanged(isConnected: Boolean) {
-//        Logger.showToast(this, "Network: $isConnected")
+        Logger.showLog("Network: $isConnected")
+        isCurrentNetwork = isConnected
+    }
+
+    fun enabaleNetwork() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startActivity(Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY))
+        } else {
+            val wifimanager = applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager
+            wifimanager?.apply {
+                this.isWifiEnabled = true
+            }
+        }
     }
 
     fun onHandleNetworkListener() {
@@ -136,7 +161,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
             }
 
             override fun onUnavailable() {
-//                Logger.showToast(this@BaseActivity, "Network UnAvailable")
+                Logger.showToast(this@BaseActivity, "Network UnAvailable")
             }
         }
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -180,59 +205,100 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
     }
 
     fun printFile(myFilesModel: MyFilesModel) {
-        val printManager: PrintManager = primaryBaseActivity?.getSystemService(Context.PRINT_SERVICE) as PrintManager
         try {
+//            val printManager: PrintManager = primaryBaseActivity?.getSystemService(Context.PRINT_SERVICE) as PrintManager
             myFilesModel.uriPath?.apply {
                 val file = File(this)
-                val printAdapter = PdfDocumentAdapter(file.absolutePath, myFilesModel.name ?: "")
-                printManager.print("Document", printAdapter, PrintAttributes.Builder().build())
+                val printAdapter = PDFDocumentAdapter(applicationContext, file)
+                printPdf("Document", printAdapter, PrintAttributes.Builder().build())
+//                val printAdapter = PdfDocumentAdapter(file.absolutePath, myFilesModel.name ?: "")
+//                printManager.print("Document", printAdapter, PrintAttributes.Builder().build())
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
+    private fun printPdf(
+        name: String, adapter: PrintDocumentAdapter,
+        attrs: PrintAttributes
+    ): PrintJob? {
+        val printManager: PrintManager = primaryBaseActivity?.getSystemService(Context.PRINT_SERVICE) as PrintManager
+        startService(Intent(this, PrintJobMonitorService::class.java))
+        return printManager.print(name, adapter, attrs)
+    }
+
     fun loadInterstAds(uuidAds: String, onCallbackLoadAds: OnCallbackLoadAds?) {
+        mOnCallbackLoadAds = onCallbackLoadAds
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(this, uuidAds, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 Logger.showLog("---onAdFailedToLoad: " + adError.message + "---countRetry: $countRetry")
-                Handler(Looper.myLooper()!!).postDelayed({
-                    mInterstitialAd = null
-                    if (countRetry < 2) {
-                        countRetry++
-                        loadInterstAds(uuidAds, onCallbackLoadAds)
-                    } else {
-                        onCallbackLoadAds?.onCallbackActionLoadAds(false)
-                    }
-                }, AppConfig.DELAY_TIME_RETRY_ADS)
+                setLogDataToFirebase(
+                    AdsLogModel(
+                        adsId = uuidAds,
+                        adsName = "Ads Interstitial Load",
+                        message = adError.message,
+                        deviceName = Common.getDeviceName(this@BaseActivity)
+                    )
+                )
+//                Handler(Looper.myLooper()!!).postDelayed({
+                mInterstitialAd = null
+//                    if (countRetry < 2) {
+//                        countRetry++
+//                        loadInterstAds(uuidAds, onCallbackLoadAds)
+//                    } else {
+                onCallbackLoadAds?.onCallbackActionLoadAds(false)
+//                    }
+//                }, AppConfig.DELAY_TIME_RETRY_ADS)
             }
 
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 Logger.showLog("---onAdLoaded--Success")
                 mInterstitialAd = interstitialAd
-                showInterstitial(onCallbackLoadAds)
+                mUUIDAds = uuidAds
+                showInterstitial(uuidAds, onCallbackLoadAds)
             }
         })
     }
 
-    private fun showInterstitial(onCallbackLoadAds: OnCallbackLoadAds?) {
+    private fun showInterstitial(uuidAds: String?, onCallbackLoadAds: OnCallbackLoadAds?) {
         // Show the ad if it"s ready. Otherwise toast and reload the ad.
         if (mInterstitialAd != null) {
             mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
                     Logger.showLog("--fullScreenContentCallback-onAdDismissedFullScreenContent")
                     onCallbackLoadAds?.onCallbackActionLoadAds(true)
+                    mInterstitialAd = null
                 }
 
                 override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                     Logger.showLog("---fullScreenContentCallback--onAdFailedToShowFullScreenContent : " + adError.message)
-                    mInterstitialAd = null
+                    setLogDataToFirebase(
+                        AdsLogModel(
+                            adsId = uuidAds,
+                            adsName = "Ads Interstitial Show",
+                            message = adError.message,
+                            deviceName = Common.getDeviceName(this@BaseActivity)
+                        )
+                    )
+//                    if (countRetry < 2) {
+//                        countRetry++
+//                        loadInterstAds(uuidAds, onCallbackLoadAds)
+//                    } else {
+//                        onCallbackLoadAds?.onCallbackActionLoadAds(false)
+//                    }
+//                    mInterstitialAd = null
                 }
 
                 override fun onAdShowedFullScreenContent() {
                     Logger.showLog("---fullScreenContentCallback--onAdShowedFullScreenContent")
                     mInterstitialAd = null
+                }
+
+                override fun onAdImpression() {
+                    super.onAdImpression()
+                    Logger.showLog("---fullScreenContentCallback--onAdImpression")
                 }
             }
             mInterstitialAd!!.show(this)
@@ -270,6 +336,14 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         }
         val adLoader = builder.withAdListener(object : AdListener() {
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                setLogDataToFirebase(
+                    AdsLogModel(
+                        adsId = uuidAds,
+                        adsName = "Ads Native",
+                        message = loadAdError.message,
+                        deviceName = Common.getDeviceName(this@BaseActivity)
+                    )
+                )
             }
         }).build()
 
@@ -308,5 +382,14 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         }
         adView.setNativeAd(nativeAd)
 
+    }
+
+    fun setLogDataToFirebase(adsLogModel: AdsLogModel) {
+        try {
+            val reference = FirebaseDatabase.getInstance().getReference("AdsError")
+            reference.push().setValue(adsLogModel)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">PdfReader</string>
+    <string name="app_name" translatable="false">PDF Reader</string>
 
     <string name="tt_request_store_permission">External storage permission</string>
     <string name="vl_request_store_permission_content">Manage External storage permission is needed for this app work, please enable it in device settings</string>
