@@ -18,7 +18,7 @@ class PdfViewActivity : BaseActivity<ActivityBaseBinding>() {
         get() = ActivityBaseBinding::inflate
 
     override fun initData() {
-        binding.prbLoadingMain.visible()
+//        binding.prbLoadingMain.visible()
         Common.countShowAdsPdf++
         if (Common.countShowAdsPdf == 1 || (Common.countShowAdsPdf % 2 == 1)) {
             loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE, object : OnCallbackLoadAds {

@@ -26,6 +26,7 @@ class PdfApplication : MultiDexApplication(), LifecycleObserver, Application.Act
     private var countDownTimer: CountDownTimer? = null
     private lateinit var appOpenAdManager: AppOpenAdManager
     private var currentActivity: Activity? = null
+    private var mOnShowAdCompleteListener: OnShowAdCompleteListener? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -168,6 +169,7 @@ class PdfApplication : MultiDexApplication(), LifecycleObserver, Application.Act
                     override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                         isLoadingAd = false
                         Logger.showLog("Thuytv---openResume----onAdFailedToLoad" + loadAdError.message)
+                        mOnShowAdCompleteListener?.onShowAdComplete()
                     }
                 })
         }
@@ -217,7 +219,7 @@ class PdfApplication : MultiDexApplication(), LifecycleObserver, Application.Act
                 Logger.showLog("The app open ad is already showing.")
                 return
             }
-
+            mOnShowAdCompleteListener = onShowAdCompleteListener
             // If the app open ad is not available yet, invoke the callback then load the ad.
             if (!isAdAvailable()) {
                 Logger.showLog("The app open ad is not ready yet.")
@@ -228,34 +230,33 @@ class PdfApplication : MultiDexApplication(), LifecycleObserver, Application.Act
 
             Logger.showLog("Will show ad.")
 
-            appOpenAd!!.setFullScreenContentCallback(
-                object : FullScreenContentCallback() {
-                    /** Called when full screen content is dismissed. */
-                    override fun onAdDismissedFullScreenContent() {
-                        // Set the reference to null so isAdAvailable() returns false.
-                        appOpenAd = null
-                        isShowingAd = false
-                        Logger.showLog("onAdDismissedFullScreenContent.")
+            appOpenAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
+                /** Called when full screen content is dismissed. */
+                override fun onAdDismissedFullScreenContent() {
+                    // Set the reference to null so isAdAvailable() returns false.
+                    appOpenAd = null
+                    isShowingAd = false
+                    Logger.showLog("onAdDismissedFullScreenContent.")
 
-                        onShowAdCompleteListener.onShowAdComplete()
-                        loadAd(activity)
-                    }
+                    onShowAdCompleteListener.onShowAdComplete()
+                    loadAd(activity)
+                }
 
-                    /** Called when fullscreen content failed to show. */
-                    override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                        appOpenAd = null
-                        isShowingAd = false
-                        Logger.showLog("onAdFailedToShowFullScreenContent: " + adError.message)
+                /** Called when fullscreen content failed to show. */
+                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                    appOpenAd = null
+                    isShowingAd = false
+                    Logger.showLog("onAdFailedToShowFullScreenContent: " + adError.message)
 
-                        onShowAdCompleteListener.onShowAdComplete()
-                        loadAd(activity)
-                    }
+                    onShowAdCompleteListener.onShowAdComplete()
+                    loadAd(activity)
+                }
 
-                    /** Called when fullscreen content is shown. */
-                    override fun onAdShowedFullScreenContent() {
-                        Logger.showLog("onAdShowedFullScreenContent.")
-                    }
-                })
+                /** Called when fullscreen content is shown. */
+                override fun onAdShowedFullScreenContent() {
+                    Logger.showLog("onAdShowedFullScreenContent.")
+                }
+            }
             isShowingAd = true
             appOpenAd!!.show(activity)
         }

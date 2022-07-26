@@ -181,6 +181,7 @@
                 android:imeActionLabel="OK"
                 android:imeOptions="actionDone"
                 android:inputType="number"
+                android:maxLength="9"
                 android:minWidth="@dimen/size_edit_box"
                 android:padding="@dimen/margin_small" />
 

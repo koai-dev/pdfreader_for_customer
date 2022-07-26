@@ -72,5 +72,11 @@
     <string name="vl_size_folder">%d het dossier</string>
     <string name="btn_click_here_read">Klik hier om nu te lezen!</string>
     <string name="vl_history_file">Geschiedenisbestand (%d)</string>
+    <string name="vl_loading_ads">Advertenties laden (%s)</string>
+    <string name="vl_well_comeback" translatable="false">Welkom terug</string>
+    <string name="tt_update_version">App bijwerken</string>
+    <string name="vl_contetn_update_version">Er is een nieuwe versie van Upgrade beschikbaar. Wil je hem nu updaten?</string>
+    <string name="btn_update_now">Update nu</string>
+    <string name="btn_later">Later</string>
 
 </resources>

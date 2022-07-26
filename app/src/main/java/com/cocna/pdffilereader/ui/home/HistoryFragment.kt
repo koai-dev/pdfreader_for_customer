@@ -25,12 +25,22 @@ import java.io.File
 /**
  * Created by Thuytv on 09/06/2022.
  */
-class HistoryFragment(private val onCallbackTittleTab: OnCallbackTittleTab) : BaseFragment<FragmentHistoryBinding>(), View.OnClickListener {
+class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickListener {
     private var mRecentAdapter: MyFilesAdapter? = null
     private var eventsBusDisposable: Disposable? = null
     private var rxBusDisposable: Disposable? = null
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentHistoryBinding = FragmentHistoryBinding::inflate
+    companion object {
+        private var mOnCallbackTittleTab: OnCallbackTittleTab? = null
+        fun newInstance(onCallbackTittleTab: OnCallbackTittleTab?): HistoryFragment {
+            val fragment = HistoryFragment()
+            mOnCallbackTittleTab = onCallbackTittleTab
+            return fragment
+        }
+    }
+
+
     override fun initData() {
         onListenReloadFile()
         onListenUpdateFile()
@@ -168,7 +178,7 @@ private fun setBackgroundColor(isEmpty: Boolean){
                         setBackgroundColor(true)
                     }
                     Logger.showLog("Thuytv------History----onCallbackUpdateTab: " + sizeRecent)
-                    onCallbackTittleTab.onCallbackUpdateTab(sizeRecent)
+                    mOnCallbackTittleTab?.onCallbackUpdateTab(sizeRecent)
                 }
             }
         }
@@ -188,7 +198,7 @@ private fun setBackgroundColor(isEmpty: Boolean){
                     setBackgroundColor(false)
                 }
                 mRecentAdapter?.updateData(this)
-                onCallbackTittleTab.onCallbackUpdateTab(this.size)
+                mOnCallbackTittleTab?.onCallbackUpdateTab(this.size)
             }
         }
     }

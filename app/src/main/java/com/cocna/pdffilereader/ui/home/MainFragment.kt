@@ -65,17 +65,19 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         hideShowFragment(myFilesFragment, settingFragment, favoriteFragment, browseFragment)
         binding.navigationBottom.itemIconTintList = null
         idViewSelected = R.id.navigation_my_file
-
-        adView = AdView(requireContext())
-        binding.adViewContainer.addView(adView)
-        // Since we're loading the banner based on the adContainerView size, we need to wait until this
-        // view is laid out before we can get the width.
-        binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
-            if (!initialLayoutComplete) {
-                initialLayoutComplete = true
-                loadBannerAds()
+        getBaseActivity()?.apply {
+            adView = AdView(this)
+            binding.adViewContainer.addView(adView)
+            // Since we're loading the banner based on the adContainerView size, we need to wait until this
+            // view is laid out before we can get the width.
+            binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
+                if (!initialLayoutComplete) {
+                    initialLayoutComplete = true
+                    loadBannerAds()
+                }
             }
         }
+
 //        getBaseActivity()?.apply {
 //            InterstitialUtils.sharedInstance?.loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE, this)
 ////            loadNativeAds(binding.frameAdsNative, AppConfig.ID_ADS_NATIVE_TOP_BAR)
@@ -199,11 +201,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
         // Start loading the ad in the background.
         adView.loadAd(adRequest)
-        adView.adListener = object : AdListener(){
+        adView.adListener = object : AdListener() {
             override fun onAdFailedToLoad(loadAdsError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdsError)
-                getBaseActivity()?.setLogDataToFirebase(AdsLogModel(adsId = AppConfig.ID_ADS_BANNER_MAIN, adsName = "Ads Banner Main", message = loadAdsError.message,
-                deviceName = Common.getDeviceName(getBaseActivity())))
+                getBaseActivity()?.setLogDataToFirebase(
+                    AdsLogModel(
+                        adsId = AppConfig.ID_ADS_BANNER_MAIN, adsName = "Ads Banner Main", message = loadAdsError.message,
+                        deviceName = Common.getDeviceName(getBaseActivity())
+                    )
+                )
             }
         }
 

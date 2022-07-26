@@ -53,6 +53,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
 
     private var initialLayoutComplete = false
     private var startTime: Long = 0L
+    private var isSendShowAds = false
 
     // Determine the screen width (less decorations) to use for the ad width.
     // If the ad hasn't been laid out, default to the full screen width.
@@ -88,16 +89,19 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                 loadDataFile()
             }, 500)
         }
-        adView = AdView(requireContext())
-        binding.adViewContainer.addView(adView)
-        // Since we're loading the banner based on the adContainerView size, we need to wait until this
-        // view is laid out before we can get the width.
-        binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
-            if (!initialLayoutComplete) {
-                initialLayoutComplete = true
-                loadBannerAds()
+        getBaseActivity()?.apply {
+            adView = AdView(this)
+            binding.adViewContainer.addView(adView)
+            // Since we're loading the banner based on the adContainerView size, we need to wait until this
+            // view is laid out before we can get the width.
+            binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
+                if (!initialLayoutComplete) {
+                    initialLayoutComplete = true
+                    loadBannerAds()
+                }
             }
         }
+
         Logger.showLog("Thuytv-------isCurrentNetwork: " + getBaseActivity()?.isCurrentNetwork)
         if (getBaseActivity()?.isCurrentNetwork == false) {
             getBaseActivity()?.enabaleNetwork()
@@ -339,8 +343,10 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         recycleMemory()
         val endTime = System.currentTimeMillis()
         Logger.showLog("Thuytv----onDestroy: " + ((endTime - startTime) >= 10 * 1000))
-        if ((endTime - startTime) >= 10 * 1000) {
-            getBaseActivity()?.loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_BACK_FILE, null)
+        if ((endTime - startTime) >= 10000 && !isSendShowAds) {
+            isSendShowAds = true
+            RxBus.publish(EventsBus.SHOW_ADS_BACK)
+//                getBaseActivity()?.loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_BACK_FILE, null)
         }
     }
 

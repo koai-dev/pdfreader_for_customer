@@ -47,6 +47,7 @@
         <entry key="app/src/main/res/layout/dialog_confirm_file.xml" value="0.16041666666666668" />
         <entry key="app/src/main/res/layout/dialog_delete_file.xml" value="0.165" />
         <entry key="app/src/main/res/layout/dialog_progress_bar.xml" value="0.225" />
+        <entry key="app/src/main/res/layout/dialog_progress_load_ads.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/dialog_rename_file.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/dialog_well_comeback.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_browse.xml" value="0.19583333333333333" />

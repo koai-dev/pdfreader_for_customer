@@ -99,7 +99,7 @@ class WellComeBackDialog(private val mApplication: Application?, private val mAc
             object : PdfApplication.OnShowAdCompleteListener {
                 override fun onShowAdComplete() {
                     if (isVisible && dialog?.isShowing == true) {
-                        dismiss()
+                        dialog?.dismiss()
                     }
                 }
             })

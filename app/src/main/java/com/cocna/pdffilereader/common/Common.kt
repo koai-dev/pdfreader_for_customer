@@ -3,9 +3,11 @@ package com.cocna.pdffilereader.common
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 /**
  * Created by Thuytv on 12/06/2022.
@@ -16,6 +18,7 @@ object Common {
     var IS_BACK_FROM_BACKGROUND: Boolean? = null
     var countShowAdsOpenResume: Int = 0
     var countShowAdsPdf: Int = 0
+    var lstDataDetail: ArrayList<MyFilesModel>? = null
 
     @JvmStatic
     fun covertTimeLongToString(time: Long?): String {

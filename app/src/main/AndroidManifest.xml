@@ -44,23 +44,28 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
             android:name=".ui.setting.LanguageActivity"
+            android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
 
 
         <activity
             android:name=".ui.home.PdfViewActivity"
+            android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
             android:name=".ui.home.MyFileDetailActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
             android:name=".ui.setting.ChangeThemeActivity"
+            android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
             android:name=".ui.setting.PrivatePolicyFragment"
+            android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
             android:name=".ui.home.PdfPreviewActivity"

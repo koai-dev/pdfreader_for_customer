@@ -37,8 +37,8 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
 
     private var PATH_DEFAULT_STORE = "/storage/emulated/0"
 
-    private lateinit var myFileDetailFragment: MyFileDetailFragment
-    private lateinit var historyFragment: HistoryFragment
+    private var myFileDetailFragment: MyFileDetailFragment? = null
+    private var historyFragment: HistoryFragment? = null
     private lateinit var mAdapter: TabFileAdapter
 
     private var isViewType = false
@@ -68,21 +68,21 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
     private fun setupViewPager(viewPager: ViewPager) {
         val lstRecent = getBaseActivity()?.sharedPreferences?.getRecentFile()
         val sizeRecent = lstRecent?.size ?: 0
-        myFileDetailFragment = MyFileDetailFragment(object : OnCallbackTittleTab {
+        myFileDetailFragment = MyFileDetailFragment.newInstance(object : OnCallbackTittleTab {
             override fun onCallbackUpdateTab(numberTab: Int) {
                 mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, numberTab))
             }
 
         })
-        historyFragment = HistoryFragment(object : OnCallbackTittleTab {
+        historyFragment = HistoryFragment.newInstance(object : OnCallbackTittleTab {
             override fun onCallbackUpdateTab(numberTab: Int) {
                 mAdapter.updateTitleTab(1, getString(R.string.vl_history_file, numberTab))
             }
 
         })
         mAdapter = TabFileAdapter(getBaseActivity()!!, childFragmentManager)
-        mAdapter.addFragment(myFileDetailFragment, getString(R.string.tt_all_file))
-        mAdapter.addFragment(historyFragment, getString(R.string.vl_history_file, sizeRecent))
+        mAdapter.addFragment(myFileDetailFragment!!, getString(R.string.tt_all_file))
+        mAdapter.addFragment(historyFragment!!, getString(R.string.vl_history_file, sizeRecent))
         viewPager.adapter = mAdapter
         viewPager.offscreenPageLimit = 2
     }
@@ -116,8 +116,8 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                 } else {
                     binding.imvAdapterType.setImageResource(R.drawable.ic_grid_type)
                 }
-                myFileDetailFragment.changeTypeViewAdapter(isViewType)
-                historyFragment.changeTypeViewAdapter(isViewType)
+                myFileDetailFragment?.changeTypeViewAdapter(isViewType)
+                historyFragment?.changeTypeViewAdapter(isViewType)
             }
             R.id.imv_filter_file -> {
                 val lstRecent = getBaseActivity()?.sharedPreferences?.getRecentFile()
@@ -127,52 +127,52 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                             R.id.menu_all_size -> {
                                 lstFilePdf.apply {
                                     sortWith { o1, o2 -> o1.length!!.compareTo(o2.length!!) }
-                                    myFileDetailFragment.updateData(this)
+                                    myFileDetailFragment?.updateData(this)
                                 }
                                 lstRecent?.apply {
                                     sortWith { o1, o2 -> o1.length!!.compareTo(o2.length!!) }
-                                    historyFragment.updateData(this)
+                                    historyFragment?.updateData(this)
                                 }
 
                             }
                             R.id.menu_all_name_a_z -> {
                                 lstFilePdf.apply {
                                     sortWith { o1, o2 -> o1.name!!.compareTo(o2.name!!) }
-                                    myFileDetailFragment.updateData(this)
+                                    myFileDetailFragment?.updateData(this)
                                 }
                                 lstRecent?.apply {
                                     sortWith { o1, o2 -> o1.name!!.compareTo(o2.name!!) }
-                                    historyFragment.updateData(this)
+                                    historyFragment?.updateData(this)
                                 }
                             }
                             R.id.menu_all_name_z_a -> {
                                 lstFilePdf.apply {
                                     sortWith { o1, o2 -> o2.name!!.compareTo(o1.name!!) }
-                                    myFileDetailFragment.updateData(this)
+                                    myFileDetailFragment?.updateData(this)
                                 }
                                 lstRecent?.apply {
                                     sortWith { o1, o2 -> o2.name!!.compareTo(o1.name!!) }
-                                    historyFragment.updateData(this)
+                                    historyFragment?.updateData(this)
                                 }
                             }
                             R.id.menu_all_date_modified -> {
                                 lstFilePdf.apply {
                                     sortWith { o1, o2 -> o1.lastModified!!.compareTo(o2.lastModified!!) }
-                                    myFileDetailFragment.updateData(this)
+                                    myFileDetailFragment?.updateData(this)
                                 }
                                 lstRecent?.apply {
                                     sortWith { o1, o2 -> o1.lastModified!!.compareTo(o2.lastModified!!) }
-                                    historyFragment.updateData(this)
+                                    historyFragment?.updateData(this)
                                 }
                             }
                             R.id.menu_all_date_added -> {
                                 lstFilePdf.apply {
                                     sortWith { o1, o2 -> o2.lastModified!!.compareTo(o1.lastModified!!) }
-                                    myFileDetailFragment.updateData(this)
+                                    myFileDetailFragment?.updateData(this)
                                 }
                                 lstRecent?.apply {
                                     sortWith { o1, o2 -> o2.lastModified!!.compareTo(o1.lastModified!!) }
-                                    historyFragment.updateData(this)
+                                    historyFragment?.updateData(this)
                                 }
                             }
                         }
@@ -282,7 +282,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                 }
             }
             getBaseActivity()?.runOnUiThread {
-                myFileDetailFragment.updateData(lstFilePdf)
+                myFileDetailFragment?.updateData(lstFilePdf)
                 mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
                 Handler(Looper.myLooper()!!).postDelayed({
                     if (isVisible && getBaseActivity()?.isFinishing == false) {
@@ -297,7 +297,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
     }
 
     fun onSearchFile(strName: String) {
-        historyFragment.onSearchFile(strName)
-        myFileDetailFragment.onSearchFile(strName)
+        historyFragment?.onSearchFile(strName)
+        myFileDetailFragment?.onSearchFile(strName)
     }
 }

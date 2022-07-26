@@ -20,6 +20,8 @@ import com.cocna.pdffilereader.ui.home.adapter.MyFilesAdapter
 import com.cocna.pdffilereader.ui.home.dialog.DeleteFileDialog
 import com.cocna.pdffilereader.ui.home.dialog.RenameFileDialog
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import io.reactivex.disposables.Disposable
 import java.io.File
 
@@ -27,7 +29,7 @@ import java.io.File
 /**
  * Created by Thuytv on 10/06/2022.
  */
-class MyFileDetailFragment(private val onCallbackTittleTab: OnCallbackTittleTab) : BaseFragment<FragmentMyFileDetailBinding>(), View.OnClickListener {
+class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.OnClickListener {
     private var lstDataFile: ArrayList<MyFilesModel>? = null
     private var myFilesAdapter: MyFilesAdapter? = null
     private var isViewType = false
@@ -36,23 +38,41 @@ class MyFileDetailFragment(private val onCallbackTittleTab: OnCallbackTittleTab)
     private var rxBusDisposable: Disposable? = null
     private var isFromDetail = false
 
+    companion object {
+        private var mOnCallbackTittleTab: OnCallbackTittleTab? = null
+        fun newInstance(onCallbackTittleTab: OnCallbackTittleTab?): MyFileDetailFragment {
+            val fragment = MyFileDetailFragment()
+            mOnCallbackTittleTab = onCallbackTittleTab
+            return fragment
+        }
+    }
+
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMyFileDetailBinding
         get() = FragmentMyFileDetailBinding::inflate
 
     override fun initData() {
         sharePreferenceUtils = SharePreferenceUtils(getBaseActivity())
         isViewType = sharePreferenceUtils.getValueBoolean(SharePreferenceUtils.KEY_TYPE_VIEW_FILE) ?: false
-        lstDataFile = arguments?.getParcelableArrayList(AppKeys.KEY_BUNDLE_DATA)
         isFromDetail = arguments?.getBoolean(AppKeys.KEY_BUNDLE_ACTION, false) ?: false
+//        lstDataFile = arguments?.getParcelableArrayList(AppKeys.KEY_BUNDLE_DATA)
+//        val strData = arguments?.getString(AppKeys.KEY_BUNDLE_DATA)
+//        strData?.apply {
+//            lstDataFile = Gson().fromJson<ArrayList<MyFilesModel>>(
+//                strData,
+//                object : TypeToken<ArrayList<MyFilesModel>>() {}.type
+//            )
+//        }
+        lstDataFile = Common.lstDataDetail
         if (lstDataFile == null) {
             lstDataFile = ArrayList()
         }
+        setupRecycleView()
+
         if (isFromDetail) {
             binding.llToolbarAll.visible()
             val titleData = arguments?.getString(AppKeys.KEY_BUNDLE_SCREEN)
             binding.ttToolbar.text = titleData
         }
-        setupRecycleView()
         onListenDeleteFile()
     }
 
@@ -105,32 +125,32 @@ class MyFileDetailFragment(private val onCallbackTittleTab: OnCallbackTittleTab)
                         when (menuItem?.itemId) {
                             R.id.menu_all_size -> {
                                 lstDataFile?.apply {
-                                    sortWith(Comparator { o1, o2 -> o1.length!!.compareTo(o2.length!!) })
+                                    sortWith { o1, o2 -> o1.length!!.compareTo(o2.length!!) }
                                     myFilesAdapter?.updateData(this)
                                 }
 
                             }
                             R.id.menu_all_name_a_z -> {
                                 lstDataFile?.apply {
-                                    sortWith(Comparator { o1, o2 -> o1.name!!.compareTo(o2.name!!) })
+                                    sortWith { o1, o2 -> o1.name!!.compareTo(o2.name!!) }
                                     myFilesAdapter?.updateData(this)
                                 }
                             }
                             R.id.menu_all_name_z_a -> {
                                 lstDataFile?.apply {
-                                    sortWith(Comparator { o1, o2 -> o2.name!!.compareTo(o1.name!!) })
+                                    sortWith { o1, o2 -> o2.name!!.compareTo(o1.name!!) }
                                     myFilesAdapter?.updateData(this)
                                 }
                             }
                             R.id.menu_all_date_modified -> {
                                 lstDataFile?.apply {
-                                    sortWith(Comparator { o1, o2 -> o1.lastModified!!.compareTo(o2.lastModified!!) })
+                                    sortWith { o1, o2 -> o1.lastModified!!.compareTo(o2.lastModified!!) }
                                     myFilesAdapter?.updateData(this)
                                 }
                             }
                             R.id.menu_all_date_added -> {
                                 lstDataFile?.apply {
-                                    sortWith(Comparator { o1, o2 -> o2.lastModified!!.compareTo(o1.lastModified!!) })
+                                    sortWith { o1, o2 -> o2.lastModified!!.compareTo(o1.lastModified!!) }
                                     myFilesAdapter?.updateData(this)
                                 }
                             }
@@ -160,7 +180,7 @@ class MyFileDetailFragment(private val onCallbackTittleTab: OnCallbackTittleTab)
 
     private fun setupRecycleView() {
         lstDataFile?.apply {
-            sortWith({ o1, o2 -> o1.name!!.compareTo(o2.name!!) })
+            sortWith { o1, o2 -> o1.name!!.compareTo(o2.name!!) }
             myFilesAdapter = MyFilesAdapter(context, lstDataFile!!, MyFilesAdapter.TYPE_VIEW_FILE, object : MyFilesAdapter.OnItemClickListener {
                 override fun onClickItem(documentFile: MyFilesModel) {
                     Logger.showLog("Thuytv-----documentFile: " + documentFile.name)
@@ -244,7 +264,7 @@ class MyFileDetailFragment(private val onCallbackTittleTab: OnCallbackTittleTab)
                 if (it.isDelete == true) {
                     lstDataFile?.remove(it)
                     myFilesAdapter?.deleteData(it)
-                    onCallbackTittleTab.onCallbackUpdateTab(lstDataFile?.size ?: 0)
+                    mOnCallbackTittleTab?.onCallbackUpdateTab(lstDataFile?.size ?: 0)
                 }
             }
         }

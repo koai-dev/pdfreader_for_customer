@@ -2,14 +2,8 @@
 
 package com.cocna.pdffilereader.ui.base
 
-import android.content.Context
-import android.content.ContextWrapper
-import android.content.Intent
-import android.content.IntentFilter
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkCapabilities
-import android.net.NetworkRequest
+import android.content.*
+import android.net.*
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
@@ -31,8 +25,10 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
+import com.cocna.pdffilereader.myinterface.OnUpdateVersionClickListener
 import com.cocna.pdffilereader.print.PDFDocumentAdapter
 import com.cocna.pdffilereader.print.PrintJobMonitorService
+import com.cocna.pdffilereader.ui.home.dialog.ProgressDialogLoadingAds
 import com.cocna.pdffilereader.ui.home.dialog.WellComeBackDialog
 import com.cocna.pdffilereader.ui.home.model.AdsLogModel
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
@@ -46,6 +42,10 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import io.reactivex.disposables.Disposable
 import java.io.File
 import java.util.*
 
@@ -68,6 +68,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
     private var currentNativeAd: NativeAd? = null
     private var mOnCallbackLoadAds: OnCallbackLoadAds? = null
     var isCurrentNetwork = true
+    private var eventsBusDisposable: Disposable? = null
 
     @Suppress("UNCHECKED_CAST")
     protected val binding: VB
@@ -118,6 +119,31 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         super.onDestroy()
         _binding = null
         unregisterReceiver(broadcastReceiver)
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (eventsBusDisposable?.isDisposed == false) eventsBusDisposable?.dispose()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        onListenEventbus()
+    }
+
+    private fun onListenEventbus() {
+        if (eventsBusDisposable == null || eventsBusDisposable?.isDisposed == true) {
+            eventsBusDisposable = RxBus.listenDeBounce(EventsBus::class.java).subscribe {
+                if (EventsBus.SHOW_ADS_BACK == it) {
+                    if (!isFinishing && !isDestroyed) {
+                        runOnUiThread {
+                            loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_BACK_FILE, null)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun attachBaseContext(newBase: Context) {
@@ -229,8 +255,10 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
     }
 
     fun loadInterstAds(uuidAds: String, onCallbackLoadAds: OnCallbackLoadAds?) {
-        mOnCallbackLoadAds = onCallbackLoadAds
         val adRequest = AdRequest.Builder().build()
+        val progressLoadingAds = ProgressDialogLoadingAds(this)
+        progressLoadingAds.show()
+        mOnCallbackLoadAds = onCallbackLoadAds
         InterstitialAd.load(this, uuidAds, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 Logger.showLog("---onAdFailedToLoad: " + adError.message + "---countRetry: $countRetry")
@@ -242,6 +270,9 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
                         deviceName = Common.getDeviceName(this@BaseActivity)
                     )
                 )
+                if (!isFinishing && !isDestroyed) {
+                    progressLoadingAds.dismiss()
+                }
 //                Handler(Looper.myLooper()!!).postDelayed({
                 mInterstitialAd = null
 //                    if (countRetry < 2) {
@@ -249,6 +280,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
 //                        loadInterstAds(uuidAds, onCallbackLoadAds)
 //                    } else {
                 onCallbackLoadAds?.onCallbackActionLoadAds(false)
+
 //                    }
 //                }, AppConfig.DELAY_TIME_RETRY_ADS)
             }
@@ -257,7 +289,10 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
                 Logger.showLog("---onAdLoaded--Success")
                 mInterstitialAd = interstitialAd
                 mUUIDAds = uuidAds
-                showInterstitial(uuidAds, onCallbackLoadAds)
+                if (!isFinishing && !isDestroyed) {
+                    progressLoadingAds.dismiss()
+                    showInterstitial(uuidAds, onCallbackLoadAds)
+                }
             }
         })
     }
@@ -392,4 +427,27 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
             e.printStackTrace()
         }
     }
+
+    fun gotoPlayStore() {
+        val packageName = this.packageName ?: "com.cocna.pdfreader.viewpdf"
+        val uri = Uri.parse("market://details?id=$packageName")
+        Logger.showLog("Thuytv------gotoPlayStore: " + uri.path)
+        val goToMarket = Intent(Intent.ACTION_VIEW, uri)
+        goToMarket.addFlags(
+            Intent.FLAG_ACTIVITY_NO_HISTORY or
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+        )
+        try {
+            this.startActivity(goToMarket)
+        } catch (e: ActivityNotFoundException) {
+            this.startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+                )
+            )
+        }
+    }
+
+
 }

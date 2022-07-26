@@ -41,7 +41,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(), View.OnClickList
                 shareApplication()
             }
             R.id.llSettingRate -> {
-                gotoRatingApp()
+                getBaseActivity()?.gotoPlayStore()
             }
             R.id.llSettingTerm -> {
                 getBaseActivity()?.onNextScreen(PrivatePolicyFragment::class.java, null, false)
@@ -49,25 +49,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(), View.OnClickList
         }
     }
 
-    private fun gotoRatingApp() {
-        val packageName = getBaseActivity()?.packageName ?: "com.cocna.pdfreader.viewpdf"
-        val uri = Uri.parse("market://details?id=$packageName")
-        val goToMarket = Intent(Intent.ACTION_VIEW, uri)
-        goToMarket.addFlags(
-            Intent.FLAG_ACTIVITY_NO_HISTORY or
-                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK
-        )
-        try {
-            getBaseActivity()?.startActivity(goToMarket)
-        } catch (e: ActivityNotFoundException) {
-            getBaseActivity()?.startActivity(
-                Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
-                )
-            )
-        }
-    }
 
     private fun shareApplication() {
         val packageName = getBaseActivity()?.packageName ?: "com.cocna.pdfreader.viewpdf"

@@ -72,5 +72,11 @@
     <string name="msg_import_please_wait">Importando… Por favor espere</string>
     <string name="btn_click_here_read">Haga clic aquí para leer ahora!</string>
     <string name="vl_history_file">Archivo de historial (%d)</string>
+    <string name="vl_loading_ads">Cargando Anuncios (%s)</string>
+    <string name="vl_well_comeback" translatable="false">Bienvenido de nuevo</string>
+    <string name="tt_update_version">Actualizar aplicación</string>
+    <string name="vl_contetn_update_version">Hay una nueva versión de Upgrade disponible. ¿Te gustaría actualizarlo ahora?</string>
+    <string name="btn_update_now">Actualizar ahora</string>
+    <string name="btn_later">Luego</string>
 
 </resources>

@@ -73,5 +73,11 @@
     <string name="vl_size_folder">%d berkas</string>
     <string name="btn_click_here_read">Klik di sini untuk membaca sekarang!</string>
     <string name="vl_history_file">Berkas Riwayat (%d)</string>
+    <string name="vl_loading_ads">Memuat Iklan (%s)</string>
+    <string name="vl_well_comeback" translatable="false">Selamat datang kembali</string>
+    <string name="tt_update_version">Perbarui Aplikasi</string>
+    <string name="vl_contetn_update_version">Versi baru Upgrade tersedia. Apakah Anda ingin memperbaruinya sekarang?</string>
+    <string name="btn_update_now">Memperbarui sekarang</string>
+    <string name="btn_later">Nanti</string>
 
 </resources>

@@ -33,7 +33,7 @@ class ProgressDialog(mContext: Context) : Dialog(mContext, R.style.AlertDialogSt
         }
         val bind: DialogProgressBarBinding = DialogProgressBarBinding.inflate(LayoutInflater.from(context))
         setContentView(bind.root)
-        setCancelable(true)
+        setCancelable(false)
     }
     fun dismissDialog(){
         dismiss()

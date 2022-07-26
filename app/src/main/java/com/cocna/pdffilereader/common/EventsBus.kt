@@ -9,4 +9,5 @@ enum class EventsBus {
     RELOAD_THEME,
     RELOAD_RECENT,
     RELOAD_FAVORITE,
+    SHOW_ADS_BACK
 }

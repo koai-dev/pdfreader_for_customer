@@ -14,10 +14,7 @@ import com.anggrayudi.storage.file.extension
 import com.anggrayudi.storage.file.search
 import com.google.gson.Gson
 import com.cocna.pdffilereader.R
-import com.cocna.pdffilereader.common.AppKeys
-import com.cocna.pdffilereader.common.Logger
-import com.cocna.pdffilereader.common.PermissionUtil
-import com.cocna.pdffilereader.common.RxBus
+import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.FragmentBrowseBinding
 import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.home.adapter.MyFilesAdapter
@@ -42,7 +39,8 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
             override fun onClickItem(documentFile: MyFilesModel) {
                 if ((documentFile.lstChildFile?.size ?: 0) > 0) {
                     val bundle = Bundle()
-                    bundle.putParcelableArrayList(AppKeys.KEY_BUNDLE_DATA, documentFile.lstChildFile)
+//                    bundle.putParcelableArrayList(AppKeys.KEY_BUNDLE_DATA, documentFile.lstChildFile)
+                    Common.lstDataDetail = documentFile.lstChildFile
                     bundle.putString(AppKeys.KEY_BUNDLE_SCREEN, getString(R.string.tt_pdf_file))
                     bundle.putBoolean(AppKeys.KEY_BUNDLE_ACTION, true)
                     getBaseActivity()?.onNextScreen(MyFileDetailActivity::class.java, bundle, false)
