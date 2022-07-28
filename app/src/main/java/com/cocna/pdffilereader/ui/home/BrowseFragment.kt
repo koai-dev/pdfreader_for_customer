@@ -60,8 +60,10 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
             adapter = mFolderAdapter
         }
         Handler(Looper.myLooper()!!).postDelayed({
-            if (PermissionUtil.checkExternalStoragePermission(requireContext())) {
-                getAllFileInDevice()
+            getBaseActivity()?.apply {
+                if (PermissionUtil.checkExternalStoragePermission(this)) {
+                    getAllFileInDevice()
+                }
             }
         }, 1000)
     }

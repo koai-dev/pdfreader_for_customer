@@ -75,8 +75,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:stepSize="1.0"
-            android:valueFrom="0.0"
-            android:valueTo="100.0"
             app:thumbColor="@color/color_white"
             app:tickColor="@android:color/transparent"
             app:trackColorActive="@color/rgb_F44336"

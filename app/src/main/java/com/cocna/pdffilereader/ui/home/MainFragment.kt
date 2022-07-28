@@ -49,7 +49,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             }
 
             val adWidth = (adWidthPixels / density).toInt()
-            return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(requireContext(), adWidth)
+            return if (getBaseActivity() != null) {
+                AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getBaseActivity()!!, adWidth)
+            } else {
+                AdSize.BANNER
+            }
         }
 
     override fun initData() {

@@ -261,37 +261,39 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
 
     private fun getAllFilePdf(dialogProgress: ProgressDialog) {
         Thread {
-            var root = DocumentFileCompat.getRootDocumentFile(requireContext(), "primary", true)
-            if (root == null) {
-                root = DocumentFile.fromFile(File(PATH_DEFAULT_STORE))
-            }
-            val mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")!!
-            val pdfArray = root.search(true, DocumentFileType.FILE, arrayOf(mime))
-            if (pdfArray.isNotEmpty()) {
-                for (item in pdfArray) {
-                    val model =
-                        MyFilesModel(
-                            name = item.name,
-                            uriPath = item.uri.path,
-                            uriOldPath = item.uri.path,
-                            lastModified = item.lastModified(),
-                            extensionName = item.extension,
-                            length = item.length()
-                        )
-                    lstFilePdf.add(model)
+            getBaseActivity()?.apply {
+                var root = DocumentFileCompat.getRootDocumentFile(this, "primary", true)
+                if (root == null) {
+                    root = DocumentFile.fromFile(File(PATH_DEFAULT_STORE))
                 }
-            }
-            getBaseActivity()?.runOnUiThread {
-                myFileDetailFragment?.updateData(lstFilePdf)
-                mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
-                Handler(Looper.myLooper()!!).postDelayed({
-                    if (isVisible && getBaseActivity()?.isFinishing == false) {
-                        dialogProgress.dismiss()
+                val mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")!!
+                val pdfArray = root.search(true, DocumentFileType.FILE, arrayOf(mime))
+                if (pdfArray.isNotEmpty()) {
+                    for (item in pdfArray) {
+                        val model =
+                            MyFilesModel(
+                                name = item.name,
+                                uriPath = item.uri.path,
+                                uriOldPath = item.uri.path,
+                                lastModified = item.lastModified(),
+                                extensionName = item.extension,
+                                length = item.length()
+                            )
+                        lstFilePdf.add(model)
                     }
-                }, 1000)
-            }
-            if (getBaseActivity()?.isCurrentNetwork == false) {
-                getBaseActivity()?.enabaleNetwork()
+                }
+                getBaseActivity()?.runOnUiThread {
+                    myFileDetailFragment?.updateData(lstFilePdf)
+                    mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
+                    Handler(Looper.myLooper()!!).postDelayed({
+                        if (isVisible && getBaseActivity()?.isFinishing == false) {
+                            dialogProgress.dismiss()
+                        }
+                    }, 1000)
+                }
+                if (getBaseActivity()?.isCurrentNetwork == false) {
+                    getBaseActivity()?.enabaleNetwork()
+                }
             }
         }.start()
     }

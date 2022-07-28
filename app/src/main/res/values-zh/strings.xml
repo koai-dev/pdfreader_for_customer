@@ -76,7 +76,7 @@
     <string name="vl_loading_ads">加载广告 (%s)</string>
     <string name="btn_update_now">现在更新</string>
     <string name="tt_update_version">更新应用</string>
-    <string name="vl_well_comeback" translatable="false">欢迎回来</string>
+    <string name="vl_well_comeback">欢迎回来</string>
     <string name="vl_contetn_update_version">新版本的升级可用。 你想现在更新吗？</string>
     <string name="btn_later">之后</string>
 

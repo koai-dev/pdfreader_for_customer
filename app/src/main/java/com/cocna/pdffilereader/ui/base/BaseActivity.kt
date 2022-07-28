@@ -106,7 +106,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         if (Common.IS_BACK_FROM_BACKGROUND == false) {
             Common.IS_BACK_FROM_BACKGROUND = true
 //            loadInterstAds(getString(R.string.id_interstitial_ad_background), null)
-            WellComeBackDialog(application, this).show(supportFragmentManager, "WELL_COMEBACK")
+            WellComeBackDialog.newInstance(application, this).show(supportFragmentManager, "WELL_COMEBACK")
         } else if (mInterstitialAd != null) {
             Handler(Looper.myLooper()!!).postDelayed({
                 showInterstitial(mUUIDAds, mOnCallbackLoadAds)

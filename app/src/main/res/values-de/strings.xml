@@ -74,7 +74,7 @@
     <string name="btn_click_here_read">Klicken Sie hier, um jetzt zu lesen!</string>
     <string name="vl_history_file">Verlaufsdatei (%d)</string>
     <string name="vl_loading_ads">Anzeigen werden geladen (%s)</string>
-    <string name="vl_well_comeback" translatable="false">Willkommen zurück</string>
+    <string name="vl_well_comeback">Willkommen zurück</string>
     <string name="tt_update_version">App aktualisieren</string>
     <string name="vl_contetn_update_version">Eine neue Version von Upgrade ist verfügbar. Möchten Sie es jetzt aktualisieren?</string>
     <string name="btn_update_now">Jetzt aktualisieren</string>

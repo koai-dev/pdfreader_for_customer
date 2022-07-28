@@ -45,33 +45,33 @@ class PdfApplication : MultiDexApplication(), LifecycleObserver, Application.Act
     fun onMoveToForeground() {
         // Show the ad (if available) when the app moves to foreground.
 //        Logger.showLog("Thuytv------onMoveToForeground : " + Common.IS_BACK_FROM_BACKGROUND)
-//        countDownTimer?.cancel()
-//        countDownTimer = null
+        countDownTimer?.cancel()
+        countDownTimer = null
     }
 
     @Suppress("DEPRECATION")
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onAppBackgrounded() {
-//        if (countDownTimer == null) {
-//            countDownTimer = object : CountDownTimer(30 * 1000, 1000) {
-//                override fun onTick(millisUntilFinished: Long) {
-//                    Logger.showLog("Thuytv------millisUntilFinished: $millisUntilFinished ---IS_BACK_FROM_BACKGROUND: " + Common.IS_BACK_FROM_BACKGROUND)
-//                }
-//
-//                override fun onFinish() {
-        Common.countShowAdsOpenResume++
-        if (Common.countShowAdsOpenResume == 1 ) {
-            appOpenAdManager.loadAd(applicationContext)
+        if (countDownTimer == null) {
+            countDownTimer = object : CountDownTimer(10 * 1000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    Logger.showLog("Thuytv------millisUntilFinished: $millisUntilFinished ---IS_BACK_FROM_BACKGROUND: " + Common.IS_BACK_FROM_BACKGROUND)
+                }
+
+                override fun onFinish() {
+                    Common.countShowAdsOpenResume++
+                    if (Common.countShowAdsOpenResume == 1) {
+                        appOpenAdManager.loadAd(applicationContext)
+                    }
+                    if (Common.countShowAdsOpenResume == 1 || (Common.countShowAdsOpenResume % 2 == 1)) {
+                        Common.IS_BACK_FROM_BACKGROUND = false
+                    }
+                    countDownTimer = null
+                    Logger.showLog("Thuytv------onAppBackgrounded")
+                }
+            }
+            countDownTimer?.start()
         }
-        if (Common.countShowAdsOpenResume == 1 || (Common.countShowAdsOpenResume % 2 == 1)) {
-            Common.IS_BACK_FROM_BACKGROUND = false
-        }
-//                    countDownTimer = null
-//                    Logger.showLog("Thuytv------onAppBackgrounded")
-//                }
-//            }
-//            countDownTimer?.start()
-//        }
     }
 
     /** ActivityLifecycleCallback methods. */

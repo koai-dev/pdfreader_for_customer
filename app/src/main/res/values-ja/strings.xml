@@ -74,7 +74,7 @@
     <string name="btn_click_here_read">今すぐ読むにはここをクリックしてください！</string>
     <string name="vl_history_file">履歴ファイル（(%d)</string>
     <string name="vl_loading_ads">広告の読み込み (%s)</string>
-    <string name="vl_well_comeback" translatable="false">お帰りなさい</string>
+    <string name="vl_well_comeback">お帰りなさい</string>
     <string name="tt_update_version">アプリを更新</string>
     <string name="vl_contetn_update_version">アップグレードの新しいバージョンが利用可能です。 今すぐ更新しますか？</string>
     <string name="btn_update_now">今すぐアップデート</string>

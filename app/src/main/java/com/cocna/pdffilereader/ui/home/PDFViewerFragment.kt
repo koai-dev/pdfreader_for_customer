@@ -72,7 +72,11 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             }
 
             val adWidth = (adWidthPixels / density).toInt()
-            return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(requireContext(), adWidth)
+            return if (getBaseActivity() != null) {
+                AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getBaseActivity()!!, adWidth)
+            } else {
+                AdSize.BANNER
+            }
         }
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPdfViewerBinding
         get() = FragmentPdfViewerBinding::inflate
@@ -138,7 +142,6 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                             binding.rcvPreviewPage.scrollToPosition(currentPage)
                         }
                     }
-
                 }
 
             }, 30)
@@ -169,7 +172,6 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         }
         binding.edtJumpPage.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(p0: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                Logger.showLog("Thuytv----actionId : $actionId ---action: ${event?.action}---keyCode: ${event?.keyCode}")
                 if (actionId == EditorInfo.IME_ACTION_DONE || event?.action == KeyEvent.ACTION_DOWN
                     || event?.keyCode == KeyEvent.KEYCODE_ENTER
                 ) {

@@ -1,19 +1,18 @@
 package com.cocna.pdffilereader.ui.home.dialog
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.cocna.pdffilereader.PdfApplication
 import com.cocna.pdffilereader.R
@@ -30,18 +29,28 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 
 
 /**
  * Created by Thuytv on 26/06/2022.
  */
-class WellComeBackDialog(private val mApplication: Application?, private val mActivity: BaseActivity<*>) : DialogFragment() {
+class WellComeBackDialog : DialogFragment() {
     private var _binding: DialogWellComebackBinding? = null
     private var mInterstitialAd: InterstitialAd? = null
     private var countRetry: Int = 0
+    private var countDownTimer: CountDownTimer? = null
 
+    companion object {
+        @SuppressLint("StaticFieldLeak")
+        private var mActivity: BaseActivity<*>? = null
+        private var mApplication: Application? = null
+        fun newInstance(mApplication: Application?, mActivity: BaseActivity<*>?): WellComeBackDialog {
+            val fragment = WellComeBackDialog()
+            this.mActivity = mActivity
+            this.mApplication = mApplication
+            return fragment
+        }
+    }
 
     @NonNull
     override fun onCreateDialog(@Nullable savedInstanceState: Bundle?): Dialog {
@@ -70,7 +79,30 @@ class WellComeBackDialog(private val mApplication: Application?, private val mAc
             val height = ViewGroup.LayoutParams.MATCH_PARENT
             window?.setLayout(width, height)
         }
+        showCountDownTime()
+    }
 
+    override fun onStop() {
+        super.onStop()
+        countDownTimer?.cancel()
+        countDownTimer = null
+    }
+
+    private fun showCountDownTime() {
+        if (countDownTimer == null) {
+            countDownTimer = object : CountDownTimer(60 * 1000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    Logger.showLog("Thuytv------millisUntilFinished: $millisUntilFinished")
+                }
+
+                override fun onFinish() {
+                    if (isVisible && dialog?.isShowing == true) {
+                        dialog?.dismiss()
+                    }
+                }
+            }
+            countDownTimer?.start()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,15 +126,18 @@ class WellComeBackDialog(private val mApplication: Application?, private val mAc
         }
 
         // Show the app open ad.
-        pdfApplication.showAdIfAvailable(
-            mActivity,
-            object : PdfApplication.OnShowAdCompleteListener {
-                override fun onShowAdComplete() {
-                    if (isVisible && dialog?.isShowing == true) {
-                        dialog?.dismiss()
+        mActivity?.apply {
+            pdfApplication.showAdIfAvailable(
+                this,
+                object : PdfApplication.OnShowAdCompleteListener {
+                    override fun onShowAdComplete() {
+                        Logger.showLog("Thuytv-----onShowAdComplete----isVisible: $isVisible ----isShowing: " + dialog?.isShowing)
+                        if (isVisible && dialog?.isShowing == true) {
+                            dialog?.dismiss()
+                        }
                     }
-                }
-            })
+                })
+        }
     }
 
     private fun loadInterstAds() {
