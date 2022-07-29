@@ -48,10 +48,9 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        onListenChangeTheme()
-        initData()
-        initEvents()
-
+            onListenChangeTheme()
+            initData()
+            initEvents()
     }
 
     abstract fun initData()

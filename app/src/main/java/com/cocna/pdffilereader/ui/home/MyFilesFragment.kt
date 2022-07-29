@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.documentfile.provider.DocumentFile
 import androidx.viewpager.widget.ViewPager
 import com.anggrayudi.storage.file.*
+import com.anggrayudi.storage.media.MediaStoreCompat
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.FragmentMyFilesBinding

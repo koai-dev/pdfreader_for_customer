@@ -24,4 +24,5 @@ class MainActivity : BaseActivity<ActivityBaseBinding>() {
     }
 
 
+
 }

@@ -99,9 +99,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                             binding.imvPurchase.visible()
                             binding.ttSettingHome.gone()
                         }
-//                        if (!binding.edtSearchAll.text?.toString().isNullOrEmpty()) {
-//                            binding.edtSearchAll.setText("")
-//                        }
                         hideShowFragment(myFilesFragment, settingFragment, favoriteFragment, browseFragment)
                     }
                     R.id.navigation_favorite -> {
@@ -121,9 +118,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                             binding.imvPurchase.visible()
                             binding.ttSettingHome.gone()
                         }
-//                        if (!binding.edtSearchAll.text?.toString().isNullOrEmpty()) {
-//                            binding.edtSearchAll.setText("")
-//                        }
                         hideShowFragment(browseFragment, myFilesFragment, favoriteFragment, browseFragment)
                     }
                     R.id.navigation_setting -> {
@@ -158,15 +152,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             }
 
         })
-
-//        val iconColorStates = ColorStateList(
-//            arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)), intArrayOf(
-//                Color.parseColor("#123456"),
-//                Color.parseColor("#654321")
-//            )
-//        )
-//        binding.navigationBottom.itemTextColor = iconColorStates
-//        binding.navigationBottom.itemIconTintList = iconColorStates
     }
 
     private fun loadFragment(fragment: Fragment) {
@@ -179,23 +164,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         activity?.supportFragmentManager?.beginTransaction()?.hide(hideFragment1)?.hide(hideFragment2)?.hide(hideFragment3)?.show(showFragment)?.commit()
     }
 
-    //    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-//        when (item.itemId) {
-//            R.id.navigation_home -> {
-//                hideShowFragment(homeFragment, notificationFragment, dashboardFragment, browserFragment)
-//            }
-//            R.id.navigation_dashboard -> {
-//                hideShowFragment(dashboardFragment, notificationFragment, homeFragment, browserFragment)
-//            }
-//            R.id.navigation_notifications -> {
-//                hideShowFragment(notificationFragment, dashboardFragment, homeFragment, browserFragment)
-//            }
-//            R.id.navigation_browser -> {
-//                hideShowFragment(browserFragment, homeFragment, dashboardFragment, notificationFragment)
-//            }
-//        }
-//        return@OnNavigationItemSelectedListener true
-//    }
     private fun loadBannerAds() {
         adView.adUnitId = AppConfig.ID_ADS_BANNER_MAIN
         adView.setAdSize(adSize)
