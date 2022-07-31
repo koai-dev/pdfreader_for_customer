@@ -48,13 +48,53 @@
             android:src="@drawable/ic_filter_all" />
     </LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/frame_ads_native_all_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/ll_my_file" />
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager_my_file"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/sw_refresh_data"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_my_file" />
+        app:layout_constraintTop_toBottomOf="@id/frame_ads_native_all_file">
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager_my_file"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_go_to_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/Text_Button_All"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/msg_no_files"
+            android:textColor="@color/color_black" />
+
+        <Button
+            android:id="@+id/btn_go_to_setting"
+            style="@style/Button_Confirm_All"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_all"
+            android:text="@string/btn_go_to_setting" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

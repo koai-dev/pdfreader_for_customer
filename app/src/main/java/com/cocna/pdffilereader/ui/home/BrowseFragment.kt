@@ -30,6 +30,7 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentBrowseBinding = FragmentBrowseBinding::inflate
     private lateinit var mFolderAdapter: MyFilesAdapter
     private var rxBusDisposable: Disposable? = null
+    private var eventBusDisposable: Disposable? = null
     private lateinit var lstAllFolder: ArrayList<MyFilesModel>
 
     override fun initData() {
@@ -61,11 +62,17 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
         }
         Handler(Looper.myLooper()!!).postDelayed({
             getBaseActivity()?.apply {
-                if (PermissionUtil.checkExternalStoragePermission(this)) {
-                    getAllFileInDevice()
+                if (Common.listAllFolder.isNullOrEmpty()) {
+                    if (PermissionUtil.checkExternalStoragePermission(this)) {
+                        getAllFileInDevice()
+                    }
+                } else {
+                    lstAllFolder = Common.listAllFolder!!
+                    mFolderAdapter.updateData(lstAllFolder)
                 }
             }
-        }, 1000)
+        }, 200)
+        onListenEventBus()
     }
 
     override fun initEvents() {
@@ -118,6 +125,7 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
     override fun onDestroy() {
         super.onDestroy()
         if (rxBusDisposable?.isDisposed == false) rxBusDisposable?.dispose()
+        if (eventBusDisposable?.isDisposed == false) eventBusDisposable?.dispose()
     }
 
     private fun onListenUpdateFile() {
@@ -148,6 +156,18 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
                                 break
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun onListenEventBus() {
+        eventBusDisposable = RxBus.listenDeBounce(EventsBus::class.java).subscribe {
+            if (it == EventsBus.PERMISSION_STORED_GRANTED) {
+                getBaseActivity()?.apply {
+                    if (PermissionUtil.checkExternalStoragePermission(this)) {
+                        getAllFileInDevice()
                     }
                 }
             }

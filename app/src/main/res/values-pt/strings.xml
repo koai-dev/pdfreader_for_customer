@@ -4,9 +4,9 @@
     <string name="title_favorite">Favorito</string>
     <string name="title_browse">Navegar</string>
     <string name="title_setting">Contexto</string>
-    <string name="btn_continue">Continuar</string>
-    <string name="tt_request_store_permission">Permissão de armazenamento externo</string>
-    <string name="vl_request_store_permission_content">Gerenciar a permissão de armazenamento externo é necessária para o trabalho deste aplicativo, ative -o nas configurações do dispositivo</string>
+    <string name="btn_continue">Permitir</string>
+    <string name="tt_request_store_permission">Permissão necessária</string>
+    <string name="vl_request_store_permission_content">Todas as permissões de acesso a arquivos são necessárias para ler arquivos locais.</string>
     <string name="vl_request_read_permission_content">Leia a permissão de armazenamento externo é necessária para o trabalho deste aplicativo, ative -o nas configurações do dispositivo</string>
     <string name="menu_size">Tamanho</string>
     <string name="menu_name_a_z">Nome A-Z</string>
@@ -78,5 +78,7 @@
     <string name="vl_contetn_update_version">Uma nova versão do Upgrade está disponível. Deseja atualizá-lo agora?</string>
     <string name="btn_update_now">Atualizar agora</string>
     <string name="btn_later">Mais tarde</string>
+    <string name="msg_no_files">Nenhum arquivo ainda - É necessária permissão para ler todos os arquivos</string>
+    <string name="btn_go_to_setting">Ir para a configuração</string>
 
 </resources>

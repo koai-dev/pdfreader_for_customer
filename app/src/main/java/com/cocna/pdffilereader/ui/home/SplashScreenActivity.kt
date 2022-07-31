@@ -2,8 +2,16 @@ package com.cocna.pdffilereader.ui.home
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
+import android.webkit.MimeTypeMap
 import androidx.core.content.pm.PackageInfoCompat
+import androidx.documentfile.provider.DocumentFile
+import com.anggrayudi.storage.file.DocumentFileCompat
+import com.anggrayudi.storage.file.DocumentFileType
+import com.anggrayudi.storage.file.extension
+import com.anggrayudi.storage.file.search
 import com.google.android.gms.ads.*
 import com.cocna.pdffilereader.MainActivity
 import com.cocna.pdffilereader.PdfApplication
@@ -13,27 +21,38 @@ import com.cocna.pdffilereader.databinding.ActivitySplassScreenBinding
 import com.cocna.pdffilereader.myinterface.OnUpdateVersionClickListener
 import com.cocna.pdffilereader.ui.base.BaseActivity
 import com.cocna.pdffilereader.ui.base.OnCallbackLoadAds
+import com.cocna.pdffilereader.ui.home.dialog.ProgressDialog
 import com.cocna.pdffilereader.ui.home.dialog.UpdateVersionDialog
+import com.cocna.pdffilereader.ui.home.model.AdsLogModel
+import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.cocna.pdffilereader.ui.setting.LanguageActivity
 import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import java.io.File
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by Thuytv on 09/06/2022.
  */
 class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
+    private val PATH_DEFAULT_STORE = "/storage/emulated/0"
+    private var startTime: Long = 0
 
     override val bindingInflater: (LayoutInflater) -> ActivitySplassScreenBinding
         get() = ActivitySplassScreenBinding::inflate
 
     override fun initData() {
-//        val testDeviceIds = Arrays.asList("B8D2F4981BD1CDC61FB420D2A9CC64E0")
-//        val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
-//        MobileAds.setRequestConfiguration(configuration)
+        val testDeviceIds = Arrays.asList("B8D2F4981BD1CDC61FB420D2A9CC64E0")
+        val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
+        MobileAds.setRequestConfiguration(configuration)
+
+        getAllFilePdf()
+        getAllFileInDevice()
 
         Common.TIME_USE_APP_START = System.currentTimeMillis()
         if ((sharedPreferences.getValueLong(SharePreferenceUtils.KEY_TIME_INSTALL) ?: 0) <= 0) {
@@ -50,8 +69,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                 logEventFirebase(AppConfig.KEY_EVENT_FB_APP_7DAYS, AppConfig.KEY_EVENT_FB_APP_7DAYS)
             }
         }
-
-//        createTimer(3L)
+        startTime = System.currentTimeMillis()
         checkNewVersionApp()
 //        loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL, object : OnCallbackLoadAds {
 //            override fun onCallbackActionLoadAds(isSuccess: Boolean) {
@@ -63,7 +81,16 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
     private fun loadAds() {
         loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL, object : OnCallbackLoadAds {
             override fun onCallbackActionLoadAds(isSuccess: Boolean) {
-                gotoMainScreen()
+                val endTime = System.currentTimeMillis()
+                val totalTime = (endTime - startTime) / 1000
+                Logger.showLog("Thuytv------totalTime: $totalTime")
+                if (totalTime > 3) {
+                    gotoMainScreen()
+                } else {
+                    Handler(Looper.myLooper()!!).postDelayed({
+                        gotoMainScreen()
+                    }, 3000)
+                }
             }
         })
     }
@@ -104,6 +131,9 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
     }
 
     override fun initEvents() {
+        if (sharedPreferences.getValueBoolean(SharePreferenceUtils.KEY_FIRST_LOGIN) == false) {
+            loadNativeAdsLanguage()
+        }
     }
 
     private fun gotoMainScreen() {
@@ -143,5 +173,110 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
             }
         }
         countDownTimer.start()
+    }
+
+    private fun getAllFilePdf() {
+        Thread {
+            Common.listAllData = ArrayList()
+            if (PermissionUtil.checkExternalStoragePermission(this)) {
+                val startTime = System.currentTimeMillis()
+                var root = DocumentFileCompat.getRootDocumentFile(this, "primary", true)
+                if (root == null) {
+                    root = DocumentFile.fromFile(File(PATH_DEFAULT_STORE))
+                }
+                val mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")!!
+                val pdfArray = root.search(true, DocumentFileType.FILE, arrayOf(mime))
+                if (pdfArray.isNotEmpty()) {
+                    Common.listAllData = ArrayList()
+                    for (item in pdfArray) {
+                        val model =
+                            MyFilesModel(
+                                name = item.name,
+                                uriPath = item.uri.path,
+                                uriOldPath = item.uri.path,
+                                lastModified = item.lastModified(),
+                                extensionName = item.extension,
+                                length = item.length()
+                            )
+                        Common.listAllData?.add(model)
+                    }
+                }
+                val endTime = System.currentTimeMillis() - startTime
+                Logger.showLog("Thuytv-----endTime: $endTime")
+            }
+        }.start()
+    }
+
+    private fun getAllFileInDevice() {
+        Thread {
+            Common.listAllFolder = ArrayList()
+            if (PermissionUtil.checkExternalStoragePermission(this)) {
+                Logger.showLog("Thuytv---------getAllFileInDevice--Spalsh")
+                val root = DocumentFile.fromFile(File(PATH_DEFAULT_STORE))
+                val mimePDF = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")!!
+                for (item in root.listFiles()) {
+                    if (!item.isFile) {
+                        val rootFile = item.search(true, DocumentFileType.FILE, arrayOf(mimePDF))
+                        if (rootFile.isNotEmpty()) {
+                            val lstChildFile: ArrayList<MyFilesModel> = ArrayList()
+                            for (mFile in rootFile) {
+                                val model =
+                                    MyFilesModel(
+                                        name = mFile.name,
+                                        uriPath = mFile.uri.path,
+                                        uriOldPath = mFile.uri.path,
+                                        lastModified = mFile.lastModified(),
+                                        extensionName = mFile.extension,
+                                        length = mFile.length()
+                                    )
+                                lstChildFile.add(model)
+                            }
+                            val mFolder = MyFilesModel(folderName = item.name, lstChildFile = lstChildFile)
+                            Common.listAllFolder?.add(mFolder)
+                        }
+                    } else if (item.extension.lowercase() == "pdf") {
+                        val model =
+                            MyFilesModel(
+                                name = item.name,
+                                uriPath = item.uri.path,
+                                uriOldPath = item.uri.path,
+                                lastModified = item.lastModified(),
+                                extensionName = item.extension,
+                                length = item.length()
+                            )
+                        Common.listAllFolder?.add(model)
+                    }
+                }
+            }
+        }.start()
+    }
+
+    private fun loadNativeAdsLanguage() {
+        val builder = AdLoader.Builder(this, AppConfig.ID_ADS_NATIVE_LANGUAGE)
+
+        builder.forNativeAd { nativeAd ->
+            Common.mNativeAdLanguage = nativeAd
+        }
+        val videoOptions = VideoOptions.Builder()
+            .build()
+
+        val adOptions = NativeAdOptions.Builder()
+            .setVideoOptions(videoOptions)
+            .build()
+
+        builder.withNativeAdOptions(adOptions)
+
+        val adLoader = builder.withAdListener(object : AdListener() {
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                setLogDataToFirebase(
+                    AdsLogModel(
+                        adsId = AppConfig.ID_ADS_NATIVE_LANGUAGE, adsName = "Ads Native Language", message = loadAdError.message,
+                        deviceName = Common.getDeviceName(this@SplashScreenActivity)
+                    )
+                )
+            }
+        }).build()
+
+        adLoader.loadAd(AdRequest.Builder().build())
     }
 }

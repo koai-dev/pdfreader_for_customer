@@ -34,7 +34,13 @@ class ChangeThemeActivity : BaseActivity<ActivityChangeThemeBinding>() {
     var currentNativeAd: NativeAd? = null
 
     override fun initData() {
-        refreshAd()
+        if (Common.mNativeAdTheme == null) {
+            Logger.showLog("Thuytv----Refresh Ads Theme")
+            refreshAd()
+        } else {
+            Logger.showLog("Thuytv----Show Ads Theme")
+            showAdsNativeTheme(Common.mNativeAdLanguage!!)
+        }
         typeScreen = intent.getStringExtra(AppKeys.KEY_BUNDLE_SCREEN)
         sharedPreferences.setValueBoolean(SharePreferenceUtils.KEY_FIRST_LOGIN, true)
         val theme = sharedPreferences.getThemeApp()
@@ -212,24 +218,7 @@ class ChangeThemeActivity : BaseActivity<ActivityChangeThemeBinding>() {
         val builder = AdLoader.Builder(this, AppConfig.ID_ADS_NATIVE_THEME)
 
         builder.forNativeAd { nativeAd ->
-            // OnUnifiedNativeAdLoadedListener implementation.
-            // If this callback occurs after the activity is destroyed, you must call
-            // destroy and return or you may get a memory leak.
-            var activityDestroyed = false
-            activityDestroyed = isDestroyed
-            if (activityDestroyed || isFinishing || isChangingConfigurations) {
-                nativeAd.destroy()
-                return@forNativeAd
-            }
-            // You must call destroy on old ads when you are done with them,
-            // otherwise you will have a memory leak.
-            currentNativeAd?.destroy()
-            currentNativeAd = nativeAd
-            val adView = layoutInflater
-                .inflate(R.layout.ads_unifield, null) as NativeAdView
-            populateNativeAdView(nativeAd, adView)
-            binding.adFrameTheme.removeAllViews()
-            binding.adFrameTheme.addView(adView)
+            showAdsNativeTheme(nativeAd)
         }
 
         val videoOptions = VideoOptions.Builder()
@@ -258,9 +247,30 @@ class ChangeThemeActivity : BaseActivity<ActivityChangeThemeBinding>() {
 //        videostatus_text.text = ""
     }
 
+    private fun showAdsNativeTheme(nativeAd: NativeAd) {
+        var activityDestroyed = false
+        activityDestroyed = isDestroyed
+        if (activityDestroyed || isFinishing || isChangingConfigurations) {
+            nativeAd.destroy()
+            return
+        }
+        // You must call destroy on old ads when you are done with them,
+        // otherwise you will have a memory leak.
+        currentNativeAd?.destroy()
+        currentNativeAd = nativeAd
+        val adView = layoutInflater
+            .inflate(R.layout.ads_unifield, null) as NativeAdView
+        populateNativeAdView(nativeAd, adView)
+        binding.adFrameTheme.removeAllViews()
+        binding.adFrameTheme.addView(adView)
+    }
+
     override fun onDestroy() {
         currentNativeAd?.destroy()
         super.onDestroy()
+        if (Common.mNativeAdTheme != null) {
+            Common.mNativeAdTheme = null
+        }
     }
     /* init ads end */
 

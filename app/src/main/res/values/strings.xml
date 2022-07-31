@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name" translatable="false">PDF Reader</string>
 
-    <string name="tt_request_store_permission">External storage permission</string>
-    <string name="vl_request_store_permission_content">Manage External storage permission is needed for this app work, please enable it in device settings</string>
-    <string name="vl_request_read_permission_content">Read External storage permission is needed for this app work, please enable it in device settings</string>
-    <string name="btn_continue">Continue</string>
+    <string name="tt_request_store_permission">Permission Required</string>
+    <string name="vl_request_store_permission_content">All files access permission is required to read local files.</string>
+    <string name="btn_continue">Allow</string>
+    <string name="msg_no_files">No Files Yet - Permission is required to read all files </string>
+    <string name="btn_go_to_setting">Go to Setting</string>
 
 
     <string name="title_my_file">My File</string>

@@ -29,10 +29,17 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
     private var typeScreen: String? = null
 
     override fun initData() {
-        refreshAd()
+        if (Common.mNativeAdLanguage == null) {
+            Logger.showLog("Thuytv----Refresh Ads Language")
+            refreshAd()
+        } else {
+            Logger.showLog("Thuytv----Show Ads Language")
+            showNativeAds(Common.mNativeAdLanguage!!)
+        }
         typeScreen = intent.getStringExtra(AppKeys.KEY_BUNDLE_SCREEN)
         if (typeScreen == AppConfig.TYPE_SCREEN_FROM_SPLASH) {
             binding.imvAllBack.invisible()
+            preLoadAdsNativeTheme()
         }
 
         val lstLanguage: ArrayList<LanguageModel> = ArrayList()
@@ -209,21 +216,7 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
             // OnUnifiedNativeAdLoadedListener implementation.
             // If this callback occurs after the activity is destroyed, you must call
             // destroy and return or you may get a memory leak.
-            var activityDestroyed = false
-            activityDestroyed = isDestroyed
-            if (activityDestroyed || isFinishing || isChangingConfigurations) {
-                nativeAd.destroy()
-                return@forNativeAd
-            }
-            // You must call destroy on old ads when you are done with them,
-            // otherwise you will have a memory leak.
-            currentNativeAd?.destroy()
-            currentNativeAd = nativeAd
-            val adView = layoutInflater
-                .inflate(R.layout.ads_unifield, null) as NativeAdView
-            populateNativeAdView(nativeAd, adView)
-            binding.adFrameLanguage.removeAllViews()
-            binding.adFrameLanguage.addView(adView)
+            showNativeAds(nativeAd)
         }
 
         val videoOptions = VideoOptions.Builder()
@@ -252,11 +245,61 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
 //        videostatus_text.text = ""
     }
 
+    private fun showNativeAds(nativeAd: NativeAd) {
+        var activityDestroyed = false
+        activityDestroyed = isDestroyed
+        if (activityDestroyed || isFinishing || isChangingConfigurations) {
+            nativeAd.destroy()
+            return
+        }
+        // You must call destroy on old ads when you are done with them,
+        // otherwise you will have a memory leak.
+        currentNativeAd?.destroy()
+        currentNativeAd = nativeAd
+        val adView = layoutInflater
+            .inflate(R.layout.ads_unifield, null) as NativeAdView
+        populateNativeAdView(nativeAd, adView)
+        binding.adFrameLanguage.removeAllViews()
+        binding.adFrameLanguage.addView(adView)
+    }
+
     override fun onDestroy() {
         currentNativeAd?.destroy()
         super.onDestroy()
+        if (Common.mNativeAdLanguage != null) {
+            Common.mNativeAdLanguage = null
+        }
     }
     /* init ads end */
 
+    private fun preLoadAdsNativeTheme() {
 
+        val builder = AdLoader.Builder(this, AppConfig.ID_ADS_NATIVE_THEME)
+
+        builder.forNativeAd { nativeAd ->
+            Common.mNativeAdTheme = nativeAd
+        }
+
+        val videoOptions = VideoOptions.Builder()
+            .build()
+
+        val adOptions = NativeAdOptions.Builder()
+            .setVideoOptions(videoOptions)
+            .build()
+
+        builder.withNativeAdOptions(adOptions)
+
+        val adLoader = builder.withAdListener(object : AdListener() {
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                setLogDataToFirebase(
+                    AdsLogModel(
+                        adsId = AppConfig.ID_ADS_NATIVE_THEME, adsName = "Ads Native Theme", message = loadAdError.message,
+                        deviceName = Common.getDeviceName(this@LanguageActivity)
+                    )
+                )
+            }
+        }).build()
+
+        adLoader.loadAd(AdRequest.Builder().build())
+    }
 }

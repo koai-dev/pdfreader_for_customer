@@ -26,7 +26,7 @@ class InterstitialUtils {
                 Logger.showLog("---onAdFailedToLoad: " + adError.message + "---countRetry: $countRetry")
                 Handler(Looper.myLooper()!!).postDelayed({
                     mInterstitialAd = null
-                    if (countRetry < 2) {
+                    if (countRetry < 1) {
                         countRetry++
                         loadInterstAds(uuidAds, context)
                     }

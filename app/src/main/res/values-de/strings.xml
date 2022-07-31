@@ -5,9 +5,9 @@
     <string name="title_favorite">Favorit</string>
     <string name="title_browse">Mappe</string>
     <string name="title_setting">Einstellung</string>
-    <string name="btn_continue">Fortsetzen</string>
-    <string name="tt_request_store_permission">Externe Speichergenehmigung</string>
-    <string name="vl_request_store_permission_content">Verwalten Sie für diese App -Arbeit, die externe Speicherberechtigte benötigt werden. Aktivieren Sie diese in Geräteeinstellungen</string>
+    <string name="btn_continue">Erlauben</string>
+    <string name="tt_request_store_permission">Berechtigung erforderlich</string>
+    <string name="vl_request_store_permission_content">Zum Lesen lokaler Dateien ist die Berechtigung zum Zugriff auf alle Dateien erforderlich.</string>
     <string name="vl_request_read_permission_content">Lesen Sie für diese App -Arbeit, die externe Speicherberechtigte benötigt werden. Aktivieren Sie diese in Geräteeinstellungen</string>
     <string name="menu_size">Größe</string>
     <string name="menu_name_a_z">Name a-Z</string>
@@ -79,5 +79,7 @@
     <string name="vl_contetn_update_version">Eine neue Version von Upgrade ist verfügbar. Möchten Sie es jetzt aktualisieren?</string>
     <string name="btn_update_now">Jetzt aktualisieren</string>
     <string name="btn_later">Später</string>
+    <string name="msg_no_files">Noch keine Dateien - Zum Lesen aller Dateien ist eine Berechtigung erforderlich</string>
+    <string name="btn_go_to_setting">Gehen Sie zu Einstellung</string>
 
 </resources>

@@ -12,6 +12,12 @@ dependencyResolutionManagement {
         mavenCentral()
         gradlePluginPortal()
         maven { url 'https://jitpack.io' }
+        maven {
+            url 'https://artifact.bytedance.com/repository/pangle/'
+        }
+        maven {
+            url 'https://android-sdk.is.com/'
+        }
         flatDir { dir "libs" }
     }
 }

@@ -63,9 +63,9 @@
     <string name="vl_sprint">Sprint</string>
     <string name="vl_share_document">Deel document</string>
     <string name="vl_share_document_content">Deel het document met jullie vrienden</string>
-    <string name="btn_continue">Doorgaan</string>
-    <string name="tt_request_store_permission">Externe opslagvergunning</string>
-    <string name="vl_request_store_permission_content">Beheer externe opslagvergunning is nodig voor deze app -werk, schakel deze in in apparaatinstellingen</string>
+    <string name="btn_continue">Toestaan</string>
+    <string name="tt_request_store_permission">Toestemming vereist</string>
+    <string name="vl_request_store_permission_content">Toegang tot alle bestanden is vereist om lokale bestanden te lezen.</string>
     <string name="vl_request_read_permission_content">Lees externe opslagvergunning nodig voor deze app werk, schakel deze in in apparaatinstellingen</string>
     <string name="msg_import_please_wait">Importeren… Even geduld a.u.b.</string>
     <string name="msg_recent_empty">Je hebt de laatste tijd geen bestand gelezen</string>
@@ -78,5 +78,7 @@
     <string name="vl_contetn_update_version">Er is een nieuwe versie van Upgrade beschikbaar. Wil je hem nu updaten?</string>
     <string name="btn_update_now">Update nu</string>
     <string name="btn_later">Later</string>
+    <string name="msg_no_files">Nog geen bestanden - Toestemming is vereist om alle bestanden te lezen</string>
+    <string name="btn_go_to_setting">Ga naar Instellingen</string>
 
 </resources>

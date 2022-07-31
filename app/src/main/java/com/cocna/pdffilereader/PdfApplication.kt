@@ -16,6 +16,7 @@ import com.google.android.gms.ads.*
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.firebase.FirebaseApp
 import com.cocna.pdffilereader.common.Logger
+import com.ironsource.mediationsdk.IronSource
 import java.util.*
 
 /**
@@ -87,9 +88,13 @@ class PdfApplication : MultiDexApplication(), LifecycleObserver, Application.Act
         }
     }
 
-    override fun onActivityResumed(activity: Activity) {}
+    override fun onActivityResumed(activity: Activity) {
 
-    override fun onActivityPaused(activity: Activity) {}
+    }
+
+    override fun onActivityPaused(activity: Activity) {
+
+    }
 
     override fun onActivityStopped(activity: Activity) {}
 

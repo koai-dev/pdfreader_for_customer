@@ -82,10 +82,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             }
         }
 
-//        getBaseActivity()?.apply {
-//            InterstitialUtils.sharedInstance?.loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE, this)
-////            loadNativeAds(binding.frameAdsNative, AppConfig.ID_ADS_NATIVE_TOP_BAR)
-//        }
+        getBaseActivity()?.apply {
+            InterstitialUtils.sharedInstance?.loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE, this)
+//            loadNativeAds(binding.frameAdsNative, AppConfig.ID_ADS_NATIVE_TOP_BAR)
+        }
     }
 
     override fun initEvents() {

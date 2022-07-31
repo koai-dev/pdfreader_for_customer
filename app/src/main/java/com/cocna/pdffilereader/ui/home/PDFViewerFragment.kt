@@ -40,8 +40,6 @@ import java.util.*
  * Created by Thuytv on 10/06/2022.
  */
 class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClickListener {
-    private val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-    private val outputPDF = File(storageDir, "Converted_PDF.pdf")
     private var myFileModel: MyFilesModel? = null
     private var isFirst = true
     private var isTouchSlider = true
@@ -206,7 +204,15 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                 .scrollHandle(MyScrollHandle(context, false))
                 .onTap(onTapListener)
                 .onRender(onRenderListener)
+                .onLoad {
+                    val totalPage = binding.pdfViewer.pageCount
+                    if (totalPage > 1) {
+                        binding.seekbarJumpToPage.valueFrom = 1f
+                    }
+                }
                 .load()
+
+
         }
     }
 

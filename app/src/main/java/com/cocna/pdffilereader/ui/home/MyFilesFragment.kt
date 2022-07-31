@@ -1,7 +1,13 @@
 package com.cocna.pdffilereader.ui.home
 
 import android.Manifest
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.opengl.Visibility
 import android.os.*
+import android.os.Build.VERSION.SDK_INT
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,9 +20,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.documentfile.provider.DocumentFile
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager.widget.ViewPager
 import com.anggrayudi.storage.file.*
-import com.anggrayudi.storage.media.MediaStoreCompat
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.FragmentMyFilesBinding
@@ -27,6 +33,7 @@ import com.cocna.pdffilereader.ui.home.adapter.TabFileAdapter
 import com.cocna.pdffilereader.ui.home.dialog.ProgressDialog
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import java.io.File
+
 
 /**
  * Created by Thuytv on 09/06/2022.
@@ -43,19 +50,41 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
     private lateinit var mAdapter: TabFileAdapter
 
     private var isViewType = false
+    var swipeRefreshLayout: SwipeRefreshLayout? = null
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMyFilesBinding = FragmentMyFilesBinding::inflate
     override fun initData() {
         lstFilePdf = ArrayList()
         setupViewPager(binding.viewPagerMyFile)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            executeWithPerm {
-                val dialogProgress = ProgressDialog(requireContext())
-                dialogProgress.show()
+        getBaseActivity()?.loadNativeAds(binding.frameAdsNativeAllFile, AppConfig.ID_ADS_NATIVE_TOP_BAR_PDF)
+
+        if (SDK_INT >= Build.VERSION_CODES.M) {
+//            executeWithPerm {
+//                if (Common.listAllData.isNullOrEmpty()) {
+//                    getAllFilePdf()
+//                } else {
+//                    lstFilePdf = Common.listAllData!!
+//                    Handler(Looper.myLooper()!!).postDelayed({
+//                        myFileDetailFragment!!.updateData(lstFilePdf)
+//                        mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
+//                    }, 200)
+//                }
+//            }
+            if (Common.listAllData.isNullOrEmpty()) {
+                getBaseActivity()?.apply {
+                    if (PermissionUtil.checkExternalStoragePermission(this)) {
+                        getAllFilePdf(true)
+                    } else {
+                        showPopupPermission()
+                    }
+                }
+            } else {
+                lstFilePdf = Common.listAllData!!
                 Handler(Looper.myLooper()!!).postDelayed({
-                    getAllFilePdf(dialogProgress)
-                }, 1000)
+                    myFileDetailFragment!!.updateData(lstFilePdf)
+                    mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
+                }, 200)
             }
         }
         isViewType = getBaseActivity()?.sharedPreferences?.getValueBoolean(SharePreferenceUtils.KEY_TYPE_VIEW_FILE) ?: false
@@ -64,6 +93,19 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
         } else {
             binding.imvAdapterType.setImageResource(R.drawable.ic_grid_type)
         }
+    }
+
+    private fun getAllFilePdf(isShowDialog: Boolean) {
+        if (binding.llGoToSetting.visibility == View.VISIBLE) {
+            binding.llGoToSetting.gone()
+        }
+        val dialogProgress = ProgressDialog(requireContext())
+        if (isShowDialog) {
+            dialogProgress.show()
+        }
+        Handler(Looper.myLooper()!!).postDelayed({
+            getAllFilePdf(dialogProgress, isShowDialog)
+        }, 100)
     }
 
     private fun setupViewPager(viewPager: ViewPager) {
@@ -104,7 +146,16 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
             }
             binding.tabMyFile.tabRippleColor = null
         }
-        listenClickViews(binding.imvAdapterType, binding.imvFilterFile)
+        listenClickViews(binding.imvAdapterType, binding.imvFilterFile, binding.btnGoToSetting)
+        swipeRefreshLayout = binding.swRefreshData
+        swipeRefreshLayout?.setOnRefreshListener {
+            swipeRefreshLayout?.isRefreshing = true
+            getBaseActivity()?.apply {
+                if (PermissionUtil.checkExternalStoragePermission(this)) {
+                    getAllFilePdf(false)
+                }
+            }
+        }
     }
 
     override fun onClick(v: View?) {
@@ -181,6 +232,9 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
 
                 })
             }
+            R.id.btn_go_to_setting -> {
+                requestPermission()
+            }
         }
     }
 
@@ -200,7 +254,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
             .setTitle(getString(R.string.tt_request_store_permission))
             .setMessage(getString(R.string.vl_request_store_permission_content))
             .setPositiveButton(getString(R.string.btn_continue)) { _, _ ->
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (SDK_INT >= Build.VERSION_CODES.R) {
                     launcher.launch(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
                 }
             }
@@ -220,7 +274,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
     private fun <T> requestReadExternalStoragePermission(permissionGranted: () -> T) {
         val settingsDialog = AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.tt_request_store_permission))
-            .setMessage(getString(R.string.vl_request_read_permission_content))
+            .setMessage(getString(R.string.vl_request_store_permission_content))
             .setPositiveButton(getString(R.string.btn_continue)) { _, _ ->
                 launcher.launch(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
             }
@@ -237,7 +291,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
 
         val permissionDeniedDialog = AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.tt_request_store_permission))
-            .setMessage(getString(R.string.vl_request_read_permission_content))
+            .setMessage(getString(R.string.vl_request_store_permission_content))
             .setPositiveButton(getString(R.string.btn_continue)) { _, _ ->
                 externalLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             }
@@ -260,7 +314,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
 
     }
 
-    private fun getAllFilePdf(dialogProgress: ProgressDialog) {
+    private fun getAllFilePdf(dialogProgress: ProgressDialog, isShowDialog: Boolean) {
         Thread {
             getBaseActivity()?.apply {
                 var root = DocumentFileCompat.getRootDocumentFile(this, "primary", true)
@@ -269,6 +323,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                 }
                 val mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")!!
                 val pdfArray = root.search(true, DocumentFileType.FILE, arrayOf(mime))
+                lstFilePdf = ArrayList()
                 if (pdfArray.isNotEmpty()) {
                     for (item in pdfArray) {
                         val model =
@@ -287,14 +342,15 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                     myFileDetailFragment?.updateData(lstFilePdf)
                     mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
                     Handler(Looper.myLooper()!!).postDelayed({
-                        if (isVisible && getBaseActivity()?.isFinishing == false) {
+                        if (isVisible && getBaseActivity()?.isFinishing == false && !isShowDialog) {
                             dialogProgress.dismiss()
                         }
-                    }, 1000)
+                    }, 100)
                 }
                 if (getBaseActivity()?.isCurrentNetwork == false) {
                     getBaseActivity()?.enabaleNetwork()
                 }
+                swipeRefreshLayout?.isRefreshing = false
             }
         }.start()
     }
@@ -302,5 +358,60 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
     fun onSearchFile(strName: String) {
         historyFragment?.onSearchFile(strName)
         myFileDetailFragment?.onSearchFile(strName)
+    }
+
+    private fun showPopupPermission() {
+        val permissionDeniedDialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.tt_request_store_permission))
+            .setMessage(getString(R.string.vl_request_store_permission_content))
+            .setPositiveButton(getString(R.string.btn_continue)) { _, _ ->
+                requestPermission()
+            }
+            .setNegativeButton(getString(R.string.btn_cancel)) { _, _ ->
+                binding.llGoToSetting.visible()
+            }
+        permissionDeniedDialog.show()
+    }
+
+    private fun requestPermission() {
+        getBaseActivity()?.apply {
+            if (SDK_INT >= Build.VERSION_CODES.R) {
+                try {
+                    val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                    intent.addCategory("android.intent.category.DEFAULT")
+                    intent.data = Uri.parse(java.lang.String.format("package:%s", getBaseActivity()?.packageName))
+                    resultLauncher.launch(intent)
+                } catch (e: Exception) {
+                    val intent = Intent()
+                    intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                    resultLauncher.launch(intent)
+                }
+            } else {
+                requestPermissionLauncher.launch(WRITE_EXTERNAL_STORAGE)
+            }
+        }
+    }
+
+    private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        getBaseActivity()?.apply {
+            Logger.showLog("Thuytv---------resultLauncher--:" + PermissionUtil.checkExternalStoragePermission(this))
+            if (PermissionUtil.checkExternalStoragePermission(this)) {
+                getAllFilePdf(true)
+                RxBus.publish(EventsBus.PERMISSION_STORED_GRANTED)
+            } else {
+                binding.llGoToSetting.visible()
+            }
+        }
+    }
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        Logger.showLog("Thuytv---------requestPermissionLauncher : $isGranted")
+        if (isGranted) {
+            getAllFilePdf(true)
+            RxBus.publish(EventsBus.PERMISSION_STORED_GRANTED)
+        } else {
+            binding.llGoToSetting.visible()
+        }
     }
 }

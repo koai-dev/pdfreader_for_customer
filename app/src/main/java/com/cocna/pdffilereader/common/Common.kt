@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
+import com.google.android.gms.ads.nativead.NativeAd
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -19,6 +20,10 @@ object Common {
     var countShowAdsOpenResume: Int = 0
     var countShowAdsPdf: Int = 0
     var lstDataDetail: ArrayList<MyFilesModel>? = null
+    var listAllData: ArrayList<MyFilesModel>? = null
+    var listAllFolder: ArrayList<MyFilesModel>? = null
+    var mNativeAdLanguage: NativeAd? = null
+    var mNativeAdTheme: NativeAd? = null
 
     @JvmStatic
     fun covertTimeLongToString(time: Long?): String {

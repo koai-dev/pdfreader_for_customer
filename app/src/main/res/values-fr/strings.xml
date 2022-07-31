@@ -4,9 +4,9 @@
     <string name="title_favorite">Favori</string>
     <string name="title_browse">dossier</string>
     <string name="title_setting">Paramètre</string>
-    <string name="btn_continue">Continuer</string>
-    <string name="tt_request_store_permission">Autorisation de stockage externe</string>
-    <string name="vl_request_store_permission_content">Gérer l\'autorisation de stockage externe est nécessaire pour ce travail d\'application, veuillez l\'activer dans les paramètres de l\'appareil</string>
+    <string name="btn_continue">Permettre</string>
+    <string name="tt_request_store_permission">Autorisation requise</string>
+    <string name="vl_request_store_permission_content">L\'autorisation d\'accès à tous les fichiers est requise pour lire les fichiers locaux.</string>
     <string name="vl_request_read_permission_content">Lire une autorisation de stockage externe est nécessaire pour ce travail d\'application, veuillez l\'activer dans les paramètres de l\'appareil</string>
     <string name="menu_size">Taille</string>
     <string name="menu_name_a_z">Nommez A-Z</string>
@@ -78,5 +78,7 @@
     <string name="vl_contetn_update_version">Une nouvelle version de Upgrade est disponible. Souhaitez-vous le mettre à jour maintenant ?</string>
     <string name="btn_update_now">Mettez à jour maintenant</string>
     <string name="btn_later">Plus tard</string>
+    <string name="msg_no_files">Aucun fichier pour le moment - Une autorisation est requise pour lire tous les fichiers</string>
+    <string name="btn_go_to_setting">Aller à Réglage</string>
 
 </resources>

@@ -45,6 +45,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import com.ironsource.mediationsdk.IronSource
 import io.reactivex.disposables.Disposable
 import java.io.File
 import java.util.*
@@ -112,6 +113,12 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
                 showInterstitial(mUUIDAds, mOnCallbackLoadAds)
             }, 500)
         }
+        IronSource.onResume(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        IronSource.onPause(this)
     }
 
     override fun onDestroy() {
@@ -257,7 +264,9 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
     fun loadInterstAds(uuidAds: String, onCallbackLoadAds: OnCallbackLoadAds?) {
         val adRequest = AdRequest.Builder().build()
         val progressLoadingAds = ProgressDialogLoadingAds(this)
-        progressLoadingAds.show()
+        if (uuidAds != AppConfig.ID_ADS_INTERSTITIAL) {
+            progressLoadingAds.show()
+        }
         mOnCallbackLoadAds = onCallbackLoadAds
         InterstitialAd.load(this, uuidAds, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
@@ -270,7 +279,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
                         deviceName = Common.getDeviceName(this@BaseActivity)
                     )
                 )
-                if (!isFinishing && !isDestroyed) {
+                if (!isFinishing && !isDestroyed && uuidAds != AppConfig.ID_ADS_INTERSTITIAL) {
                     progressLoadingAds.dismiss()
                 }
 //                Handler(Looper.myLooper()!!).postDelayed({
@@ -290,7 +299,9 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
                 mInterstitialAd = interstitialAd
                 mUUIDAds = uuidAds
                 if (!isFinishing && !isDestroyed) {
-                    progressLoadingAds.dismiss()
+                    if (uuidAds != AppConfig.ID_ADS_INTERSTITIAL) {
+                        progressLoadingAds.dismiss()
+                    }
                     showInterstitial(uuidAds, onCallbackLoadAds)
                 }
             }

@@ -19,6 +19,7 @@ import com.cocna.pdffilereader.databinding.DialogProgressBarBinding
 import com.cocna.pdffilereader.databinding.DialogProgressLoadAdsBinding
 import com.cocna.pdffilereader.myinterface.OnDialogItemClickListener
 import com.cocna.pdffilereader.myinterface.OnUpdateVersionClickListener
+import com.cocna.pdffilereader.ui.base.BaseActivity
 import com.cocna.pdffilereader.ui.base.OnCallbackTittleTab
 import com.cocna.pdffilereader.ui.home.HistoryFragment
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
@@ -27,7 +28,7 @@ import java.io.File
 /**
  * Created by Thuytv on 13/06/2022.
  */
-class ProgressDialogLoadingAds(private val mContext: Context) : Dialog(mContext, R.style.AlertDialogStyle) {
+class ProgressDialogLoadingAds(private val mContext: BaseActivity<*>) : Dialog(mContext, R.style.AlertDialogStyle) {
     private var countDownTimer: CountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +47,6 @@ class ProgressDialogLoadingAds(private val mContext: Context) : Dialog(mContext,
 
     override fun onStop() {
         super.onStop()
-        Logger.showLog("Thuytv--------onStop")
         countDownTimer?.cancel()
         countDownTimer = null
     }
@@ -56,15 +56,14 @@ class ProgressDialogLoadingAds(private val mContext: Context) : Dialog(mContext,
             countDownTimer = object : CountDownTimer(30 * 1000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     val second = (millisUntilFinished / 1000).toInt()
-                    Logger.showLog("Thuytv--------onTick : $second")
                     binding?.vlLoadingAds?.text = context.getString(R.string.vl_loading_ads, (second.toString().plus("s")))
                 }
 
                 override fun onFinish() {
-                    countDownTimer = null
-                    if (isShowing) {
+                    if (isShowing && !mContext.isFinishing && !mContext.isDestroyed) {
                         dismiss()
                     }
+                    countDownTimer = null
                 }
             }
             countDownTimer?.start()

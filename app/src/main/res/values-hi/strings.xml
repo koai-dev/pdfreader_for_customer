@@ -64,9 +64,9 @@
     <string name="vl_sprint">पूरे वेग से दौड़ना</string>
     <string name="vl_share_document">शेयर दस्तावेज़</string>
     <string name="vl_share_document_content">आप दोस्तों के साथ दस्तावेज़ साझा करें</string>
-    <string name="btn_continue">जारी रखना</string>
-    <string name="tt_request_store_permission">बाह्य भंडारण अनुमति</string>
-    <string name="vl_request_store_permission_content">इस ऐप के काम के लिए बाहरी संग्रहण अनुमति की आवश्यकता है, कृपया इसे डिवाइस सेटिंग्स में सक्षम करें</string>
+    <string name="btn_continue">अनुमति देना</string>
+    <string name="tt_request_store_permission">अनुमति आवश्यक</string>
+    <string name="vl_request_store_permission_content">स्थानीय फाइलों को पढ़ने के लिए सभी फाइलों तक पहुंच की अनुमति आवश्यक है।</string>
     <string name="vl_request_read_permission_content">इस ऐप के काम के लिए बाहरी संग्रहण अनुमति की आवश्यकता है, कृपया इसे डिवाइस सेटिंग्स में सक्षम करें</string>
     <string name="vl_size_folder">%d फ़ाइल</string>
     <string name="msg_recent_empty">आपने हाल ही में कोई फ़ाइल नहीं पढ़ी</string>
@@ -79,5 +79,7 @@
     <string name="vl_contetn_update_version">अपग्रेड का एक नया संस्करण उपलब्ध है। क्या आप इसे अभी अपडेट करना चाहेंगे?</string>
     <string name="btn_update_now">अभी अद्यतन करें</string>
     <string name="btn_later">बाद में</string>
+    <string name="msg_no_files">अभी तक कोई फाइल नहीं - सभी फाइलों को पढ़ने के लिए अनुमति की आवश्यकता है</string>
+    <string name="btn_go_to_setting">सेटिंग पर जाएं</string>
 
 </resources>

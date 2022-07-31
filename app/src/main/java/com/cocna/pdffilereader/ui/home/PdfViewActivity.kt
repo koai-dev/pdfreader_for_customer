@@ -21,20 +21,21 @@ class PdfViewActivity : BaseActivity<ActivityBaseBinding>() {
 //        binding.prbLoadingMain.visible()
         Common.countShowAdsPdf++
         if (Common.countShowAdsPdf == 1 || (Common.countShowAdsPdf % 2 == 1)) {
-            loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE, object : OnCallbackLoadAds {
+//            loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE, object : OnCallbackLoadAds {
+//                override fun onCallbackActionLoadAds(isSuccess: Boolean) {
+//                    gotoPdfViewFragment()
+//                }
+//            })
+            InterstitialUtils.sharedInstance?.showInterstitial(AppConfig.ID_ADS_INTERSTITIAL_FILE, this, object : OnCallbackLoadAds {
                 override fun onCallbackActionLoadAds(isSuccess: Boolean) {
                     gotoPdfViewFragment()
+                    logEventFirebase(AppConfig.KEY_EVENT_FB_OPEN_PDF, AppConfig.KEY_EVENT_FB_OPEN_PDF)
                 }
             })
         } else {
             gotoPdfViewFragment()
         }
-//        InterstitialUtils.sharedInstance?.showInterstitial(AppConfig.ID_ADS_INTERSTITIAL_FILE, this, object : OnCallbackLoadAds {
-//            override fun onCallbackActionLoadAds(isSuccess: Boolean) {
-//                replaceFragment(PDFViewerFragment(), intent.extras, R.id.layout_container)
-//                logEventFirebase(AppConfig.KEY_EVENT_FB_OPEN_PDF, AppConfig.KEY_EVENT_FB_OPEN_PDF)
-//            }
-//        })
+
     }
 
     private fun gotoPdfViewFragment() {
