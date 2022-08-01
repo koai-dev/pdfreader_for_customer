@@ -1,6 +1,7 @@
 package com.cocna.pdffilereader.ui.home
 
 import android.Manifest
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity
 import android.content.Intent
@@ -342,7 +343,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                     myFileDetailFragment?.updateData(lstFilePdf)
                     mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
                     Handler(Looper.myLooper()!!).postDelayed({
-                        if (isVisible && getBaseActivity()?.isFinishing == false && !isShowDialog) {
+                        if (isVisible && getBaseActivity()?.isFinishing == false && isShowDialog) {
                             dialogProgress.dismiss()
                         }
                     }, 100)
@@ -387,7 +388,8 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                     resultLauncher.launch(intent)
                 }
             } else {
-                requestPermissionLauncher.launch(WRITE_EXTERNAL_STORAGE)
+//                requestPermissionLauncher.launch(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                requestPermissionLauncher.launch(arrayOf(WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE))
             }
         }
     }
@@ -404,8 +406,11 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
         }
     }
     private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val isGranted = permissions.entries.all {
+            it.value == true
+        }
         Logger.showLog("Thuytv---------requestPermissionLauncher : $isGranted")
         if (isGranted) {
             getAllFilePdf(true)
