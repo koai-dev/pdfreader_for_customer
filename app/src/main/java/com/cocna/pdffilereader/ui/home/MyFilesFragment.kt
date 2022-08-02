@@ -3,10 +3,8 @@ package com.cocna.pdffilereader.ui.home
 import android.Manifest
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.*
 import android.os.Build.VERSION.SDK_INT
 import android.provider.Settings
@@ -33,6 +31,7 @@ import com.cocna.pdffilereader.ui.base.OnCallbackTittleTab
 import com.cocna.pdffilereader.ui.home.adapter.TabFileAdapter
 import com.cocna.pdffilereader.ui.home.dialog.ProgressDialog
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
+import io.reactivex.disposables.Disposable
 import java.io.File
 
 
@@ -49,9 +48,11 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
     private var myFileDetailFragment: MyFileDetailFragment? = null
     private var historyFragment: HistoryFragment? = null
     private lateinit var mAdapter: TabFileAdapter
+    private var eventsBusListener: Disposable? = null
 
     private var isViewType = false
     var swipeRefreshLayout: SwipeRefreshLayout? = null
+    var mDialogProgress: ProgressDialog? = null
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMyFilesBinding = FragmentMyFilesBinding::inflate
     override fun initData() {
@@ -59,7 +60,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
         setupViewPager(binding.viewPagerMyFile)
 
         getBaseActivity()?.loadNativeAds(binding.frameAdsNativeAllFile, AppConfig.ID_ADS_NATIVE_TOP_BAR_PDF)
-
+        onListenEventBus()
         if (SDK_INT >= Build.VERSION_CODES.M) {
 //            executeWithPerm {
 //                if (Common.listAllData.isNullOrEmpty()) {
@@ -75,7 +76,9 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
             if (Common.listAllData.isNullOrEmpty()) {
                 getBaseActivity()?.apply {
                     if (PermissionUtil.checkExternalStoragePermission(this)) {
-                        getAllFilePdf(true)
+                        mDialogProgress = ProgressDialog(this)
+                        mDialogProgress?.show()
+//                        getAllFilePdf(true)
                     } else {
                         showPopupPermission()
                     }
@@ -315,8 +318,31 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        if (eventsBusListener?.isDisposed == false) eventsBusListener?.dispose()
+    }
+
+    private fun onListenEventBus() {
+        eventsBusListener = RxBus.listenDeBounce(EventsBus::class.java).subscribe {
+            if (it == EventsBus.RELOAD_ALL_FILE) {
+                if (Common.listAllFolder?.isNotEmpty() == true && isVisible) {
+                    lstFilePdf = Common.listAllData!!
+                    getBaseActivity()?.runOnUiThread {
+                        myFileDetailFragment!!.updateData(lstFilePdf)
+                        mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
+                        if (isVisible && getBaseActivity()?.isFinishing == false) {
+                            mDialogProgress?.dismiss()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun getAllFilePdf(dialogProgress: ProgressDialog, isShowDialog: Boolean) {
         Thread {
+            Logger.showLog("Thuytv------getAllFilePdf---MyFile")
             getBaseActivity()?.apply {
                 var root = DocumentFileCompat.getRootDocumentFile(this, "primary", true)
                 if (root == null) {

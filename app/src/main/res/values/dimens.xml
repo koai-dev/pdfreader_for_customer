@@ -31,6 +31,10 @@
     <dimen name="width_preview">66dp</dimen>
     <dimen name="height_preview">89dp</dimen>
     <dimen name="height_rcv_preview">120dp</dimen>
+    <dimen name="width_image_change_theme">180dp</dimen>
+    <dimen name="height_ads_change_theme">200dp</dimen>
+    <dimen name="width_image_menu_home">14dp</dimen>
+    <dimen name="height_image_menu_home">16dp</dimen>
 
     <dimen name="text_size_title">18sp</dimen>
     <dimen name="text_size_content">13sp</dimen>
@@ -41,4 +45,5 @@
     <dimen name="text_size_sp14">14sp</dimen>
     <dimen name="text_size_sp15">15sp</dimen>
     <dimen name="text_size_sp24">24sp</dimen>
+    <dimen name="text_size_menu_change_theme">7sp</dimen>
 </resources>

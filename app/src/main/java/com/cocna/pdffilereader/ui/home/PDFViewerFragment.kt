@@ -104,7 +104,6 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             }
         }
 
-        Logger.showLog("Thuytv-------isCurrentNetwork: " + getBaseActivity()?.isCurrentNetwork)
         if (getBaseActivity()?.isCurrentNetwork == false) {
             getBaseActivity()?.enabaleNetwork()
         }
@@ -136,7 +135,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                 override fun run() {
                     getBaseActivity()?.runOnUiThread {
 //                        previewAdapter?.updateCurrentPage(currentPage)
-                        if (previewAdapter != null && isVisible && getBaseActivity()?.isFinishing == false) {
+                        if (previewAdapter != null && isVisible && getBaseActivity()?.isFinishing == false && currentPage > 0) {
                             binding.rcvPreviewPage.scrollToPosition(currentPage)
                         }
                     }
@@ -145,22 +144,6 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             }, 30)
 
         }
-//        binding.seekbarJumpToPage.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-//            private var timer = Timer()
-//            override fun onProgressChanged(p0: SeekBar?, progress: Int, p2: Boolean) {
-//                Logger.showLog("Thuytv----onProgressChanged : $progress")
-//            }
-//
-//            override fun onStartTrackingTouch(p0: SeekBar?) {
-//                Logger.showLog("Thuytv----onStartTrackingTouch ")
-//            }
-//
-//            override fun onStopTrackingTouch(p0: SeekBar?) {
-//                binding.pdfViewer.jumpTo(binding.seekbarJumpToPage.progress)
-//                Logger.showLog("Thuytv----onStopTrackingTouch:  " + binding.seekbarJumpToPage.progress)
-//            }
-//
-//        })
         binding.vlJumpPage.setOnClickListener {
             MultiClickPreventer.preventMultiClick(it)
             binding.groupPageViewer.gone()
@@ -203,7 +186,6 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                 .pageFitPolicy(FitPolicy.WIDTH)
                 .scrollHandle(MyScrollHandle(context, false))
                 .onTap(onTapListener)
-                .onRender(onRenderListener)
                 .onLoad {
                     val totalPage = binding.pdfViewer.pageCount
                     if (totalPage > 1) {
@@ -215,8 +197,6 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
 
         }
     }
-
-    private val onRenderListener = OnRenderListener { binding.pdfViewer.fitToWidth(binding.pdfViewer.currentPage) }
 
     @SuppressLint("SetTextI18n")
     private val onPageChangeListener = OnPageChangeListener { page, pageCount ->
@@ -350,7 +330,6 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         super.onDestroy()
         recycleMemory()
         val endTime = System.currentTimeMillis()
-        Logger.showLog("Thuytv----onDestroy: " + ((endTime - startTime) >= 10 * 1000))
         if ((endTime - startTime) >= 10000 && !isSendShowAds) {
             isSendShowAds = true
             RxBus.publish(EventsBus.SHOW_ADS_BACK)

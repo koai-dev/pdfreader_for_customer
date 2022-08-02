@@ -1,11 +1,10 @@
 package com.cocna.pdffilereader.ui.home
 
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import com.cocna.pdffilereader.R
-import com.cocna.pdffilereader.common.AppConfig
-import com.cocna.pdffilereader.common.Common
-import com.cocna.pdffilereader.common.InterstitialUtils
-import com.cocna.pdffilereader.common.visible
+import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.ActivityBaseBinding
 import com.cocna.pdffilereader.ui.base.BaseActivity
 import com.cocna.pdffilereader.ui.base.OnCallbackLoadAds
@@ -28,8 +27,9 @@ class PdfViewActivity : BaseActivity<ActivityBaseBinding>() {
 //            })
             InterstitialUtils.sharedInstance?.showInterstitial(AppConfig.ID_ADS_INTERSTITIAL_FILE, this, object : OnCallbackLoadAds {
                 override fun onCallbackActionLoadAds(isSuccess: Boolean) {
-                    gotoPdfViewFragment()
-                    logEventFirebase(AppConfig.KEY_EVENT_FB_OPEN_PDF, AppConfig.KEY_EVENT_FB_OPEN_PDF)
+                    Handler(Looper.myLooper()!!).postDelayed({
+                        gotoPdfViewFragment()
+                    }, 200)
                 }
             })
         } else {
@@ -39,8 +39,10 @@ class PdfViewActivity : BaseActivity<ActivityBaseBinding>() {
     }
 
     private fun gotoPdfViewFragment() {
-        replaceFragment(PDFViewerFragment(), intent.extras, R.id.layout_container)
-        logEventFirebase(AppConfig.KEY_EVENT_FB_OPEN_PDF, AppConfig.KEY_EVENT_FB_OPEN_PDF)
+        runOnUiThread {
+            replaceFragment(PDFViewerFragment(), intent.extras, R.id.layout_container)
+            logEventFirebase(AppConfig.KEY_EVENT_FB_OPEN_PDF, AppConfig.KEY_EVENT_FB_OPEN_PDF)
+        }
     }
 
     override fun initEvents() {

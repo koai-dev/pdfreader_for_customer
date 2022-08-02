@@ -2,7 +2,7 @@ package com.cocna.pdffilereader.common
 
 enum class EventsBus {
     RELOAD_ALL_FILE,
-    RELOAD_PDF_FILE,
+    RELOAD_ALL_FOLDER,
     RELOAD_WORD_FILE,
     RELOAD_EXCEL_FILE,
     RELOAD_POWER_POINT_FILE,

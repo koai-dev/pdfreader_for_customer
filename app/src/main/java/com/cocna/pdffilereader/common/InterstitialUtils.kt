@@ -48,23 +48,24 @@ class InterstitialUtils {
         if (mInterstitialAd != null) {
             mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
-                    Logger.showLog("--fullScreenContentCallback-onAdDismissedFullScreenContent")
+                    Logger.showLog("Thuytv---2-fullScreenContentCallback-onAdDismissedFullScreenContent")
                     onCallbackLoadAds?.onCallbackActionLoadAds(true)
                     loadInterstAds(uuidAds, context)
                 }
 
                 override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                    Logger.showLog("---fullScreenContentCallback--onAdFailedToShowFullScreenContent : " + adError.message)
+                    Logger.showLog("Thuytv---2--fullScreenContentCallback--onAdFailedToShowFullScreenContent : " + adError.message)
                     mInterstitialAd = null
                 }
 
                 override fun onAdShowedFullScreenContent() {
-                    Logger.showLog("---fullScreenContentCallback--onAdShowedFullScreenContent")
+                    Logger.showLog("Thuytv---2--fullScreenContentCallback--onAdShowedFullScreenContent")
                     mInterstitialAd = null
                 }
             }
             mInterstitialAd!!.show(context)
         } else {
+            Logger.showLog("Thuytv------show pre load")
             countRetry = 0
             loadInterstAds(uuidAds, context)
             onCallbackLoadAds?.onCallbackActionLoadAds(false)

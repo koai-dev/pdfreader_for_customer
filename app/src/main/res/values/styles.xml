@@ -26,10 +26,16 @@
 
     <style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
         <item name="android:textSize">@dimen/text_size_menu_home</item>
+        <item name="android:fontFamily">@font/googlesans_medium</item>
     </style>
 
     <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">
         <item name="android:textSize">@dimen/text_size_menu_home</item>
+        <item name="android:fontFamily">@font/googlesans_medium</item>
+    </style>
+    <style name="Text_Menu_Home_Change_Theme">
+        <item name="android:textSize">@dimen/text_size_menu_change_theme</item>
+        <item name="android:fontFamily">@font/googlesans_medium</item>
     </style>
 
     <style name="PopupMenu.MyStyle" parent="TextAppearance.MaterialComponents.Caption">

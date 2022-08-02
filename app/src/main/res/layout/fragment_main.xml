@@ -64,7 +64,6 @@
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
         android:background="@color/color_bg_menu"
-        android:theme="@style/MyBottomNavigationView"
         app:itemTextAppearanceActive="@style/BottomNavigationView.Active"
         app:itemTextAppearanceInactive="@style/BottomNavigationView"
         app:itemTextColor="@color/bottom_nav_color_text"

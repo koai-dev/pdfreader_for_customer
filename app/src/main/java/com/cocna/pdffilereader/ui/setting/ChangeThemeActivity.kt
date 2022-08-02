@@ -1,11 +1,15 @@
 package com.cocna.pdffilereader.ui.setting
 
+import android.content.res.ColorStateList
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.cocna.pdffilereader.MainActivity
 import com.cocna.pdffilereader.R
@@ -63,6 +67,7 @@ class ChangeThemeActivity : BaseActivity<ActivityChangeThemeBinding>() {
         changeThemeAdapter = ChangeThemeAdapter(baseContext, lstThemeApp, object : ChangeThemeAdapter.OnItemClickListener {
             override fun onClickItem(themeModel: ThemeModel) {
                 mThemeModel = themeModel
+                changeColorTheme(themeModel)
             }
         })
 
@@ -72,6 +77,16 @@ class ChangeThemeActivity : BaseActivity<ActivityChangeThemeBinding>() {
             adapter = changeThemeAdapter
         }
 
+    }
+    private fun changeColorTheme(themeModel: ThemeModel){
+        themeModel.idTheme?.apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                binding.ttMenuThemeMyFile.setTextColor(resources.getColor(this, theme))
+            }else{
+                binding.ttMenuThemeMyFile.setTextColor(resources.getColor(this))
+            }
+            binding.imvMenuThemeMyFile.setColorFilter(ContextCompat.getColor(this@ChangeThemeActivity, this), android.graphics.PorterDuff.Mode.SRC_IN);
+        }
     }
 
     override fun initEvents() {

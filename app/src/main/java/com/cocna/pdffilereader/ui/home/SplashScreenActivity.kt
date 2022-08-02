@@ -201,6 +201,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                         Common.listAllData?.add(model)
                     }
                 }
+                RxBus.publish(EventsBus.RELOAD_ALL_FILE)
                 val endTime = System.currentTimeMillis() - startTime
                 Logger.showLog("Thuytv-----endTime: $endTime")
             }
@@ -247,6 +248,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                         Common.listAllFolder?.add(model)
                     }
                 }
+                RxBus.publish(EventsBus.RELOAD_ALL_FOLDER)
             }
         }.start()
     }

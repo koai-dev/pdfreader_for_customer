@@ -63,9 +63,9 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
         Handler(Looper.myLooper()!!).postDelayed({
             getBaseActivity()?.apply {
                 if (Common.listAllFolder.isNullOrEmpty()) {
-                    if (PermissionUtil.checkExternalStoragePermission(this)) {
-                        getAllFileInDevice()
-                    }
+//                    if (PermissionUtil.checkExternalStoragePermission(this)) {
+//                        getAllFileInDevice()
+//                    }
                 } else {
                     lstAllFolder = Common.listAllFolder!!
                     mFolderAdapter.updateData(lstAllFolder)
@@ -80,7 +80,7 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
 
     private fun getAllFileInDevice() {
         Thread {
-            Logger.showLog("Thuytv---------getAllFileInDevice")
+            Logger.showLog("Thuytv---------getAllFileInDevice---Browse")
             val root = DocumentFile.fromFile(File(PATH_DEFAULT_STORE))
             val mimePDF = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")!!
             for (item in root.listFiles()) {
@@ -169,6 +169,11 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
                     if (PermissionUtil.checkExternalStoragePermission(this)) {
                         getAllFileInDevice()
                     }
+                }
+            }else if(it == EventsBus.RELOAD_ALL_FOLDER){
+                getBaseActivity()?.runOnUiThread {
+                    lstAllFolder = Common.listAllFolder!!
+                    mFolderAdapter.updateData(lstAllFolder)
                 }
             }
         }

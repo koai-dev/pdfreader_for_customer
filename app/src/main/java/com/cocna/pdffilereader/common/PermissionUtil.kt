@@ -12,14 +12,22 @@ object PermissionUtil {
 
     @SuppressLint("NewApi")
     fun checkExternalStoragePermission(context: Context): Boolean {
-        return (sdk29andMore {
-            Environment.isExternalStorageManager()
-        } ?: {
-            ContextCompat.checkSelfPermission(
+//        return (sdk29andMore {
+//            Environment.isExternalStorageManager()
+//        } ?: {
+//            ContextCompat.checkSelfPermission(
+//                context,
+//                Manifest.permission.READ_EXTERNAL_STORAGE
+//            ) == PackageManager.PERMISSION_GRANTED
+//        }) == true
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+            return Environment.isExternalStorageManager()
+        }else{
+            return ContextCompat.checkSelfPermission(
                 context,
                 Manifest.permission.READ_EXTERNAL_STORAGE
             ) == PackageManager.PERMISSION_GRANTED
-        }) == true
+        }
 
     }
 

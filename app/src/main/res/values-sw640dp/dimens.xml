@@ -89,6 +89,18 @@
   <dimen name="height_rcv_preview">
     213.33dp
   </dimen>
+  <dimen name="width_image_change_theme">
+    320.0dp
+  </dimen>
+  <dimen name="height_ads_change_theme">
+    355.56dp
+  </dimen>
+  <dimen name="width_image_menu_home">
+    24.89dp
+  </dimen>
+  <dimen name="height_image_menu_home">
+    28.44dp
+  </dimen>
   <dimen name="text_size_title">
     32.0sp
   </dimen>
@@ -115,5 +127,8 @@
   </dimen>
   <dimen name="text_size_sp24">
     42.67sp
+  </dimen>
+  <dimen name="text_size_menu_change_theme">
+    12.44sp
   </dimen>
 </resources>
