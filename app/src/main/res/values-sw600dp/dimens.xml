@@ -90,7 +90,7 @@
     200.0dp
   </dimen>
   <dimen name="width_image_change_theme">
-    300.0dp
+    250.0dp
   </dimen>
   <dimen name="height_ads_change_theme">
     333.33dp
