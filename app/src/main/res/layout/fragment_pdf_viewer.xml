@@ -99,12 +99,14 @@
             android:layout_marginStart="@dimen/dp2"
             android:layout_marginEnd="@dimen/margin_all" />
     </LinearLayout>
+
     <FrameLayout
         android:id="@+id/frame_ads_native_pdf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/llToolbarPdf"/>
+        app:layout_constraintTop_toBottomOf="@id/llToolbarPdf" />
+
     <com.github.barteksc.pdfviewer.PDFView
         android:id="@+id/pdfViewer"
         android:layout_width="match_parent"
@@ -147,13 +149,15 @@
     <LinearLayout
         android:id="@+id/llJumpToPageEdit"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_toolbar_all"
+        android:layout_height="@dimen/height_toolbar_home"
         android:background="@color/color_EDEDED"
         android:gravity="center|start"
         android:orientation="horizontal"
         android:paddingStart="@dimen/margin_all"
         android:paddingEnd="@dimen/margin_all"
         android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView

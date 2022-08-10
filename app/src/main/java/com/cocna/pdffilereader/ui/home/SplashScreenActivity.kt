@@ -47,9 +47,9 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
         get() = ActivitySplassScreenBinding::inflate
 
     override fun initData() {
-        val testDeviceIds = Arrays.asList("B8D2F4981BD1CDC61FB420D2A9CC64E0")
-        val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
-        MobileAds.setRequestConfiguration(configuration)
+//        val testDeviceIds = Arrays.asList("B8D2F4981BD1CDC61FB420D2A9CC64E0", "391347B342346395839E0B6C68235561")
+//        val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
+//        MobileAds.setRequestConfiguration(configuration)
 
         getAllFilePdf()
         getAllFileInDevice()
@@ -179,16 +179,22 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
         Thread {
             Common.listAllData = ArrayList()
             if (PermissionUtil.checkExternalStoragePermission(this)) {
-                val startTime = System.currentTimeMillis()
                 var root = DocumentFileCompat.getRootDocumentFile(this, "primary", true)
                 if (root == null) {
                     root = DocumentFile.fromFile(File(PATH_DEFAULT_STORE))
                 }
-                val mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")!!
-                val pdfArray = root.search(true, DocumentFileType.FILE, arrayOf(mime))
-                if (pdfArray.isNotEmpty()) {
-                    Common.listAllData = ArrayList()
-                    for (item in pdfArray) {
+                getFilePdf(root)
+//                RxBus.publish(EventsBus.RELOAD_ALL_FILE)
+            }
+        }.start()
+    }
+
+    private fun getFilePdf(rootFile: DocumentFile) {
+        val pdfArray = rootFile.listFiles()
+        if (pdfArray.isNotEmpty()) {
+            for (item in pdfArray) {
+                if (item.isFile) {
+                    if (item.extension.lowercase() == "pdf") {
                         val model =
                             MyFilesModel(
                                 name = item.name,
@@ -200,12 +206,11 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                             )
                         Common.listAllData?.add(model)
                     }
+                } else {
+                    getFilePdf(item)
                 }
-                RxBus.publish(EventsBus.RELOAD_ALL_FILE)
-                val endTime = System.currentTimeMillis() - startTime
-                Logger.showLog("Thuytv-----endTime: $endTime")
             }
-        }.start()
+        }
     }
 
     private fun getAllFileInDevice() {
@@ -248,7 +253,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                         Common.listAllFolder?.add(model)
                     }
                 }
-                RxBus.publish(EventsBus.RELOAD_ALL_FOLDER)
+//                RxBus.publish(EventsBus.RELOAD_ALL_FOLDER)
             }
         }.start()
     }

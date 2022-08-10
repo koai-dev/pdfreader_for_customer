@@ -51,8 +51,8 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
     private var eventsBusListener: Disposable? = null
 
     private var isViewType = false
-    var swipeRefreshLayout: SwipeRefreshLayout? = null
-    var mDialogProgress: ProgressDialog? = null
+    private var mStrSearch = ""
+//    var mDialogProgress: ProgressDialog? = null
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMyFilesBinding = FragmentMyFilesBinding::inflate
     override fun initData() {
@@ -76,9 +76,9 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
             if (Common.listAllData.isNullOrEmpty()) {
                 getBaseActivity()?.apply {
                     if (PermissionUtil.checkExternalStoragePermission(this)) {
-                        mDialogProgress = ProgressDialog(this)
-                        mDialogProgress?.show()
-//                        getAllFilePdf(true)
+//                        mDialogProgress = ProgressDialog(this)
+//                        mDialogProgress?.show()
+                        getAllFilePdf(true)
                     } else {
                         showPopupPermission()
                     }
@@ -103,13 +103,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
         if (binding.llGoToSetting.visibility == View.VISIBLE) {
             binding.llGoToSetting.gone()
         }
-        val dialogProgress = ProgressDialog(requireContext())
-        if (isShowDialog) {
-            dialogProgress.show()
-        }
-        Handler(Looper.myLooper()!!).postDelayed({
-            getAllFilePdf(dialogProgress, isShowDialog)
-        }, 100)
+        getAllFilePdf()
     }
 
     private fun setupViewPager(viewPager: ViewPager) {
@@ -151,10 +145,9 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
             binding.tabMyFile.tabRippleColor = null
         }
         listenClickViews(binding.imvAdapterType, binding.imvFilterFile, binding.btnGoToSetting)
-        swipeRefreshLayout = binding.swRefreshData
-        swipeRefreshLayout?.setOnRefreshListener {
-            swipeRefreshLayout?.isRefreshing = true
+        binding.swRefreshData.setOnRefreshListener {
             getBaseActivity()?.apply {
+                binding.swRefreshData.isRefreshing = true
                 if (PermissionUtil.checkExternalStoragePermission(this)) {
                     getAllFilePdf(false)
                 }
@@ -193,21 +186,21 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                             }
                             R.id.menu_all_name_a_z -> {
                                 lstFilePdf.apply {
-                                    sortWith { o1, o2 -> o1.name!!.compareTo(o2.name!!) }
+                                    sortWith { o1, o2 -> o1.name!!.lowercase().compareTo(o2.name!!.lowercase()) }
                                     myFileDetailFragment?.updateData(this)
                                 }
                                 lstRecent?.apply {
-                                    sortWith { o1, o2 -> o1.name!!.compareTo(o2.name!!) }
+                                    sortWith { o1, o2 -> o1.name!!.lowercase().compareTo(o2.name!!.lowercase()) }
                                     historyFragment?.updateData(this)
                                 }
                             }
                             R.id.menu_all_name_z_a -> {
                                 lstFilePdf.apply {
-                                    sortWith { o1, o2 -> o2.name!!.compareTo(o1.name!!) }
+                                    sortWith { o1, o2 -> o2.name!!.lowercase().compareTo(o1.name!!.lowercase()) }
                                     myFileDetailFragment?.updateData(this)
                                 }
                                 lstRecent?.apply {
-                                    sortWith { o1, o2 -> o2.name!!.compareTo(o1.name!!) }
+                                    sortWith { o1, o2 -> o2.name!!.lowercase().compareTo(o1.name!!.lowercase()) }
                                     historyFragment?.updateData(this)
                                 }
                             }
@@ -325,64 +318,47 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
 
     private fun onListenEventBus() {
         eventsBusListener = RxBus.listenDeBounce(EventsBus::class.java).subscribe {
-            if (it == EventsBus.RELOAD_ALL_FILE) {
-                if (Common.listAllFolder?.isNotEmpty() == true && isVisible) {
-                    lstFilePdf = Common.listAllData!!
-                    getBaseActivity()?.runOnUiThread {
-                        myFileDetailFragment!!.updateData(lstFilePdf)
-                        mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
-                        if (isVisible && getBaseActivity()?.isFinishing == false) {
-                            mDialogProgress?.dismiss()
-                        }
-                    }
-                }
-            }
+//            if (it == EventsBus.RELOAD_ALL_FILE) {
+//                if (Common.listAllFolder?.isNotEmpty() == true && isVisible) {
+//                    lstFilePdf = Common.listAllData!!
+//                    getBaseActivity()?.runOnUiThread {
+//                        myFileDetailFragment!!.updateData(lstFilePdf)
+//                        mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
+////                        if (isVisible && getBaseActivity()?.isFinishing == false) {
+////                            mDialogProgress?.dismiss()
+////                        }
+//                    }
+//                }
+//            }
         }
     }
 
-    private fun getAllFilePdf(dialogProgress: ProgressDialog, isShowDialog: Boolean) {
+    private fun getAllFilePdf() {
         Thread {
-            Logger.showLog("Thuytv------getAllFilePdf---MyFile")
             getBaseActivity()?.apply {
                 var root = DocumentFileCompat.getRootDocumentFile(this, "primary", true)
                 if (root == null) {
                     root = DocumentFile.fromFile(File(PATH_DEFAULT_STORE))
                 }
-                val mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")!!
-                val pdfArray = root.search(true, DocumentFileType.FILE, arrayOf(mime))
                 lstFilePdf = ArrayList()
-                if (pdfArray.isNotEmpty()) {
-                    for (item in pdfArray) {
-                        val model =
-                            MyFilesModel(
-                                name = item.name,
-                                uriPath = item.uri.path,
-                                uriOldPath = item.uri.path,
-                                lastModified = item.lastModified(),
-                                extensionName = item.extension,
-                                length = item.length()
-                            )
-                        lstFilePdf.add(model)
-                    }
-                }
+                getFile(root)
                 getBaseActivity()?.runOnUiThread {
                     myFileDetailFragment?.updateData(lstFilePdf)
                     mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
-                    Handler(Looper.myLooper()!!).postDelayed({
-                        if (isVisible && getBaseActivity()?.isFinishing == false && isShowDialog) {
-                            dialogProgress.dismiss()
-                        }
-                    }, 100)
+                    binding.swRefreshData.isRefreshing = false
+                    if(mStrSearch.isNotEmpty()){
+                        myFileDetailFragment?.onSearchFile(mStrSearch)
+                    }
                 }
                 if (getBaseActivity()?.isCurrentNetwork == false) {
                     getBaseActivity()?.enabaleNetwork()
                 }
-                swipeRefreshLayout?.isRefreshing = false
             }
         }.start()
     }
 
     fun onSearchFile(strName: String) {
+        mStrSearch = strName
         historyFragment?.onSearchFile(strName)
         myFileDetailFragment?.onSearchFile(strName)
     }
@@ -443,6 +419,30 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
             RxBus.publish(EventsBus.PERMISSION_STORED_GRANTED)
         } else {
             binding.llGoToSetting.visible()
+        }
+    }
+
+    private fun getFile(rootFile: DocumentFile) {
+        val pdfArray = rootFile.listFiles()
+        if (pdfArray.isNotEmpty()) {
+            for (item in pdfArray) {
+                if (item.isFile) {
+                    if (item.extension.lowercase() == "pdf") {
+                        val model =
+                            MyFilesModel(
+                                name = item.name,
+                                uriPath = item.uri.path,
+                                uriOldPath = item.uri.path,
+                                lastModified = item.lastModified(),
+                                extensionName = item.extension,
+                                length = item.length()
+                            )
+                        lstFilePdf.add(model)
+                    }
+                } else {
+                    getFile(item)
+                }
+            }
         }
     }
 }

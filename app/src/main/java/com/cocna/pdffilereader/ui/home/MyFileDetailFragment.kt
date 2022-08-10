@@ -119,7 +119,6 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                 getBaseActivity()?.hideKeyboard()
             }
             R.id.imvToolbarMore -> {
-                MultiClickPreventer.preventMultiClick(v)
                 showPopupMenu(binding.imvToolbarMore, R.menu.menu_more_all_file, object : OnPopupMenuItemClickListener {
                     override fun onClickItemPopupMenu(menuItem: MenuItem?) {
                         when (menuItem?.itemId) {
@@ -132,13 +131,13 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                             }
                             R.id.menu_all_name_a_z -> {
                                 lstDataFile?.apply {
-                                    sortWith { o1, o2 -> o1.name!!.compareTo(o2.name!!) }
+                                    sortWith { o1, o2 -> o1.name!!.lowercase().compareTo(o2.name!!.lowercase()) }
                                     myFilesAdapter?.updateData(this)
                                 }
                             }
                             R.id.menu_all_name_z_a -> {
                                 lstDataFile?.apply {
-                                    sortWith { o1, o2 -> o2.name!!.compareTo(o1.name!!) }
+                                    sortWith { o1, o2 -> o2.name!!.lowercase().compareTo(o1.name!!.lowercase()) }
                                     myFilesAdapter?.updateData(this)
                                 }
                             }
@@ -193,7 +192,12 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                 }
 
                 override fun onClickItemMore(view: View, documentFile: MyFilesModel) {
-                    showPopupMenu(view, R.menu.menu_more_file, object : OnPopupMenuItemClickListener {
+                    var lstPopupMenu = R.menu.menu_more_file
+                    val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile()
+                    if (lstFavorite?.contains(documentFile) == true) {
+                        lstPopupMenu = R.menu.menu_more_file_favorite
+                    }
+                    showPopupMenu(view, lstPopupMenu, object : OnPopupMenuItemClickListener {
                         override fun onClickItemPopupMenu(menuItem: MenuItem?) {
                             when (menuItem?.itemId) {
                                 R.id.menu_rename -> {
@@ -207,6 +211,10 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                                 }
                                 R.id.menu_favorite -> {
                                     sharePreferenceUtils.setFavoriteFile(documentFile)
+                                    RxBus.publish(EventsBus.RELOAD_FAVORITE)
+                                }
+                                R.id.menu_un_favorite -> {
+                                    getBaseActivity()?.sharedPreferences?.removeFavoriteFile(documentFile)
                                     RxBus.publish(EventsBus.RELOAD_FAVORITE)
                                 }
                                 R.id.menu_share -> {

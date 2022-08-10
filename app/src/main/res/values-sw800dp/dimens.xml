@@ -101,6 +101,9 @@
   <dimen name="height_image_menu_home">
     35.56dp
   </dimen>
+  <dimen name="height_image_change_theme">
+    666.67dp
+  </dimen>
   <dimen name="text_size_title">
     40.0sp
   </dimen>
@@ -129,6 +132,6 @@
     53.33sp
   </dimen>
   <dimen name="text_size_menu_change_theme">
-    15.56sp
+    13.33sp
   </dimen>
 </resources>
