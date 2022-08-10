@@ -44,7 +44,7 @@
         <entry key="app/src/main/res/layout/activity_splass_screen.xml" value="0.16510416666666666" />
         <entry key="app/src/main/res/layout/ads_unfield_item_file.xml" value="0.19479166666666667" />
         <entry key="app/src/main/res/layout/ads_unfield_item_file_grid.xml" value="0.225" />
-        <entry key="app/src/main/res/layout/ads_unifield.xml" value="0.30885416666666665" />
+        <entry key="app/src/main/res/layout/ads_unifield.xml" value="0.25" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.2526041666666667" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/dialog_confirm_file.xml" value="0.16041666666666668" />
@@ -78,6 +78,7 @@
         <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.146875" />
         <entry key="app/src/main/res/menu/main.xml" value="0.146875" />
         <entry key="app/src/main/res/menu/menu_more_all_file.xml" value="0.14114583333333333" />
+        <entry key="app/src/main/res/menu/menu_more_all_test.xml" value="0.1609375" />
         <entry key="app/src/main/res/menu/menu_more_detail_file.xml" value="0.15520833333333334" />
         <entry key="app/src/main/res/menu/menu_more_detail_file_unfavorite.xml" value="0.23385416666666667" />
         <entry key="app/src/main/res/menu/menu_more_file.xml" value="0.14114583333333333" />

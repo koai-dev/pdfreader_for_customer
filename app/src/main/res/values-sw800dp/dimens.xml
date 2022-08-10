@@ -90,7 +90,7 @@
     266.67dp
   </dimen>
   <dimen name="width_image_change_theme">
-    400.0dp
+    333.33dp
   </dimen>
   <dimen name="height_ads_change_theme">
     444.44dp
@@ -100,6 +100,9 @@
   </dimen>
   <dimen name="height_image_menu_home">
     35.56dp
+  </dimen>
+  <dimen name="height_image_change_theme">
+    666.67dp
   </dimen>
   <dimen name="text_size_title">
     40.0sp
@@ -129,6 +132,6 @@
     53.33sp
   </dimen>
   <dimen name="text_size_menu_change_theme">
-    15.56sp
+    13.33sp
   </dimen>
 </resources>

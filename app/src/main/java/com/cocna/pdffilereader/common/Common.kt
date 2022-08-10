@@ -3,6 +3,7 @@ package com.cocna.pdffilereader.common
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.annotation.Keep
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.google.android.gms.ads.nativead.NativeAd
 import java.text.SimpleDateFormat
@@ -13,6 +14,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by Thuytv on 12/06/2022.
  */
+
 object Common {
     var TIME_USE_APP_START: Long? = null
     var IS_SEND_FIREBASE: Boolean = false
@@ -22,7 +24,11 @@ object Common {
     var lstDataDetail: ArrayList<MyFilesModel>? = null
     var listAllData: ArrayList<MyFilesModel>? = null
     var listAllFolder: ArrayList<MyFilesModel>? = null
+
+    @Keep
     var mNativeAdLanguage: NativeAd? = null
+
+    @Keep
     var mNativeAdTheme: NativeAd? = null
 
     @JvmStatic

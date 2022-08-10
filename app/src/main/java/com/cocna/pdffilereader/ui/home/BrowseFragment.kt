@@ -63,9 +63,9 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
         Handler(Looper.myLooper()!!).postDelayed({
             getBaseActivity()?.apply {
                 if (Common.listAllFolder.isNullOrEmpty()) {
-//                    if (PermissionUtil.checkExternalStoragePermission(this)) {
-//                        getAllFileInDevice()
-//                    }
+                    if (PermissionUtil.checkExternalStoragePermission(this)) {
+                        getAllFileInDevice()
+                    }
                 } else {
                     lstAllFolder = Common.listAllFolder!!
                     mFolderAdapter.updateData(lstAllFolder)
@@ -170,12 +170,13 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
                         getAllFileInDevice()
                     }
                 }
-            }else if(it == EventsBus.RELOAD_ALL_FOLDER){
-                getBaseActivity()?.runOnUiThread {
-                    lstAllFolder = Common.listAllFolder!!
-                    mFolderAdapter.updateData(lstAllFolder)
-                }
             }
+//            else if(it == EventsBus.RELOAD_ALL_FOLDER){
+//                getBaseActivity()?.runOnUiThread {
+//                    lstAllFolder = Common.listAllFolder!!
+//                    mFolderAdapter.updateData(lstAllFolder)
+//                }
+//            }
         }
     }
 

@@ -37,22 +37,26 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     // If the ad hasn't been laid out, default to the full screen width.
     private val adSize: AdSize
         get() {
-            val display = getBaseActivity()?.windowManager?.defaultDisplay
-            val outMetrics = DisplayMetrics()
-            display?.getMetrics(outMetrics)
+            if (isVisible) {
+                val display = getBaseActivity()?.windowManager?.defaultDisplay
+                val outMetrics = DisplayMetrics()
+                display?.getMetrics(outMetrics)
 
-            val density = outMetrics.density
+                val density = outMetrics.density
 
-            var adWidthPixels = binding.adViewContainer.width.toFloat()
-            if (adWidthPixels == 0f) {
-                adWidthPixels = outMetrics.widthPixels.toFloat()
-            }
+                var adWidthPixels = binding.adViewContainer.width.toFloat()
+                if (adWidthPixels == 0f) {
+                    adWidthPixels = outMetrics.widthPixels.toFloat()
+                }
 
-            val adWidth = (adWidthPixels / density).toInt()
-            return if (getBaseActivity() != null) {
-                AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getBaseActivity()!!, adWidth)
+                val adWidth = (adWidthPixels / density).toInt()
+                return if (getBaseActivity() != null) {
+                    AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getBaseActivity()!!, adWidth)
+                } else {
+                    AdSize.BANNER
+                }
             } else {
-                AdSize.BANNER
+                return AdSize.BANNER
             }
         }
 

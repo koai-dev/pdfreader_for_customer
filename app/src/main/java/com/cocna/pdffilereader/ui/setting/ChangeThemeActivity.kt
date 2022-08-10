@@ -39,11 +39,9 @@ class ChangeThemeActivity : BaseActivity<ActivityChangeThemeBinding>() {
 
     override fun initData() {
         if (Common.mNativeAdTheme == null) {
-            Logger.showLog("Thuytv----Refresh Ads Theme")
             refreshAd()
         } else {
-            Logger.showLog("Thuytv----Show Ads Theme")
-            showAdsNativeTheme(Common.mNativeAdLanguage!!)
+            showAdsNativeTheme(Common.mNativeAdTheme!!)
         }
         typeScreen = intent.getStringExtra(AppKeys.KEY_BUNDLE_SCREEN)
         sharedPreferences.setValueBoolean(SharePreferenceUtils.KEY_FIRST_LOGIN, true)
@@ -78,11 +76,12 @@ class ChangeThemeActivity : BaseActivity<ActivityChangeThemeBinding>() {
         }
 
     }
-    private fun changeColorTheme(themeModel: ThemeModel){
+
+    private fun changeColorTheme(themeModel: ThemeModel) {
         themeModel.idTheme?.apply {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 binding.ttMenuThemeMyFile.setTextColor(resources.getColor(this, theme))
-            }else{
+            } else {
                 binding.ttMenuThemeMyFile.setTextColor(resources.getColor(this))
             }
             binding.imvMenuThemeMyFile.setColorFilter(ContextCompat.getColor(this@ChangeThemeActivity, this), android.graphics.PorterDuff.Mode.SRC_IN);
@@ -248,6 +247,7 @@ class ChangeThemeActivity : BaseActivity<ActivityChangeThemeBinding>() {
 
         val adLoader = builder.withAdListener(object : AdListener() {
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                Logger.showLog("Thuytv---theme---onAdFailedToLoad: " + loadAdError.message)
                 setLogDataToFirebase(
                     AdsLogModel(
                         adsId = AppConfig.ID_ADS_NATIVE_THEME, adsName = "Ads Native Theme", message = loadAdError.message,

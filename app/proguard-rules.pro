@@ -96,3 +96,6 @@
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;
 }
+
+-keep class com.appsflyer.** { *; }
+-keep public class com.android.installreferrer.** { *; }

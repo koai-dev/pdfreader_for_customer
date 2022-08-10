@@ -10,13 +10,13 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.multidex.MultiDexApplication
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.appsflyer.AppsFlyerLib
 import com.cocna.pdffilereader.common.AppConfig
 import com.cocna.pdffilereader.common.Common
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.firebase.FirebaseApp
 import com.cocna.pdffilereader.common.Logger
-import com.ironsource.mediationsdk.IronSource
 import java.util.*
 
 /**
@@ -36,7 +36,8 @@ class PdfApplication : MultiDexApplication(), LifecycleObserver, Application.Act
         // Initialize the Mobile Ads SDK.
         MobileAds.initialize(this)
         appOpenAdManager = AppOpenAdManager()
-
+        AppsFlyerLib.getInstance().init(AppConfig.AF_DEV_KEY, null, this)
+        AppsFlyerLib.getInstance().start(this)
     }
 
     // ads start

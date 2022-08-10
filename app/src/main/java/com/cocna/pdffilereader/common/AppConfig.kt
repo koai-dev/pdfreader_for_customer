@@ -48,4 +48,5 @@ object AppConfig {
     const val ID_ADS_OPEN_RESUME = "ca-app-pub-5660050540886911/2291635506"
     const val ID_ADS_INTERSTITIAL_BACK_FILE = "ca-app-pub-5660050540886911/1365839713"
     const val ID_ADS_NATIVE_THEME = "ca-app-pub-5660050540886911/9487856403"
+    const val AF_DEV_KEY = "Z4BgR2ULBqGNjcK8LG4LAi"
 }

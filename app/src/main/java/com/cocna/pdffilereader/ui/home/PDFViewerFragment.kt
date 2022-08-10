@@ -1,9 +1,10 @@
 package com.cocna.pdffilereader.ui.home
 
+import `in`.gauriinfotech.commons.Commons
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.os.Environment
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.os.ParcelFileDescriptor
@@ -25,7 +26,6 @@ import com.cocna.pdffilereader.ui.home.dialog.RenameFileDialog
 import com.cocna.pdffilereader.ui.home.model.AdsLogModel
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener
-import com.github.barteksc.pdfviewer.listener.OnRenderListener
 import com.github.barteksc.pdfviewer.listener.OnTapListener
 import com.github.barteksc.pdfviewer.util.FitPolicy
 import com.google.android.gms.ads.*
@@ -52,28 +52,33 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
     private var initialLayoutComplete = false
     private var startTime: Long = 0L
     private var isSendShowAds = false
+    private var isLoadedAds = false
 
     // Determine the screen width (less decorations) to use for the ad width.
     // If the ad hasn't been laid out, default to the full screen width.
     @Suppress("DEPRECATION")
     private val adSize: AdSize
         get() {
-            val display = getBaseActivity()?.windowManager?.defaultDisplay
-            val outMetrics = DisplayMetrics()
-            display?.getMetrics(outMetrics)
+            if (isVisible) {
+                val display = getBaseActivity()?.windowManager?.defaultDisplay
+                val outMetrics = DisplayMetrics()
+                display?.getMetrics(outMetrics)
 
-            val density = outMetrics.density
+                val density = outMetrics.density
 
-            var adWidthPixels = binding.adViewContainer.width.toFloat()
-            if (adWidthPixels == 0f) {
-                adWidthPixels = outMetrics.widthPixels.toFloat()
-            }
+                var adWidthPixels = binding.adViewContainer.width.toFloat()
+                if (adWidthPixels == 0f) {
+                    adWidthPixels = outMetrics.widthPixels.toFloat()
+                }
 
-            val adWidth = (adWidthPixels / density).toInt()
-            return if (getBaseActivity() != null) {
-                AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getBaseActivity()!!, adWidth)
+                val adWidth = (adWidthPixels / density).toInt()
+                return if (getBaseActivity() != null) {
+                    AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getBaseActivity()!!, adWidth)
+                } else {
+                    AdSize.BANNER
+                }
             } else {
-                AdSize.BANNER
+                return AdSize.BANNER
             }
         }
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPdfViewerBinding
@@ -82,14 +87,32 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
     override fun initData() {
         myFileModel = arguments?.getParcelable(AppKeys.KEY_BUNDLE_DATA)
         startTime = System.currentTimeMillis()
-        myFileModel?.apply {
-            binding.ttToolbarPdf.text = name
-            if (extensionName?.lowercase() == "pdf") {
-                openFDPFile(uriPath)
+        if (myFileModel == null) {
+            val uriPath = arguments?.getParcelable<Uri>(Intent.EXTRA_STREAM)
+            uriPath?.apply {
+                val fullPath = Commons.getPath(this, getBaseActivity())
+                if (fullPath?.isNotEmpty() == true) {
+                    val cut = fullPath.lastIndexOf("/")
+                    if (cut != -1) {
+                        val fileName = fullPath.substring(cut + 1)
+                        binding.ttToolbarPdf.text = fileName
+                    }
+                }
+                openFDPFile(fullPath)
+                Handler(Looper.myLooper()!!).postDelayed({
+                    loadDataFile()
+                }, 500)
             }
-            Handler(Looper.myLooper()!!).postDelayed({
-                loadDataFile()
-            }, 500)
+        } else {
+            myFileModel?.apply {
+                binding.ttToolbarPdf.text = name
+                if (extensionName?.lowercase() == "pdf") {
+                    openFDPFile(uriPath)
+                }
+                Handler(Looper.myLooper()!!).postDelayed({
+                    loadDataFile()
+                }, 500)
+            }
         }
         getBaseActivity()?.apply {
             adView = AdView(this)
@@ -134,7 +157,6 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             timer.schedule(object : TimerTask() {
                 override fun run() {
                     getBaseActivity()?.runOnUiThread {
-//                        previewAdapter?.updateCurrentPage(currentPage)
                         if (previewAdapter != null && isVisible && getBaseActivity()?.isFinishing == false && currentPage > 0) {
                             binding.rcvPreviewPage.scrollToPosition(currentPage)
                         }
@@ -146,6 +168,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         }
         binding.vlJumpPage.setOnClickListener {
             MultiClickPreventer.preventMultiClick(it)
+            isLoadedAds = true
             binding.groupPageViewer.gone()
             binding.llJumpToPageEdit.visible()
             getBaseActivity()?.showKeyboard()
@@ -156,10 +179,13 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                 if (actionId == EditorInfo.IME_ACTION_DONE || event?.action == KeyEvent.ACTION_DOWN
                     || event?.keyCode == KeyEvent.KEYCODE_ENTER
                 ) {
+                    isLoadedAds = false
                     binding.pdfViewer.jumpTo(getEdittextNumber() - 1)
+                    isLoadedAds = true
                     binding.groupPageViewer.visible()
                     binding.llJumpToPageEdit.gone()
                     getBaseActivity()?.hideKeyboard()
+
                     return true
                 }
                 return false
@@ -177,6 +203,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         uriPath?.apply {
             binding.pdfViewer.fromFile(File(uriPath))
                 .spacing(10)
+                .defaultPage(0)
                 .enableSwipe(true)
                 .enableDoubletap(true)
                 .swipeHorizontal(false)
@@ -188,32 +215,36 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                 .onTap(onTapListener)
                 .onLoad {
                     val totalPage = binding.pdfViewer.pageCount
-                    if (totalPage > 1) {
+                    Logger.showLog("Thuytv-----onLoad---totalPage: $totalPage ---isFirst: $isFirst")
+                    if (totalPage > 1 && isFirst) {
                         binding.seekbarJumpToPage.valueFrom = 1f
                     }
                 }
                 .load()
-
-
         }
     }
 
     @SuppressLint("SetTextI18n")
     private val onPageChangeListener = OnPageChangeListener { page, pageCount ->
-        if (binding.groupPageViewer.visibility == View.GONE) {
-            binding.groupPageViewer.visible()
-        }
-        currentPage = page + 1
-        binding.vlPageAndTotalPage.text = getString(R.string.vl_total_page, currentPage, pageCount)
-        binding.vlJumpPage.text = getString(R.string.vl_page, currentPage)
-        binding.edtJumpPage.setText(currentPage.toString())
-        isTouchSlider = false
-        binding.seekbarJumpToPage.value = currentPage.toFloat()
-        if (isFirst) {
-            binding.seekbarJumpToPage.valueTo = pageCount.toFloat()
-            binding.vlTotalPage.text = "/ $pageCount"
-            binding.vlJumpTotalPageEdit.text = "/ $pageCount"
-            isFirst = false
+        if(!isLoadedAds) {
+            if (binding.groupPageViewer.visibility == View.GONE) {
+                binding.groupPageViewer.visible()
+            }
+            currentPage = page + 1
+            binding.vlPageAndTotalPage.text = getString(R.string.vl_total_page, currentPage, pageCount)
+            binding.vlJumpPage.text = getString(R.string.vl_page, currentPage)
+            binding.edtJumpPage.setText(currentPage.toString())
+            isTouchSlider = false
+            binding.seekbarJumpToPage.value = currentPage.toFloat()
+            if (isFirst) {
+                binding.seekbarJumpToPage.valueTo = pageCount.toFloat()
+                binding.vlTotalPage.text = "/ $pageCount"
+                binding.vlJumpTotalPageEdit.text = "/ $pageCount"
+                isFirst = false
+            }
+            Logger.showLog("Thuytv-----onPageChangeListener---currentPage: $currentPage ---isFirst: $isFirst")
+        }else{
+            isLoadedAds = false
         }
     }
     private val onTapListener = OnTapListener {
@@ -308,6 +339,15 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                         deviceName = Common.getDeviceName(getBaseActivity())
                     )
                 )
+            }
+
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                Logger.showLog("Thuytv--------onAdLoaded")
+                isLoadedAds = true
+                Handler(Looper.myLooper()!!).postDelayed({
+                    isLoadedAds = false
+                },500)
             }
         }
 
