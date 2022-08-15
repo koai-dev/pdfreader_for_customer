@@ -10,21 +10,6 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/txt_loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_double_all"
-        android:fontFamily="@font/googlesans_regular"
-        android:paddingStart="@dimen/margin_all"
-        android:paddingEnd="@dimen/margin_all"
-        android:text="@string/vl_loading"
-        android:textColor="@color/rgb_808E95"
-        android:textSize="@dimen/text_size_sp24"
-        app:layout_constraintBottom_toTopOf="@id/vlContent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/vlContent"
         style="@style/Text_Content_Dialog"
@@ -32,20 +17,18 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/margin_all"
-        android:text="@string/vl_well_comeback"
+        android:text="@string/vl_loading_ads"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_double_all"
-        android:src="@mipmap/ic_launcher"
-        app:layout_constraintBottom_toTopOf="@id/txt_loading"
+        android:layout_marginBottom="@dimen/margin_all"
+        app:layout_constraintBottom_toTopOf="@id/vlContent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

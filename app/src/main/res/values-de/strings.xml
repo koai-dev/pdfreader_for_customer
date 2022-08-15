@@ -8,7 +8,6 @@
     <string name="btn_continue">Erlauben</string>
     <string name="tt_request_store_permission">Berechtigung erforderlich</string>
     <string name="vl_request_store_permission_content">Zum Lesen lokaler Dateien ist die Berechtigung zum Zugriff auf alle Dateien erforderlich.</string>
-    <string name="vl_request_read_permission_content">Lesen Sie für diese App -Arbeit, die externe Speicherberechtigte benötigt werden. Aktivieren Sie diese in Geräteeinstellungen</string>
     <string name="menu_size">Größe</string>
     <string name="menu_name_a_z">Name a-Z</string>
     <string name="menu_name_z_a">Nennen Sie Z-A</string>
@@ -73,7 +72,7 @@
     <string name="msg_recent_empty">Sie haben in letzter Zeit keine Datei gelesen</string>
     <string name="btn_click_here_read">Klicken Sie hier, um jetzt zu lesen!</string>
     <string name="vl_history_file">Verlaufsdatei (%d)</string>
-    <string name="vl_loading_ads">Anzeigen werden geladen (%s)</string>
+    <string name="vl_loading_ads">Anzeigen werden geladen</string>
     <string name="vl_well_comeback">Willkommen zurück</string>
     <string name="tt_update_version">App aktualisieren</string>
     <string name="vl_contetn_update_version">Eine neue Version von Upgrade ist verfügbar. Möchten Sie es jetzt aktualisieren?</string>

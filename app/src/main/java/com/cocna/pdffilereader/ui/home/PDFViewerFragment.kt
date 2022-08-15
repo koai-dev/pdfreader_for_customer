@@ -91,13 +91,15 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             val uriPath = arguments?.getParcelable<Uri>(Intent.EXTRA_STREAM)
             uriPath?.apply {
                 val fullPath = Commons.getPath(this, getBaseActivity())
+                var fileName = ""
                 if (fullPath?.isNotEmpty() == true) {
                     val cut = fullPath.lastIndexOf("/")
                     if (cut != -1) {
-                        val fileName = fullPath.substring(cut + 1)
+                        fileName = fullPath.substring(cut + 1)
                         binding.ttToolbarPdf.text = fileName
                     }
                 }
+                myFileModel = MyFilesModel(uriPath = fullPath, uriOldPath = fullPath, name = fileName, extensionName = "pdf")
                 openFDPFile(fullPath)
                 Handler(Looper.myLooper()!!).postDelayed({
                     loadDataFile()
@@ -226,7 +228,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
 
     @SuppressLint("SetTextI18n")
     private val onPageChangeListener = OnPageChangeListener { page, pageCount ->
-        if(!isLoadedAds) {
+        if (!isLoadedAds) {
             if (binding.groupPageViewer.visibility == View.GONE) {
                 binding.groupPageViewer.visible()
             }
@@ -243,7 +245,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                 isFirst = false
             }
             Logger.showLog("Thuytv-----onPageChangeListener---currentPage: $currentPage ---isFirst: $isFirst")
-        }else{
+        } else {
             isLoadedAds = false
         }
     }
@@ -264,59 +266,70 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                 getBaseActivity()?.finish()
             }
             R.id.imvPdfMore -> {
-                var lstPopupMenu = R.menu.menu_more_detail_file
-                val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile()
-                if (lstFavorite?.contains(myFileModel) == true) {
-                    lstPopupMenu = R.menu.menu_more_detail_file_unfavorite
-                }
-                showPopupMenu(binding.imvPdfMore, lstPopupMenu, object : OnPopupMenuItemClickListener {
-                    override fun onClickItemPopupMenu(menuItem: MenuItem?) {
-                        when (menuItem?.itemId) {
-                            R.id.menu_rename -> {
-                                getBaseActivity()?.apply {
-                                    RenameFileDialog(this, myFileModel!!, object : OnDialogItemClickListener {
-                                        override fun onClickItemConfirm(mData: MyFilesModel) {
-                                            binding.ttToolbarPdf.text = mData.name
-                                        }
+                if (myFileModel != null) {
+                    var lstPopupMenu = R.menu.menu_more_detail_file
+                    val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile()
+                    if (lstFavorite?.contains(myFileModel) == true) {
+                        lstPopupMenu = R.menu.menu_more_detail_file_unfavorite
+                    }
+                    showPopupMenu(binding.imvPdfMore, lstPopupMenu, object : OnPopupMenuItemClickListener {
+                        override fun onClickItemPopupMenu(menuItem: MenuItem?) {
+                            when (menuItem?.itemId) {
+                                R.id.menu_rename -> {
+                                    if (myFileModel != null) {
+                                        getBaseActivity()?.apply {
+                                            RenameFileDialog(this, myFileModel!!, object : OnDialogItemClickListener {
+                                                override fun onClickItemConfirm(mData: MyFilesModel) {
+                                                    binding.ttToolbarPdf.text = mData.name
+                                                }
 
-                                    }).show()
+                                            }).show()
+                                        }
+                                    }
                                 }
-                            }
-                            R.id.menu_favorite -> {
-                                getBaseActivity()?.sharedPreferences?.setFavoriteFile(myFileModel!!)
-                                RxBus.publish(EventsBus.RELOAD_FAVORITE)
-                            }
-                            R.id.menu_un_favorite -> {
-                                getBaseActivity()?.sharedPreferences?.removeFavoriteFile(myFileModel!!)
-                                RxBus.publish(EventsBus.RELOAD_FAVORITE)
-                            }
-                            R.id.menu_share -> {
-                                myFileModel?.uriPath?.let { File(it) }?.let { shareFile(it) }
-                            }
-                            R.id.menu_delete -> {
-                                getBaseActivity()?.apply {
-                                    val deleteFileDialog = DeleteFileDialog(this, myFileModel!!, object : OnDialogItemClickListener {
-                                        override fun onClickItemConfirm(mData: MyFilesModel) {
+                                R.id.menu_favorite -> {
+                                    if (myFileModel != null) {
+                                        getBaseActivity()?.sharedPreferences?.setFavoriteFile(myFileModel!!)
+                                        RxBus.publish(EventsBus.RELOAD_FAVORITE)
+                                    }
+                                }
+                                R.id.menu_un_favorite -> {
+                                    if (myFileModel != null) {
+                                        getBaseActivity()?.sharedPreferences?.removeFavoriteFile(myFileModel!!)
+                                        RxBus.publish(EventsBus.RELOAD_FAVORITE)
+                                    }
+                                }
+                                R.id.menu_share -> {
+                                    myFileModel?.uriPath?.let { File(it) }?.let { shareFile(it) }
+                                }
+                                R.id.menu_delete -> {
+                                    if (myFileModel != null) {
+                                        getBaseActivity()?.apply {
+                                            val deleteFileDialog = DeleteFileDialog(this, myFileModel!!, object : OnDialogItemClickListener {
+                                                override fun onClickItemConfirm(mData: MyFilesModel) {
 //                                            sharedPreferences.removeFavoriteFile(myFileModel!!)
 //                                            sharedPreferences.removeRecentFile(myFileModel!!)
 //                                            RxBus.publish(EventsBus.RELOAD_ALL_FILE)
 //                                            RxBus.publish(myFileModel!!)
-                                            finish()
+                                                    finish()
+                                                }
+
+                                            })
+                                            deleteFileDialog.show()
                                         }
 
-                                    })
-                                    deleteFileDialog.show()
+                                    }
                                 }
-                            }
-                            R.id.menu_print -> {
-                                myFileModel?.apply {
-                                    getBaseActivity()?.printFile(this)
+                                R.id.menu_print -> {
+                                    myFileModel?.apply {
+                                        getBaseActivity()?.printFile(this)
+                                    }
                                 }
                             }
                         }
-                    }
 
-                })
+                    })
+                }
             }
         }
     }
@@ -347,7 +360,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                 isLoadedAds = true
                 Handler(Looper.myLooper()!!).postDelayed({
                     isLoadedAds = false
-                },500)
+                }, 500)
             }
         }
 

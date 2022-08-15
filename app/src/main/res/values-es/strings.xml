@@ -66,13 +66,12 @@
     <string name="btn_continue">Permitir</string>
     <string name="tt_request_store_permission">Permiso requerido</string>
     <string name="vl_request_store_permission_content">Se requiere permiso de acceso a todos los archivos para leer archivos locales.</string>
-    <string name="vl_request_read_permission_content">Se necesita un permiso de almacenamiento externo para este trabajo de aplicación, habilitarlo en la configuración del dispositivo</string>
     <string name="vl_size_folder">%d archivar</string>
     <string name="msg_recent_empty">No has leído ningún archivo recientemente</string>
     <string name="msg_import_please_wait">Importando… Por favor espere</string>
     <string name="btn_click_here_read">Haga clic aquí para leer ahora!</string>
     <string name="vl_history_file">Archivo de historial (%d)</string>
-    <string name="vl_loading_ads">Cargando Anuncios (%s)</string>
+    <string name="vl_loading_ads">Cargando Anuncios</string>
     <string name="vl_well_comeback">Bienvenido de nuevo</string>
     <string name="tt_update_version">Actualizar aplicación</string>
     <string name="vl_contetn_update_version">Hay una nueva versión de Upgrade disponible. ¿Te gustaría actualizarlo ahora?</string>
