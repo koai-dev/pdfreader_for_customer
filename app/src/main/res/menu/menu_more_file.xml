@@ -3,16 +3,28 @@
 
     <item
         android:id="@+id/menu_rename"
-        android:title="@string/menu_rename" />
+        android:title="@string/menu_rename"
+        android:icon="@drawable/ic_menu_rename"/>
 
     <item
         android:id="@+id/menu_favorite"
-        android:title="@string/menu_favorite" />
+        android:title="@string/menu_favorite"
+        android:icon="@drawable/ic_menu_bookmark"/>
 
     <item
         android:id="@+id/menu_share"
-        android:title="@string/menu_share" />
+        android:title="@string/menu_share"
+        android:icon="@drawable/ic_menu_share"/>
+    <item
+        android:id="@+id/menu_shortcut"
+        android:icon="@drawable/ic_menu_shortcut"
+        android:title="@string/menu_shortcut" />
+    <item
+        android:id="@+id/menu_file_info"
+        android:icon="@drawable/ic_menu_file_info"
+        android:title="@string/menu_file_info" />
     <item
         android:id="@+id/menu_delete"
-        android:title="@string/menu_delete" />
+        android:title="@string/menu_delete"
+        android:icon="@drawable/ic_menu_delete"/>
 </menu>

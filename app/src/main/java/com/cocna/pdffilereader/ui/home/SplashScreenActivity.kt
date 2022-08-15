@@ -202,7 +202,8 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                                 uriOldPath = item.uri.path,
                                 lastModified = item.lastModified(),
                                 extensionName = item.extension,
-                                length = item.length()
+                                length = item.length(),
+                                locationFile = item.parentFile?.name
                             )
                         Common.listAllData?.add(model)
                     }
@@ -233,7 +234,8 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                                         uriOldPath = mFile.uri.path,
                                         lastModified = mFile.lastModified(),
                                         extensionName = mFile.extension,
-                                        length = mFile.length()
+                                        length = mFile.length(),
+                                        locationFile = mFile.parentFile?.name
                                     )
                                 lstChildFile.add(model)
                             }
@@ -248,7 +250,8 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                                 uriOldPath = item.uri.path,
                                 lastModified = item.lastModified(),
                                 extensionName = item.extension,
-                                length = item.length()
+                                length = item.length(),
+                                locationFile = item.parentFile?.name
                             )
                         Common.listAllFolder?.add(model)
                     }

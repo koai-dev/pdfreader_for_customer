@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
@@ -16,8 +17,13 @@ import com.google.gson.Gson
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.FragmentBrowseBinding
+import com.cocna.pdffilereader.myinterface.OnDialogItemClickListener
+import com.cocna.pdffilereader.myinterface.OnPopupMenuItemClickListener
 import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.home.adapter.MyFilesAdapter
+import com.cocna.pdffilereader.ui.home.dialog.DeleteFileDialog
+import com.cocna.pdffilereader.ui.home.dialog.FileInfoDialog
+import com.cocna.pdffilereader.ui.home.dialog.RenameFileDialog
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import io.reactivex.disposables.Disposable
 import java.io.File
@@ -53,6 +59,57 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
             }
 
             override fun onClickItemMore(view: View, documentFile: MyFilesModel) {
+                var lstPopupMenu = R.menu.menu_more_file
+                val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile()
+                if (lstFavorite?.contains(documentFile) == true) {
+                    lstPopupMenu = R.menu.menu_more_file_favorite
+                }
+                showPopupMenu(view, lstPopupMenu, object : OnPopupMenuItemClickListener {
+                    override fun onClickItemPopupMenu(menuItem: MenuItem?) {
+                        when (menuItem?.itemId) {
+                            R.id.menu_rename -> {
+                                getBaseActivity()?.apply {
+                                    RenameFileDialog(this, documentFile, object : OnDialogItemClickListener {
+                                        override fun onClickItemConfirm(mData: MyFilesModel) {
+                                        }
+
+                                    }).show()
+                                }
+                            }
+                            R.id.menu_favorite -> {
+                                getBaseActivity()?.sharedPreferences?.setFavoriteFile(documentFile)
+                                RxBus.publish(EventsBus.RELOAD_FAVORITE)
+                            }
+                            R.id.menu_un_favorite -> {
+                                getBaseActivity()?.sharedPreferences?.removeFavoriteFile(documentFile)
+                                RxBus.publish(EventsBus.RELOAD_FAVORITE)
+                            }
+                            R.id.menu_share -> {
+                                documentFile.uriPath?.let { File(it) }?.let { shareFile(it) }
+                            }
+                            R.id.menu_delete -> {
+                                getBaseActivity()?.apply {
+                                    val deleteFileDialog = DeleteFileDialog(this, documentFile, object : OnDialogItemClickListener {
+                                        override fun onClickItemConfirm(mData: MyFilesModel) {
+                                        }
+                                    })
+                                    deleteFileDialog.show()
+                                }
+                            }
+                            R.id.menu_shortcut -> {
+                                getBaseActivity()?.apply {
+                                    setUpShortCut(this, documentFile)
+                                }
+                            }
+                            R.id.menu_file_info -> {
+                                getBaseActivity()?.apply {
+                                    FileInfoDialog(this, documentFile).show()
+                                }
+                            }
+                        }
+                    }
+
+                })
             }
 
         })
@@ -96,7 +153,8 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
                                     uriOldPath = mFile.uri.path,
                                     lastModified = mFile.lastModified(),
                                     extensionName = mFile.extension,
-                                    length = mFile.length()
+                                    length = mFile.length(),
+                                    locationFile = item.parentFile?.name
                                 )
                             lstChildFile.add(model)
                         }
@@ -111,7 +169,8 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
                             uriOldPath = item.uri.path,
                             lastModified = item.lastModified(),
                             extensionName = item.extension,
-                            length = item.length()
+                            length = item.length(),
+                            locationFile = item.parentFile?.name
                         )
                     lstAllFolder.add(model)
                 }

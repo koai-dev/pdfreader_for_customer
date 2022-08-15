@@ -1,6 +1,7 @@
 package com.cocna.pdffilereader.ui.home
 
 import android.content.Intent
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
@@ -24,11 +25,21 @@ class PdfViewActivity : BaseActivity<ActivityBaseBinding>() {
     override fun initData() {
 //        binding.prbLoadingMain.visible()
         val myModel = intent.extras?.getParcelable<MyFilesModel>(AppKeys.KEY_BUNDLE_DATA)
-        if (myModel == null) {
+        val fileName = intent.getStringExtra(AppKeys.KEY_BUNDLE_SHORTCUT_NAME)
+        val filePath = intent.getStringExtra(AppKeys.KEY_BUNDLE_SHORTCUT_PATH)
+        if (fileName?.isNotEmpty() == true && filePath?.isNotEmpty() == true) {
+            val myFilesModel = MyFilesModel(name = fileName, uriPath = filePath, uriOldPath = filePath, extensionName = "pdf")
+            val bundle = Bundle()
+            bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, myFilesModel)
+            intent.putExtras(bundle)
+        }
+        if (myModel == null && filePath.isNullOrEmpty()) {
 //            binding.prbLoadingMain.visible()
             loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE, object : OnCallbackLoadAds {
                 override fun onCallbackActionLoadAds(isSuccess: Boolean) {
-                    gotoPdfViewFragment()
+                    Handler(Looper.myLooper()!!).postDelayed({
+                        gotoPdfViewFragment()
+                    }, 500)
                 }
             })
         } else {
@@ -41,12 +52,12 @@ class PdfViewActivity : BaseActivity<ActivityBaseBinding>() {
 //            })
                 InterstitialUtils.sharedInstance?.showInterstitial(AppConfig.ID_ADS_INTERSTITIAL_FILE, this, object : OnCallbackLoadAds {
                     override fun onCallbackActionLoadAds(isSuccess: Boolean) {
-//                        Handler(Looper.myLooper()!!).postDelayed({
-                        if (!isSuccess) {
-                            Common.countShowAdsPdf = 0
-                        }
-                        gotoPdfViewFragment()
-//                        }, 500)
+                        Handler(Looper.myLooper()!!).postDelayed({
+                            if (!isSuccess) {
+                                Common.countShowAdsPdf = 0
+                            }
+                            gotoPdfViewFragment()
+                        }, 500)
                     }
                 })
             } else {

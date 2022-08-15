@@ -7,7 +7,6 @@
     <string name="btn_continue">Permettre</string>
     <string name="tt_request_store_permission">Autorisation requise</string>
     <string name="vl_request_store_permission_content">L\'autorisation d\'accès à tous les fichiers est requise pour lire les fichiers locaux.</string>
-    <string name="vl_request_read_permission_content">Lire une autorisation de stockage externe est nécessaire pour ce travail d\'application, veuillez l\'activer dans les paramètres de l\'appareil</string>
     <string name="menu_size">Taille</string>
     <string name="menu_name_a_z">Nommez A-Z</string>
     <string name="menu_name_z_a">Nom Z-A</string>
@@ -72,7 +71,8 @@
     <string name="msg_recent_empty">Vous n\'avez lu aucun fichier récemment</string>
     <string name="btn_click_here_read">Cliquez ici pour lire maintenant!</string>
     <string name="vl_history_file">Fichier historique (%d)</string>
-    <string name="vl_loading_ads">Chargement des annonces (%s)</string>
+<!--    <string name="vl_loading_ads">Chargement des annonces (%s)</string>-->
+    <string name="vl_loading_ads">Chargement des annonces</string>
     <string name="vl_well_comeback">Bon retour</string>
     <string name="tt_update_version">Mettre à jour l\'application</string>
     <string name="vl_contetn_update_version">Une nouvelle version de Upgrade est disponible. Souhaitez-vous le mettre à jour maintenant ?</string>

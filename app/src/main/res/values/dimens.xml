@@ -36,6 +36,7 @@
     <dimen name="width_image_menu_home">14dp</dimen>
     <dimen name="height_image_menu_home">16dp</dimen>
     <dimen name="height_image_change_theme">300dp</dimen>
+    <dimen name="height_rating_bar">25dp</dimen>
 
     <dimen name="text_size_title">18sp</dimen>
     <dimen name="text_size_content">13sp</dimen>
@@ -46,5 +47,6 @@
     <dimen name="text_size_sp14">14sp</dimen>
     <dimen name="text_size_sp15">15sp</dimen>
     <dimen name="text_size_sp24">24sp</dimen>
+    <dimen name="text_size_sp22">22sp</dimen>
     <dimen name="text_size_menu_change_theme">6sp</dimen>
 </resources>

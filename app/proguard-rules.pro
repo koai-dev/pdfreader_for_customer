@@ -99,3 +99,4 @@
 
 -keep class com.appsflyer.** { *; }
 -keep public class com.android.installreferrer.** { *; }
+-keep class androidx.appcompat.widget.** { *; }

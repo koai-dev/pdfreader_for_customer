@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.10281774580335731" />
+        <entry key="app/src/main/res/drawable-v24/bg_button_rate.xml" value="0.136" />
+        <entry key="app/src/main/res/drawable-v24/icon_menu_view_capture.xml" value="0.128" />
         <entry key="app/src/main/res/drawable/bg_border_button_all.xml" value="0.1695" />
         <entry key="app/src/main/res/drawable/bg_border_edittext_all.xml" value="0.1715" />
         <entry key="app/src/main/res/drawable/bg_border_edittext_edit_page.xml" value="0.1815" />
@@ -13,10 +15,13 @@
         <entry key="app/src/main/res/drawable/bg_border_search_home.xml" value="0.1715" />
         <entry key="app/src/main/res/drawable/bg_button_all.xml" value="0.1695" />
         <entry key="app/src/main/res/drawable/border_shadow.xml" value="0.1805" />
+        <entry key="app/src/main/res/drawable/custom_ratingbar_selector.xml" value="0.136" />
         <entry key="app/src/main/res/drawable/custom_thumb.xml" value="0.1805" />
         <entry key="app/src/main/res/drawable/horizontal_progress_bar.xml" value="0.182" />
         <entry key="app/src/main/res/drawable/ic236.xml" value="0.128" />
         <entry key="app/src/main/res/drawable/ic_all_files.xml" value="0.1715" />
+        <entry key="app/src/main/res/drawable/ic_back_all.xml" value="0.136" />
+        <entry key="app/src/main/res/drawable/ic_bookmark_selected.xml" value="0.136" />
         <entry key="app/src/main/res/drawable/ic_change_theme.xml" value="0.128" />
         <entry key="app/src/main/res/drawable/ic_change_theme_demo.xml" value="0.128" />
         <entry key="app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.1715" />
@@ -26,11 +31,18 @@
         <entry key="app/src/main/res/drawable/ic_menu_home_my_file.xml" value="0.1715" />
         <entry key="app/src/main/res/drawable/ic_menu_home_my_file_selected.xml" value="0.1715" />
         <entry key="app/src/main/res/drawable/ic_menu_home_setting_selected.xml" value="0.1715" />
+        <entry key="app/src/main/res/drawable/ic_page_by_page.xml" value="0.136" />
+        <entry key="app/src/main/res/drawable/ic_save_image_selected.xml" value="0.128" />
         <entry key="app/src/main/res/drawable/icon_menu_home_browse.xml" value="0.1715" />
         <entry key="app/src/main/res/drawable/icon_menu_home_favorite.xml" value="0.1715" />
         <entry key="app/src/main/res/drawable/icon_menu_home_my_file.xml" value="0.1715" />
         <entry key="app/src/main/res/drawable/icon_menu_home_setting.xml" value="0.1715" />
+        <entry key="app/src/main/res/drawable/icon_menu_view_capture.xml" value="0.128" />
+        <entry key="app/src/main/res/drawable/icon_menu_view_crop.xml" value="0.128" />
+        <entry key="app/src/main/res/drawable/icon_menu_view_save.xml" value="0.128" />
         <entry key="app/src/main/res/drawable/imv_theme_01.xml" value="0.1715" />
+        <entry key="app/src/main/res/drawable/ratingbar_empty.xml" value="0.136" />
+        <entry key="app/src/main/res/drawable/ratingbar_filled.xml" value="0.136" />
         <entry key="app/src/main/res/drawable/seekbar_progress.xml" value="0.1805" />
         <entry key="app/src/main/res/drawable/seekbar_style.xml" value="0.1805" />
         <entry key="app/src/main/res/drawable/text_color_selection_tab_layout.xml" value="0.1815" />
@@ -49,11 +61,14 @@
         <entry key="app/src/main/res/layout/content_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/dialog_confirm_file.xml" value="0.16041666666666668" />
         <entry key="app/src/main/res/layout/dialog_delete_file.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/dialog_file_info.xml" value="0.2615458170572917" />
         <entry key="app/src/main/res/layout/dialog_progress_bar.xml" value="0.225" />
         <entry key="app/src/main/res/layout/dialog_progress_load_ads.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/dialog_rating_app.xml" value="0.165" />
         <entry key="app/src/main/res/layout/dialog_rename_file.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/dialog_well_comeback.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_browse.xml" value="0.19583333333333333" />
+        <entry key="app/src/main/res/layout/fragment_crop_image.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/layout/fragment_favorite.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/fragment_history.xml" value="0.21510416666666668" />
@@ -75,6 +90,7 @@
         <entry key="app/src/main/res/layout/item_view_my_files.xml" value="0.20989583333333334" />
         <entry key="app/src/main/res/layout/item_view_my_folder.xml" value="0.21458333333333332" />
         <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/view_show_notification.xml" value="0.20520833333333333" />
         <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.146875" />
         <entry key="app/src/main/res/menu/main.xml" value="0.146875" />
         <entry key="app/src/main/res/menu/menu_more_all_file.xml" value="0.14114583333333333" />

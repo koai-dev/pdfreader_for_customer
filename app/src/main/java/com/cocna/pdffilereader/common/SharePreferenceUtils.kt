@@ -192,6 +192,9 @@ class SharePreferenceUtils(context: Context?) {
         const val KEY_FIRST_LOGIN = "KEY_FIRST_LOGIN"
         const val KEY_RECENT_FILE = "KEY_RECENT_FILE"
         const val KEY_FAVORITE_FILE = "KEY_FAVORITE_FILE"
+        const val KEY_NIGHT_MODE = "KEY_NIGHT_MODE"
+        const val KEY_PAGE_MODE = "KEY_PAGE_MODE"
+        const val KEY_SHOW_RATE_US = "KEY_SHOW_RATE_US"
 
         const val KEY_TIME_INSTALL = "KEY_TIME_INSTALL"
         const val KEY_SEND_EVENT_3DAYS = "KEY_SEND_EVENT_3DAYS"

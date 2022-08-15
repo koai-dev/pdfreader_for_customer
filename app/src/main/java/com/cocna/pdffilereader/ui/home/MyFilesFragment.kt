@@ -435,7 +435,9 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                                 uriOldPath = item.uri.path,
                                 lastModified = item.lastModified(),
                                 extensionName = item.extension,
-                                length = item.length()
+                                length = item.length(),
+                                locationFile = item.parentFile?.name
+
                             )
                         lstFilePdf.add(model)
                     }

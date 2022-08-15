@@ -18,6 +18,7 @@ import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.base.OnCallbackTittleTab
 import com.cocna.pdffilereader.ui.home.adapter.MyFilesAdapter
 import com.cocna.pdffilereader.ui.home.dialog.DeleteFileDialog
+import com.cocna.pdffilereader.ui.home.dialog.FileInfoDialog
 import com.cocna.pdffilereader.ui.home.dialog.RenameFileDialog
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.google.gson.Gson
@@ -227,6 +228,16 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                                             }
                                         })
                                         deleteFileDialog.show()
+                                    }
+                                }
+                                R.id.menu_shortcut -> {
+                                    getBaseActivity()?.apply {
+                                        setUpShortCut(this, documentFile)
+                                    }
+                                }
+                                R.id.menu_file_info -> {
+                                    getBaseActivity()?.apply {
+                                        FileInfoDialog(this, documentFile).show()
                                     }
                                 }
                             }

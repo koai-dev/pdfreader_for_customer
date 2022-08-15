@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_all"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="@dimen/corner_radius_dialog"
+        app:cardUseCompatPadding="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/margin_all">
+
+            <ImageView
+                android:id="@+id/imv_close_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close_search"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imv_rate_status"
+                android:layout_width="@dimen/height_toolbar_home"
+                android:layout_height="@dimen/height_toolbar_home"
+                android:padding="@dimen/margin_small"
+                android:src="@mipmap/ic_rate_very_good"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imv_close_rate" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/vl_title_rate"
+                style="@style/Text_Title_Rate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:gravity="center"
+                android:text="@string/tt_rating_app_very_good"
+                app:layout_constraintTop_toBottomOf="@id/imv_rate_status" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/vl_content_rate"
+                style="@style/Text_Content_Rate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/margin_small"
+                android:text="@string/vl_rating_app_very_good"
+                app:layout_constraintTop_toBottomOf="@id/vl_title_rate" />
+
+            <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                android:id="@+id/rate_bar_app"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:mrb_progressBackgroundTint="@color/color_E57373"
+                app:mrb_progressTint="@color/color_FFCC00"
+                android:numStars="5"
+                android:rating="5"
+                android:stepSize="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vl_content_rate" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_rate_app"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/rate_bar_app"
+                style="@style/Button_Confirm_All"
+                android:background="@drawable/bg_button_rate"
+                android:layout_marginStart="@dimen/height_button"
+                android:layout_marginEnd="@dimen/height_button"
+                android:layout_marginTop="@dimen/margin_double_all"
+                android:layout_marginBottom="@dimen/margin_all"
+                android:text="@string/btn_rate"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

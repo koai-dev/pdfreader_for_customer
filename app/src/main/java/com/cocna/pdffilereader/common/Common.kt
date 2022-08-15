@@ -24,6 +24,7 @@ object Common {
     var lstDataDetail: ArrayList<MyFilesModel>? = null
     var listAllData: ArrayList<MyFilesModel>? = null
     var listAllFolder: ArrayList<MyFilesModel>? = null
+    var isFirstOpenPdf: Boolean? = false
 
     @Keep
     var mNativeAdLanguage: NativeAd? = null

@@ -236,6 +236,15 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         fragmentTransaction.replace(containerId, fragment)
         fragmentTransaction.commit()
     }
+    fun addFragment(fragment: Fragment, bundle: Bundle?, containerId: Int) {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        bundle?.let {
+            fragment.arguments = it
+        }
+        fragmentTransaction.add(containerId, fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
 
     fun printFile(myFilesModel: MyFilesModel) {
         try {

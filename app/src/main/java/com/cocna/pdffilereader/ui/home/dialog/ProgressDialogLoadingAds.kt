@@ -56,7 +56,8 @@ class ProgressDialogLoadingAds(private val mContext: BaseActivity<*>) : Dialog(m
             countDownTimer = object : CountDownTimer(30 * 1000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     val second = (millisUntilFinished / 1000).toInt()
-                    binding?.vlLoadingAds?.text = context.getString(R.string.vl_loading_ads, (second.toString().plus("s")))
+//                    binding?.vlLoadingAds?.text = context.getString(R.string.vl_loading_ads, (second.toString().plus("s")))
+                    binding?.vlLoadingAds?.text = context.getString(R.string.vl_loading_ads)
                 }
 
                 override fun onFinish() {

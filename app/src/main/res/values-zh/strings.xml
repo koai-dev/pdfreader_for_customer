@@ -60,7 +60,6 @@
     <string name="btn_continue">允许</string>
     <string name="tt_request_store_permission">需要许可</string>
     <string name="vl_request_store_permission_content">读取本地文件需要所有文件访问权限。</string>
-    <string name="vl_request_read_permission_content">阅读此应用程序需要的外部存储权限，请在设备设置中启用它</string>
     <string name="vl_share_application">共享申请</string>
     <string name="vl_share_application_content">与您的朋友分享申请</string>
     <string name="vl_jump_to">跳到：</string>
@@ -73,7 +72,8 @@
 
     <string name="btn_click_here_read">点击这里立即阅读！</string>
     <string name="vl_history_file">历史文件 (%d)</string>
-    <string name="vl_loading_ads">加载广告 (%s)</string>
+<!--    <string name="vl_loading_ads">加载广告 (%s)</string>-->
+    <string name="vl_loading_ads">加载广告</string>
     <string name="btn_update_now">现在更新</string>
     <string name="tt_update_version">更新应用</string>
     <string name="vl_well_comeback">欢迎回来</string>

@@ -31,7 +31,6 @@ android {
             debuggable true
             minifyEnabled false
             shrinkResources false
-
         }
     }
     compileOptions {
@@ -82,4 +81,6 @@ dependencies {
 
     implementation 'in.gauriinfotech:commons:1.0.8'
     implementation 'com.appsflyer:af-android-sdk:6.3.2'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+    implementation 'me.zhanghai.android.materialratingbar:library:1.4.0'
 }

@@ -8,7 +8,6 @@
     <string name="btn_continue">Mengizinkan</string>
     <string name="tt_request_store_permission">Izin Diperlukan</string>
     <string name="vl_request_store_permission_content">Semua izin akses file diperlukan untuk membaca file lokal.</string>
-    <string name="vl_request_read_permission_content">Baca izin penyimpanan eksternal diperlukan untuk pekerjaan aplikasi ini, harap aktifkan di pengaturan perangkat</string>
     <string name="menu_size">Ukuran</string>
     <string name="menu_name_a_z">Nama A-Z</string>
     <string name="menu_name_z_a">Nama Z-A</string>
@@ -73,7 +72,8 @@
     <string name="vl_size_folder">%d berkas</string>
     <string name="btn_click_here_read">Klik di sini untuk membaca sekarang!</string>
     <string name="vl_history_file">Berkas Riwayat (%d)</string>
-    <string name="vl_loading_ads">Memuat Iklan (%s)</string>
+<!--    <string name="vl_loading_ads">Memuat Iklan (%s)</string>-->
+    <string name="vl_loading_ads">Memuat Iklan</string>
     <string name="vl_well_comeback">Selamat datang kembali</string>
     <string name="tt_update_version">Perbarui Aplikasi</string>
     <string name="vl_contetn_update_version">Versi baru Upgrade tersedia. Apakah Anda ingin memperbaruinya sekarang?</string>

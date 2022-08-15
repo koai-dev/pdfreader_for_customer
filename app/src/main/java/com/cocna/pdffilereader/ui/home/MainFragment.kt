@@ -13,6 +13,7 @@ import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.FragmentMainBinding
 import com.cocna.pdffilereader.ui.base.BaseFragment
+import com.cocna.pdffilereader.ui.home.dialog.RatingAppDialog
 import com.cocna.pdffilereader.ui.home.model.AdsLogModel
 import com.google.android.gms.ads.*
 
@@ -200,6 +201,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     override fun onResume() {
         super.onResume()
         adView.resume()
+        if (Common.isFirstOpenPdf == true && getBaseActivity()?.sharedPreferences?.getValueBoolean(SharePreferenceUtils.KEY_SHOW_RATE_US) != true) {
+            getBaseActivity()?.apply {
+                if (isVisible) {
+                    sharedPreferences.setValueBoolean(SharePreferenceUtils.KEY_SHOW_RATE_US, true)
+                    RatingAppDialog(this).show()
+
+                }
+            }
+        }
     }
 
     /** Called before the activity is destroyed  */

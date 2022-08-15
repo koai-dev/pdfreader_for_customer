@@ -33,6 +33,7 @@
         <item name="android:textSize">@dimen/text_size_menu_home</item>
         <item name="android:fontFamily">@font/googlesans_medium</item>
     </style>
+
     <style name="Text_Menu_Home_Change_Theme">
         <item name="android:textSize">@dimen/text_size_menu_change_theme</item>
         <item name="android:fontFamily">@font/googlesans_medium</item>
@@ -224,6 +225,36 @@
         <item name="android:textSize">@dimen/text_size_sp12</item>
         <item name="android:fontFamily">@font/googlesans_medium</item>
         <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="Text_Title_Success">
+        <item name="android:textColor">@color/color_success</item>
+        <item name="android:textSize">@dimen/text_size_sp14</item>
+        <item name="android:fontFamily">@font/googlesans_regular</item>
+    </style>
+
+    <style name="Text_Content_Success">
+        <item name="android:textColor">@color/color_323741</item>
+        <item name="android:textSize">@dimen/text_size_sp12</item>
+        <item name="android:fontFamily">@font/googlesans_regular</item>
+    </style>
+
+    <style name="Text_Title_Rate">
+        <item name="android:textColor">@color/color_black</item>
+        <item name="android:textSize">@dimen/text_size_sp14</item>
+        <item name="android:fontFamily">@font/googlesans_medium</item>
+    </style>
+
+    <style name="Text_Content_Rate">
+        <item name="android:textColor">@color/color_black</item>
+        <item name="android:textSize">@dimen/text_size_sp14</item>
+        <item name="android:fontFamily">@font/googlesans_regular</item>
+    </style>
+
+    <style name="Text_Content_Info">
+        <item name="android:textColor">@color/rgb_4B636E</item>
+        <item name="android:textSize">@dimen/text_size_sp14</item>
+        <item name="android:fontFamily">@font/googlesans_regular</item>
     </style>
 
 </resources>

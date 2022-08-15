@@ -67,13 +67,13 @@
     <string name="btn_continue">अनुमति देना</string>
     <string name="tt_request_store_permission">अनुमति आवश्यक</string>
     <string name="vl_request_store_permission_content">स्थानीय फाइलों को पढ़ने के लिए सभी फाइलों तक पहुंच की अनुमति आवश्यक है।</string>
-    <string name="vl_request_read_permission_content">इस ऐप के काम के लिए बाहरी संग्रहण अनुमति की आवश्यकता है, कृपया इसे डिवाइस सेटिंग्स में सक्षम करें</string>
     <string name="vl_size_folder">%d फ़ाइल</string>
     <string name="msg_recent_empty">आपने हाल ही में कोई फ़ाइल नहीं पढ़ी</string>
     <string name="msg_import_please_wait">आयात किया जा रहा है… कृपया प्रतीक्षा करें</string>
     <string name="btn_click_here_read">अभी पढ़ने के लिए यहां क्लिक करें!</string>
     <string name="vl_history_file">इतिहास फ़ाइल (%d)</string>
-    <string name="vl_loading_ads">विज्ञापन लोड हो रहा है (%s)</string>
+<!--    <string name="vl_loading_ads">विज्ञापन लोड हो रहा है (%s)</string>-->
+    <string name="vl_loading_ads">विज्ञापन लोड हो रहा है</string>
     <string name="vl_well_comeback">फिर स्वागत है</string>
     <string name="tt_update_version">अपडेट ऐप</string>
     <string name="vl_contetn_update_version">अपग्रेड का एक नया संस्करण उपलब्ध है। क्या आप इसे अभी अपडेट करना चाहेंगे?</string>
