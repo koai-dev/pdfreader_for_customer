@@ -1,13 +1,19 @@
 package com.cocna.pdffilereader.ui.home
 
+import android.Manifest
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.anggrayudi.storage.file.DocumentFileType
@@ -122,6 +128,9 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
                 if (Common.listAllFolder.isNullOrEmpty()) {
                     if (PermissionUtil.checkExternalStoragePermission(this)) {
                         getAllFileInDevice()
+                    } else {
+                        binding.llGoToSetting.visible()
+                        binding.rcvFolderList.gone()
                     }
                 } else {
                     lstAllFolder = Common.listAllFolder!!
@@ -133,11 +142,18 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
     }
 
     override fun initEvents() {
+        binding.btnGoToSetting.setOnClickListener {
+            MultiClickPreventer.preventMultiClick(it)
+            requestPermission()
+        }
+
     }
 
     private fun getAllFileInDevice() {
         Thread {
             Logger.showLog("Thuytv---------getAllFileInDevice---Browse")
+            binding.llGoToSetting.gone()
+            binding.rcvFolderList.visible()
             val root = DocumentFile.fromFile(File(PATH_DEFAULT_STORE))
             val mimePDF = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")!!
             for (item in root.listFiles()) {
@@ -154,7 +170,7 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
                                     lastModified = mFile.lastModified(),
                                     extensionName = mFile.extension,
                                     length = mFile.length(),
-                                    locationFile = item.parentFile?.name
+                                    locationFile = item.parentFile?.uri?.path
                                 )
                             lstChildFile.add(model)
                         }
@@ -170,7 +186,7 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
                             lastModified = item.lastModified(),
                             extensionName = item.extension,
                             length = item.length(),
-                            locationFile = item.parentFile?.name
+                            locationFile = item.parentFile?.uri?.path
                         )
                     lstAllFolder.add(model)
                 }
@@ -241,5 +257,51 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
 
     fun onSearchFolder(strName: String) {
         mFolderAdapter.filter.filter(strName)
+    }
+
+    private fun requestPermission() {
+        getBaseActivity()?.apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                try {
+                    val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                    intent.addCategory("android.intent.category.DEFAULT")
+                    intent.data = Uri.parse(java.lang.String.format("package:%s", getBaseActivity()?.packageName))
+                    resultLauncher.launch(intent)
+                } catch (e: Exception) {
+                    val intent = Intent()
+                    intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                    resultLauncher.launch(intent)
+                }
+            } else {
+//                requestPermissionLauncher.launch(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                requestPermissionLauncher.launch(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE))
+            }
+        }
+    }
+
+    private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        getBaseActivity()?.apply {
+            Logger.showLog("Thuytv---------resultLauncher--:" + PermissionUtil.checkExternalStoragePermission(this))
+            if (PermissionUtil.checkExternalStoragePermission(this)) {
+                getAllFileInDevice()
+                RxBus.publish(EventsBus.PERMISSION_STORED_GRANTED)
+            } else {
+                binding.llGoToSetting.visible()
+            }
+        }
+    }
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val isGranted = permissions.entries.all {
+            it.value == true
+        }
+        Logger.showLog("Thuytv---------requestPermissionLauncher : $isGranted")
+        if (isGranted) {
+            getAllFileInDevice()
+            RxBus.publish(EventsBus.PERMISSION_STORED_GRANTED)
+        } else {
+            binding.llGoToSetting.visible()
+        }
     }
 }

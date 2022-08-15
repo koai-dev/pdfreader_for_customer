@@ -165,8 +165,7 @@
         android:orientation="horizontal"
         android:paddingStart="@dimen/margin_all"
         android:paddingEnd="@dimen/margin_all"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/ad_view_container">
+        app:layout_constraintBottom_toTopOf="@id/ll_bottom_menu">
 
         <!--        <androidx.appcompat.widget.AppCompatSeekBar-->
         <!--            android:id="@+id/seekbarJumpToPage"-->
@@ -219,8 +218,7 @@
         android:id="@+id/pdfViewer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/ll_bottom_menu"
+        app:layout_constraintBottom_toTopOf="@id/llJumpToPage"
         app:layout_constraintTop_toBottomOf="@id/frame_ads_native_pdf" />
 
     <include
@@ -262,7 +260,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="viewBgPage, vlPageAndTotalPage" />
+        app:constraint_referenced_ids="viewBgPage, vlPageAndTotalPage,llJumpToPage, ll_bottom_menu" />
 
     <LinearLayout
         android:id="@+id/llJumpToPageEdit"

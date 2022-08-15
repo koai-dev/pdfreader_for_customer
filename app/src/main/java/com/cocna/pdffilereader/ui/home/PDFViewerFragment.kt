@@ -1,6 +1,5 @@
 package com.cocna.pdffilereader.ui.home
 
-import `in`.gauriinfotech.commons.Commons
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
@@ -8,9 +7,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
 import android.os.*
-import android.util.Base64
-import android.util.Base64.DEFAULT
-import android.util.Base64.encodeToString
 import android.util.DisplayMetrics
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -32,6 +28,7 @@ import com.cocna.pdffilereader.ui.home.model.AdsLogModel
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.github.barteksc.pdfviewer.PDFView
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener
+import com.github.barteksc.pdfviewer.listener.OnPageScrollListener
 import com.github.barteksc.pdfviewer.listener.OnTapListener
 import com.github.barteksc.pdfviewer.util.FitPolicy
 import com.google.android.gms.ads.*
@@ -63,6 +60,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
     private var isNightMode = false
     private var isPageMode = false
     private var isBookmark = false
+    private var oldPage = 0
 
     // Determine the screen width (less decorations) to use for the ad width.
     // If the ad hasn't been laid out, default to the full screen width.
@@ -107,7 +105,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         if (myFileModel == null) {
             val uriPath = arguments?.getParcelable<Uri>(Intent.EXTRA_STREAM)
             uriPath?.apply {
-//                val fullPath = Commons.getPath(this, getBaseActivity())
+//                val fullPath = RealPathUtil.getFilePathForN(getBaseActivity()!!, this)
                 val fullPath = RealPathUtil.getRealPath(getBaseActivity()!!, this)
                 myFileModel = MyFilesModel(uriPath = fullPath, uriOldPath = fullPath, extensionName = "pdf")
 
@@ -253,6 +251,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                     .fitEachPage(true)
                     .pageFitPolicy(FitPolicy.WIDTH)
                     .onPageChange(onPageChangeListener)
+                    .onPageScroll(onPageScrollListener)
                     .pageFitPolicy(FitPolicy.WIDTH)
                     .onTap(onTapListener)
                     .onLoad {
@@ -280,12 +279,20 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         }
     }
 
+    private val onPageScrollListener = OnPageScrollListener { page, positionOffset ->
+        Logger.showLog("Thuytv-----onPageScrollListener---page: $page ---oldPage: $oldPage")
+        if (binding.llToolbarPdf.visibility == View.VISIBLE && page > 0 && oldPage != page) {
+            oldPage = page
+            binding.llToolbarPdf.gone()
+            binding.groupPageViewer.gone()
+        } else {
+            oldPage = page
+        }
+    }
+
     @SuppressLint("SetTextI18n")
     private val onPageChangeListener = OnPageChangeListener { page, pageCount ->
         if (!isLoadedAds) {
-            if (binding.groupPageViewer.visibility == View.GONE) {
-                binding.groupPageViewer.visible()
-            }
             currentPage = page + 1
             binding.vlPageAndTotalPage.text = getString(R.string.vl_total_page, currentPage, pageCount)
             binding.vlJumpPage.text = getString(R.string.vl_page, currentPage)
@@ -293,6 +300,9 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             isTouchSlider = false
             binding.seekbarJumpToPage.value = currentPage.toFloat()
             if (isFirst) {
+                if (binding.groupPageViewer.visibility == View.GONE) {
+                    binding.groupPageViewer.visible()
+                }
                 binding.seekbarJumpToPage.valueTo = pageCount.toFloat()
                 binding.vlTotalPage.text = "/ $pageCount"
                 binding.vlJumpTotalPageEdit.text = "/ $pageCount"
@@ -303,6 +313,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             isLoadedAds = false
         }
     }
+
     private val onTapListener = OnTapListener {
         if (binding.llToolbarPdf.visibility == View.GONE) {
             binding.llToolbarPdf.visible()
@@ -311,7 +322,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             binding.llToolbarPdf.gone()
             binding.groupPageViewer.gone()
         }
-        true
+        false
     }
 
     override fun onClick(v: View?) {
@@ -342,16 +353,30 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                                 }
                             }
                             R.id.menu_favorite -> {
-                                if (myFileModel != null) {
-                                    getBaseActivity()?.sharedPreferences?.setFavoriteFile(myFileModel!!)
-                                    RxBus.publish(EventsBus.RELOAD_FAVORITE)
-                                }
+//                                if (myFileModel != null) {
+//                                    getBaseActivity()?.sharedPreferences?.setFavoriteFile(myFileModel!!)
+//                                    RxBus.publish(EventsBus.RELOAD_FAVORITE)
+//                                    binding.imvViewBookmark.setImageResource(R.drawable.ic_bookmark_selected)
+//                                    if(!isNightMode){
+//                                        getBaseActivity()?.apply {
+//                                            binding.imvViewBookmark.setColorFilter(ContextCompat.getColor(this, R.color.rgb_F44336))
+//                                        }
+//                                    }
+//                                }
+                                bookMarkFile()
                             }
                             R.id.menu_un_favorite -> {
-                                if (myFileModel != null) {
-                                    getBaseActivity()?.sharedPreferences?.removeFavoriteFile(myFileModel!!)
-                                    RxBus.publish(EventsBus.RELOAD_FAVORITE)
-                                }
+//                                if (myFileModel != null) {
+//                                    getBaseActivity()?.sharedPreferences?.removeFavoriteFile(myFileModel!!)
+//                                    RxBus.publish(EventsBus.RELOAD_FAVORITE)
+//                                    binding.imvViewBookmark.setImageResource(R.drawable.ic_bookmark)
+//                                    if(!isNightMode){
+//                                        getBaseActivity()?.apply {
+//                                            binding.imvViewBookmark.setColorFilter(ContextCompat.getColor(this, R.color.rgb_62757F))
+//                                        }
+//                                    }
+//                                }
+                                bookMarkFile()
                             }
                             R.id.menu_share -> {
                                 myFileModel?.uriPath?.let { File(it) }?.let { shareFile(it) }

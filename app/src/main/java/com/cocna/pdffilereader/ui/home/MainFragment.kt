@@ -205,7 +205,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             getBaseActivity()?.apply {
                 if (isVisible) {
                     sharedPreferences.setValueBoolean(SharePreferenceUtils.KEY_SHOW_RATE_US, true)
-                    RatingAppDialog(this).show()
+                    RatingAppDialog(this, true).show()
 
                 }
             }

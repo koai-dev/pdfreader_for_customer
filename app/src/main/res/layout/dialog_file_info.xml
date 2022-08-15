@@ -116,11 +116,14 @@
             <TextView
                 android:id="@+id/vl_info_location"
                 style="@style/Text_Content_Info"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_small"
+                android:layout_marginStart="@dimen/margin_small"
+                android:gravity="center|end"
                 app:layout_constraintBottom_toBottomOf="@id/tt_info_location"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tt_info_location"
                 app:layout_constraintTop_toTopOf="@id/tt_info_location" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

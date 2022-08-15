@@ -42,7 +42,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(), View.OnClickList
             }
             R.id.llSettingRate -> {
                 getBaseActivity()?.apply {
-                    RatingAppDialog(this).show()
+                    RatingAppDialog(this, false).show()
                 }
             }
             R.id.llSettingTerm -> {

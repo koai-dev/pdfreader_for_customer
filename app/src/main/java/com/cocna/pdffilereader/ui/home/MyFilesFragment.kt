@@ -13,13 +13,11 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.MimeTypeMap
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.documentfile.provider.DocumentFile
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager.widget.ViewPager
 import com.anggrayudi.storage.file.*
 import com.cocna.pdffilereader.R
@@ -29,7 +27,6 @@ import com.cocna.pdffilereader.myinterface.OnPopupMenuItemClickListener
 import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.base.OnCallbackTittleTab
 import com.cocna.pdffilereader.ui.home.adapter.TabFileAdapter
-import com.cocna.pdffilereader.ui.home.dialog.ProgressDialog
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import io.reactivex.disposables.Disposable
 import java.io.File
@@ -372,6 +369,8 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
             }
             .setNegativeButton(getString(R.string.btn_cancel)) { _, _ ->
                 binding.llGoToSetting.visible()
+            }.setOnCancelListener {
+                binding.llGoToSetting.visible()
             }
         permissionDeniedDialog.show()
     }
@@ -436,7 +435,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                                 lastModified = item.lastModified(),
                                 extensionName = item.extension,
                                 length = item.length(),
-                                locationFile = item.parentFile?.name
+                                locationFile = item.parentFile?.uri?.path
 
                             )
                         lstFilePdf.add(model)

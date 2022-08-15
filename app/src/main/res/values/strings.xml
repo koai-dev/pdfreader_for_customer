@@ -109,7 +109,8 @@
     <string name="vl_save">Save</string>
     <string name="tt_rating_app_very_good">We like you too!</string>
     <string name="vl_rating_app_very_good">Thank you for choosing us</string>
-
+    <string name="tt_rating_app_very_good_first">Thank you for choosing us!</string>
+    <string name="vl_rating_app_very_good_first">We are working hard for a better user experience. Please tell us your feeling with the app.</string>
     <string name="tt_rating_app_bad">Oh, no! Sorry for your experience</string>
     <string name="vl_rating_app_bad">Please leave us some feedback</string>
     <string name="btn_rate">Rate</string>

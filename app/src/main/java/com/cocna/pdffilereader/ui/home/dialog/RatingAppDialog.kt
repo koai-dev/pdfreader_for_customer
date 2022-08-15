@@ -22,7 +22,7 @@ import me.zhanghai.android.materialratingbar.MaterialRatingBar
  * Created by Thuytv on 13/06/2022.
  */
 class RatingAppDialog(
-    private val mContext: Context
+    private val mContext: Context, private val isFirst: Boolean
 ) : Dialog(mContext, R.style.AlertDialogStyle) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +36,13 @@ class RatingAppDialog(
 
         val binding: DialogRatingAppBinding = DialogRatingAppBinding.inflate(LayoutInflater.from(mContext))
         setContentView(binding.root)
+        if (isFirst) {
+            binding.vlTitleRate.text = mContext.getString(R.string.tt_rating_app_very_good_first)
+            binding.vlContentRate.text = mContext.getString(R.string.vl_rating_app_very_good_first)
+        } else {
+            binding.vlTitleRate.text = mContext.getString(R.string.tt_rating_app_very_good)
+            binding.vlContentRate.text = mContext.getString(R.string.vl_rating_app_very_good)
+        }
 
         binding.rateBarApp.onRatingChangeListener =
             MaterialRatingBar.OnRatingChangeListener { _, rating -> updateViewRating(binding, rating) }
@@ -58,8 +65,13 @@ class RatingAppDialog(
     private fun updateViewRating(binding: DialogRatingAppBinding, rating: Float) {
         if (rating >= 4) {
             binding.imvRateStatus.setImageResource(R.mipmap.ic_rate_very_good)
-            binding.vlTitleRate.text = mContext.getString(R.string.tt_rating_app_very_good)
-            binding.vlContentRate.text = mContext.getString(R.string.vl_rating_app_very_good)
+            if (isFirst) {
+                binding.vlTitleRate.text = mContext.getString(R.string.tt_rating_app_very_good_first)
+                binding.vlContentRate.text = mContext.getString(R.string.vl_rating_app_very_good_first)
+            } else {
+                binding.vlTitleRate.text = mContext.getString(R.string.tt_rating_app_very_good)
+                binding.vlContentRate.text = mContext.getString(R.string.vl_rating_app_very_good)
+            }
             binding.btnRateApp.text = mContext.getString(R.string.btn_rate)
         } else {
             if (rating == 3f) {

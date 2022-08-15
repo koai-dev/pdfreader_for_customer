@@ -1,14 +1,19 @@
 package com.cocna.pdffilereader.common
 
 import android.annotation.SuppressLint
-import android.provider.DocumentsContract
-import com.cocna.pdffilereader.common.RealPathUtil
 import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
+import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.provider.OpenableColumns
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import kotlin.math.min
+
 
 object RealPathUtil {
     /**
@@ -89,7 +94,7 @@ object RealPathUtil {
             column
         )
         try {
-            Logger.showLog("Thuytv----uri: "+ uri?.path)
+            Logger.showLog("Thuytv----uri: " + uri?.path)
             cursor = context.contentResolver.query(
                 uri!!, projection, selection, selectionArgs,
                 null
@@ -98,8 +103,11 @@ object RealPathUtil {
                 val index = cursor.getColumnIndexOrThrow(column)
                 return cursor.getString(index)
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
+            uri?.apply {
+                return getFilePathForN(context, uri)
+            }
         } finally {
             cursor?.close()
         }
@@ -137,5 +145,40 @@ object RealPathUtil {
      */
     fun isGooglePhotosUri(uri: Uri): Boolean {
         return "com.google.android.apps.photos.content" == uri.authority
+    }
+
+    @SuppressLint("Recycle")
+    fun getFilePathForN(context: Context, uri: Uri): String? {
+        val returnCursor = context.contentResolver.query(uri, null, null, null, null)
+        /*
+     * Get the column indexes of the data in the Cursor,
+     *     * move to the first row in the Cursor, get the data,
+     *     * and display it.
+     * */
+        val nameIndex = returnCursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        val sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE)
+        returnCursor.moveToFirst()
+        val name = returnCursor.getString(nameIndex)
+        val file = File(context.filesDir, name)
+        try {
+            val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
+            inputStream?.apply {
+                val outputStream = FileOutputStream(file)
+                var read = 0
+                val maxBufferSize = 1 * 1024 * 1024
+                val bytesAvailable: Int = inputStream.available()
+
+                //int bufferSize = 1024;
+                val bufferSize = min(bytesAvailable, maxBufferSize)
+                val buffers = ByteArray(bufferSize)
+                while (inputStream.read(buffers).also { read = it } != -1) {
+                    outputStream.write(buffers, 0, read)
+                }
+                inputStream.close()
+                outputStream.close()
+            }
+        } catch (e: java.lang.Exception) {
+        }
+        return file.path
     }
 }
