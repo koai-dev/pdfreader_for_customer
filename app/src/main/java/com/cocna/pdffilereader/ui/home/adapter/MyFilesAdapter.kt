@@ -51,26 +51,23 @@ class MyFilesAdapter(
 
     private fun updateDataAds(mListData: ArrayList<MyFilesModel>): ArrayList<MyFilesModel> {
         if (mListData.isNotEmpty()) {
-            mFileListWithAds.clear()
-            adsPosition = 0
-            for (item in mListData) {
-                if (adsPosition == 5) {
-                    val adsFile = MyFilesModel()
-                    adsFile.isAds = true
-                    mFileListWithAds.add(adsFile)
-                    adsPosition = 0
-                }
-                item.isAds = false
-                mFileListWithAds.add(item)
-                adsPosition++
-            }
+//            mFileListWithAds.clear()
+//            adsPosition = 0
+//            for (item in mListData) {
+//                if (adsPosition == 5) {
+//                    val adsFile = MyFilesModel()
+//                    adsFile.isAds = true
+//                    mFileListWithAds.add(adsFile)
+//                    adsPosition = 0
+//                }
+//                item.isAds = false
+//                mFileListWithAds.add(item)
+//                adsPosition++
+//            }
+            mFileListWithAds = mListData
         } else {
             mFileListWithAds = ArrayList()
         }
-//        else if (typeAdapter == TYPE_VIEW_FILE_GRID || typeAdapter == TYPE_VIEW_FOLDER) {
-//            mFileListWithAds.clear()
-//            mFileListWithAds.addAll(mListData)
-//        }
         return mFileListWithAds
     }
 
@@ -236,8 +233,12 @@ class MyFilesAdapter(
 
                 val adLoader = builder.withAdListener(object : AdListener() {
                     override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                        setLogDataToFirebase(AdsLogModel(adsId = AppConfig.ID_ADS_NATIVE_FILE, adsName = "Ads Native File", message = loadAdError.message,
-                            deviceName = Common.getDeviceName(mContext)))
+                        setLogDataToFirebase(
+                            AdsLogModel(
+                                adsId = AppConfig.ID_ADS_NATIVE_FILE, adsName = "Ads Native File", message = loadAdError.message,
+                                deviceName = Common.getDeviceName(mContext)
+                            )
+                        )
                     }
                 }).build()
 
@@ -247,6 +248,7 @@ class MyFilesAdapter(
 
         }
     }
+
     private fun setLogDataToFirebase(adsLogModel: AdsLogModel) {
         try {
             val reference = FirebaseDatabase.getInstance().getReference("AdsError")

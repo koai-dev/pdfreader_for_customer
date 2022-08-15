@@ -419,7 +419,6 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                             }
                         }
                     }
-
                 })
             }
             R.id.imv_change_mode -> {

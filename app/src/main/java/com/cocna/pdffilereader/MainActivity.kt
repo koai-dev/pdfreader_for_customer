@@ -4,12 +4,14 @@ import android.view.LayoutInflater
 import com.cocna.pdffilereader.databinding.ActivityBaseBinding
 import com.cocna.pdffilereader.ui.base.BaseActivity
 import com.cocna.pdffilereader.ui.home.MainFragment
+import com.cocna.pdffilereader.ui.home.dialog.LoadingAdsDialog
 
 class MainActivity : BaseActivity<ActivityBaseBinding>() {
     override val bindingInflater: (LayoutInflater) -> ActivityBaseBinding = ActivityBaseBinding::inflate
 
 
     override fun initData() {
+        LoadingAdsDialog.newInstance(this).show(supportFragmentManager, "LOADING_ADS")
         replaceFragment(MainFragment(), intent.extras, R.id.layout_container)
     }
 
@@ -22,7 +24,6 @@ class MainActivity : BaseActivity<ActivityBaseBinding>() {
         // destroying it. Therefore, MainActivity will be shown when the user switches back to the app.
         moveTaskToBack(true)
     }
-
 
 
 }

@@ -35,11 +35,11 @@ class ProgressDialogLoadingAds(private val mContext: BaseActivity<*>) : Dialog(m
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            window?.setBackgroundDrawable(ColorDrawable(context.resources.getColor(android.R.color.transparent, context.theme)))
+            window?.setBackgroundDrawable(ColorDrawable(mContext.resources.getColor(android.R.color.transparent, mContext.theme)))
         } else {
-            window?.setBackgroundDrawable(ColorDrawable(context.resources.getColor(android.R.color.transparent)))
+            window?.setBackgroundDrawable(ColorDrawable(mContext.resources.getColor(android.R.color.transparent)))
         }
-        val bind: DialogProgressLoadAdsBinding = DialogProgressLoadAdsBinding.inflate(LayoutInflater.from(context))
+        val bind: DialogProgressLoadAdsBinding = DialogProgressLoadAdsBinding.inflate(LayoutInflater.from(mContext))
         setContentView(bind.root)
         setCancelable(false)
         startCountDown(bind)
@@ -55,7 +55,7 @@ class ProgressDialogLoadingAds(private val mContext: BaseActivity<*>) : Dialog(m
         if (countDownTimer == null) {
             countDownTimer = object : CountDownTimer(30 * 1000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
-                    val second = (millisUntilFinished / 1000).toInt()
+//                    val second = (millisUntilFinished / 1000).toInt()
 //                    binding?.vlLoadingAds?.text = context.getString(R.string.vl_loading_ads, (second.toString().plus("s")))
                     binding?.vlLoadingAds?.text = context.getString(R.string.vl_loading_ads)
                 }

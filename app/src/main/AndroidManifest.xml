@@ -58,14 +58,14 @@
 
         <activity
             android:name=".ui.home.PdfViewActivity"
+            android:exported="true"
             android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"
-            android:exported="true">
-            <intent-filter  tools:ignore="AppLinkUrlError">
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden">
+            <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/pdf" />
-<!--                <data android:mimeType="*/*" android:host="*" android:pathPattern=".*.csv" />-->
+                <!--                <data android:mimeType="*/*" android:host="*" android:pathPattern=".*.csv" />-->
             </intent-filter>
         </activity>
         <activity

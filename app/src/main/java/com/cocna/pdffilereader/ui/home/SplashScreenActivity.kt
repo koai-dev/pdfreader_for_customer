@@ -79,20 +79,20 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
     }
 
     private fun loadAds() {
-        loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL, object : OnCallbackLoadAds {
-            override fun onCallbackActionLoadAds(isSuccess: Boolean) {
-                val endTime = System.currentTimeMillis()
-                val totalTime = (endTime - startTime) / 1000
-                Logger.showLog("Thuytv------totalTime: $totalTime")
-                if (totalTime > 3) {
+//        loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL, object : OnCallbackLoadAds {
+//            override fun onCallbackActionLoadAds(isSuccess: Boolean) {
+//                val endTime = System.currentTimeMillis()
+//                val totalTime = (endTime - startTime) / 1000
+//                Logger.showLog("Thuytv------totalTime: $totalTime")
+//                if (totalTime > 3) {
                     gotoMainScreen()
-                } else {
-                    Handler(Looper.myLooper()!!).postDelayed({
-                        gotoMainScreen()
-                    }, 3000)
-                }
-            }
-        })
+//                } else {
+//                    Handler(Looper.myLooper()!!).postDelayed({
+//                        gotoMainScreen()
+//                    }, 3000)
+//                }
+//            }
+//        })
     }
 
     private fun checkNewVersionApp() {
