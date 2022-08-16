@@ -1,6 +1,5 @@
 package com.cocna.pdffilereader.ui.home
 
-import `in`.gauriinfotech.commons.Commons
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
@@ -89,21 +88,23 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         startTime = System.currentTimeMillis()
         if (myFileModel == null) {
             val uriPath = arguments?.getParcelable<Uri>(Intent.EXTRA_STREAM)
-            uriPath?.apply {
-                val fullPath = Commons.getPath(this, getBaseActivity())
-                var fileName = ""
-                if (fullPath?.isNotEmpty() == true) {
-                    val cut = fullPath.lastIndexOf("/")
-                    if (cut != -1) {
-                        fileName = fullPath.substring(cut + 1)
-                        binding.ttToolbarPdf.text = fileName
+            getBaseActivity()?.apply {
+                if (uriPath != null) {
+                    val fullPath = RealPathUtil.getRealPath(this, uriPath)
+                    var fileName = ""
+                    if (fullPath?.isNotEmpty() == true) {
+                        val cut = fullPath.lastIndexOf("/")
+                        if (cut != -1) {
+                            fileName = fullPath.substring(cut + 1)
+                            binding.ttToolbarPdf.text = fileName
+                        }
                     }
+                    myFileModel = MyFilesModel(uriPath = fullPath, uriOldPath = fullPath, name = fileName, extensionName = "pdf")
+                    openFDPFile(fullPath)
+                    Handler(Looper.myLooper()!!).postDelayed({
+                        loadDataFile()
+                    }, 500)
                 }
-                myFileModel = MyFilesModel(uriPath = fullPath, uriOldPath = fullPath, name = fileName, extensionName = "pdf")
-                openFDPFile(fullPath)
-                Handler(Looper.myLooper()!!).postDelayed({
-                    loadDataFile()
-                }, 500)
             }
         } else {
             myFileModel?.apply {
