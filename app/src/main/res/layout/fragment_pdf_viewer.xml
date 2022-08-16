@@ -132,7 +132,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/btn_share_image"
+            android:id="@+id/btn_share_file"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -152,7 +152,7 @@
                 style="@style/Text_Item_Date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/vl_share_image" />
+                android:text="@string/tt_share_file" />
         </LinearLayout>
     </LinearLayout>
 

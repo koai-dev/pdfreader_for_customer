@@ -35,7 +35,7 @@ object Common {
     @JvmStatic
     fun covertTimeLongToString(time: Long?): String {
         time?.let {
-            val sdf = SimpleDateFormat("dd/MM/yyyy     HH:mm", Locale.getDefault())
+            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
             return sdf.format(Date(time))
         }
         return ""
@@ -87,6 +87,27 @@ object Common {
             return Build.BRAND + "-" + Build.MODEL + " Version: " + Build.VERSION.SDK_INT + "--Version App: " + getVersionApp(context)
         } catch (e: Exception) {
             return ""
+        }
+    }
+
+    fun convertByteToString(bytes: Long?): String {
+        if (bytes == null) return ""
+        val kilobyte: Long = 1024
+        val megabyte = kilobyte * 1024
+        val gigabyte = megabyte * 1024
+        val terabyte = gigabyte * 1024
+        return if (bytes in 0 until kilobyte) {
+            "$bytes B"
+        } else if (bytes in kilobyte until megabyte) {
+            (bytes / kilobyte).toString() + " KB"
+        } else if (bytes in megabyte until gigabyte) {
+            (bytes / megabyte).toString() + " MB"
+        } else if (bytes in gigabyte until terabyte) {
+            (bytes / gigabyte).toString() + " GB"
+        } else if (bytes >= terabyte) {
+            (bytes / terabyte).toString() + " TB"
+        } else {
+            "$bytes Bytes"
         }
     }
 }

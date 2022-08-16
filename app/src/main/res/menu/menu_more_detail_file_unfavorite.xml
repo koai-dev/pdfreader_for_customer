@@ -10,11 +10,6 @@
         android:title="@string/menu_rename" />
 
     <item
-        android:id="@+id/menu_share"
-        android:icon="@drawable/ic_menu_share"
-        android:title="@string/menu_share" />
-
-    <item
         android:id="@+id/menu_print"
         android:icon="@drawable/ic_menu_printer"
         android:title="@string/menu_print" />

@@ -142,8 +142,10 @@ class MyFilesAdapter(
         fun bind(mData: MyFilesModel) {
             val binding = ItemViewMyFilesBinding.bind(itemView)
             binding.vlItemName.text = mData.name
-            binding.vlItemDate.text = Common.covertTimeLongToString(mData.lastModified)
+            binding.vlItemDate.text = mContext?.getString(R.string.vl_accessed, Common.covertTimeLongToString(mData.lastModified))
             setIconFile(binding.imvItemFile, mData.extensionName ?: "")
+            binding.vlItemSize.text = Common.convertByteToString(mData.length)
+            binding.vlItemLocation.text = mData.folderName
 
             binding.llItemMyFile.setOnClickListener {
                 MultiClickPreventer.preventMultiClick(it)

@@ -116,7 +116,7 @@ class RatingAppDialog(
         selectorIntent.data = Uri.parse("mailto:")
 
         val emailIntent = Intent(Intent.ACTION_SEND)
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("thanhbg.bk01@gmail.com"))
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("support@igicorp.vn"))
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback for PDF Reader")
         emailIntent.selector = selectorIntent
 

@@ -37,7 +37,7 @@ class InterstitialUtils {
             }
 
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                Logger.showLog("---onAdLoaded--Success")
+                Logger.showLog("---onAdLoaded--Success--InterstitialUtil")
                 mInterstitialAd = interstitialAd
             }
         })

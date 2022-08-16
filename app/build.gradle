@@ -64,9 +64,9 @@ dependencies {
     implementation 'io.github.inflationx:viewpump:2.0.3'
 
     implementation 'com.google.android.gms:play-services-ads:21.1.0'
-    implementation 'com.google.ads.mediation:applovin:11.4.4.0'
-    implementation 'com.google.ads.mediation:pangle:4.5.0.6.0'
-    implementation 'com.google.ads.mediation:ironsource:7.2.3.1.0'
+//    implementation 'com.google.ads.mediation:applovin:11.4.4.0'
+//    implementation 'com.google.ads.mediation:pangle:4.5.0.6.0'
+//    implementation 'com.google.ads.mediation:ironsource:7.2.3.1.0'
     
     implementation "com.anggrayudi:storage:1.4.1"
     implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
@@ -79,7 +79,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'com.google.firebase:firebase-messaging-ktx:23.0.6'
 
-    implementation 'in.gauriinfotech:commons:1.0.8'
+//    implementation 'in.gauriinfotech:commons:1.0.8'
     implementation 'com.appsflyer:af-android-sdk:6.3.2'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
     implementation 'me.zhanghai.android.materialratingbar:library:1.4.0'

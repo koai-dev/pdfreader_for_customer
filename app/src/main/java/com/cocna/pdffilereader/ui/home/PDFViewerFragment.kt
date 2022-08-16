@@ -56,6 +56,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
     private var startTime: Long = 0L
     private var isSendShowAds = false
     private var isLoadedAds = false
+    private var isJumpEdit = false
     private var pdfConfig: PDFView.Configurator? = null
     private var isNightMode = false
     private var isPageMode = false
@@ -173,7 +174,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             binding.imvChangeMode,
             binding.btnViewBookmark,
             binding.btnViewCapture,
-            binding.btnShareImage
+            binding.btnShareFile
         )
         binding.seekbarJumpToPage.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
             @SuppressLint("RestrictedApi")
@@ -225,7 +226,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                     binding.groupPageViewer.visible()
                     binding.llJumpToPageEdit.gone()
                     getBaseActivity()?.hideKeyboard()
-
+                    isJumpEdit = true
                     return true
                 }
                 return false
@@ -280,12 +281,15 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
     }
 
     private val onPageScrollListener = OnPageScrollListener { page, positionOffset ->
-        Logger.showLog("Thuytv-----onPageScrollListener---page: $page ---oldPage: $oldPage")
-        if (binding.llToolbarPdf.visibility == View.VISIBLE && page > 0 && oldPage != page) {
+        Logger.showLog("Thuytv-----onPageScrollListener---page: $page ---oldPage: $oldPage ----isJumpEdit: $isJumpEdit")
+        if (binding.llToolbarPdf.visibility == View.VISIBLE && page > 0 && oldPage != page && !isJumpEdit) {
             oldPage = page
             binding.llToolbarPdf.gone()
             binding.groupPageViewer.gone()
         } else {
+            if (isJumpEdit) {
+                isJumpEdit = false
+            }
             oldPage = page
         }
     }
@@ -378,9 +382,9 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
 //                                }
                                 bookMarkFile()
                             }
-                            R.id.menu_share -> {
-                                myFileModel?.uriPath?.let { File(it) }?.let { shareFile(it) }
-                            }
+//                            R.id.menu_share -> {
+//                                myFileModel?.uriPath?.let { File(it) }?.let { shareFile(it) }
+//                            }
                             R.id.menu_delete -> {
                                 getBaseActivity()?.apply {
                                     if (myFileModel != null) {
@@ -446,10 +450,11 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                     getBaseActivity()?.addFragment(CropImageFragment(), bundle, R.id.layout_container)
                 }
             }
-            R.id.btn_share_image -> {
+            R.id.btn_share_file -> {
 //                val bundle = Bundle()
 //                bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, myFileModel)
 //                getBaseActivity()?.onNextScreen(PdfPreviewActivity::class.java, bundle, false)
+                myFileModel?.uriPath?.let { File(it) }?.let { shareFile(it) }
             }
         }
     }

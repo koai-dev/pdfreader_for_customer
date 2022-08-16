@@ -333,6 +333,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
     private fun getAllFilePdf() {
         Thread {
             getBaseActivity()?.apply {
+                val startTime = System.currentTimeMillis()
                 var root = DocumentFileCompat.getRootDocumentFile(this, "primary", true)
                 if (root == null) {
                     root = DocumentFile.fromFile(File(PATH_DEFAULT_STORE))
@@ -343,13 +344,14 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                     myFileDetailFragment?.updateData(lstFilePdf)
                     mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
                     binding.swRefreshData.isRefreshing = false
-                    if(mStrSearch.isNotEmpty()){
+                    if (mStrSearch.isNotEmpty()) {
                         myFileDetailFragment?.onSearchFile(mStrSearch)
                     }
                 }
                 if (getBaseActivity()?.isCurrentNetwork == false) {
                     getBaseActivity()?.enabaleNetwork()
                 }
+                Logger.showLog("Thuytv------getAllFilePdf----: " + (System.currentTimeMillis() - startTime))
             }
         }.start()
     }
@@ -435,7 +437,8 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                                 lastModified = item.lastModified(),
                                 extensionName = item.extension,
                                 length = item.length(),
-                                locationFile = item.parentFile?.uri?.path
+                                locationFile = item.parentFile?.uri?.path,
+                                folderName = item.parentFile?.name
 
                             )
                         lstFilePdf.add(model)

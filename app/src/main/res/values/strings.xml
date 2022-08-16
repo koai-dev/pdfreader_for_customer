@@ -121,5 +121,6 @@
     <string name="menu_shortcut">Shortcut</string>
     <string name="vl_location">Location</string>
     <string name="vl_last_modified">Last modified</string>
+    <string name="vl_accessed">Accessed: %s</string>
 
 </resources>

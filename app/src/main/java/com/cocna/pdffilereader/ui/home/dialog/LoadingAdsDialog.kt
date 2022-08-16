@@ -135,7 +135,7 @@ class LoadingAdsDialog : DialogFragment() {
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                    Logger.showLog("---onAdLoaded--Success")
+                    Logger.showLog("---onAdLoaded--Success Loading ads dialog")
                     mInterstitialAd = interstitialAd
                     showInterstitial()
                 }

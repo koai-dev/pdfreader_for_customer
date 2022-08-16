@@ -45,17 +45,12 @@ class PdfViewActivity : BaseActivity<ActivityBaseBinding>() {
         } else {
             Common.countShowAdsPdf++
             if (Common.countShowAdsPdf == 1 || (Common.countShowAdsPdf % 2 == 1)) {
-//            loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE, object : OnCallbackLoadAds {
-//                override fun onCallbackActionLoadAds(isSuccess: Boolean) {
-//                    gotoPdfViewFragment()
-//                }
-//            })
                 InterstitialUtils.sharedInstance?.showInterstitial(AppConfig.ID_ADS_INTERSTITIAL_FILE, this, object : OnCallbackLoadAds {
                     override fun onCallbackActionLoadAds(isSuccess: Boolean) {
                         Handler(Looper.myLooper()!!).postDelayed({
-                            if (!isSuccess) {
-                                Common.countShowAdsPdf = 0
-                            }
+//                            if (!isSuccess) {
+//                                Common.countShowAdsPdf = 0
+//                            }
                             gotoPdfViewFragment()
                         }, 500)
                     }

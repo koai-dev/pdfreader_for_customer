@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Window
 import com.cocna.pdffilereader.R
+import com.cocna.pdffilereader.common.Common
 import com.cocna.pdffilereader.common.MultiClickPreventer
 import com.cocna.pdffilereader.databinding.DialogFileInfoBinding
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
@@ -39,33 +40,14 @@ class FileInfoDialog(
         }
         myFileModel.apply {
             binding.vlInfoFileName.text = name
-            binding.vlInfoSize.text = convertByteToString(this.length)
+            binding.vlInfoSize.text = Common.convertByteToString(this.length)
             binding.vlInfoLastModified.text = convertLongToTime(this.lastModified)
             binding.vlInfoLocation.text = locationFile
         }
 
     }
 
-    private fun convertByteToString(bytes: Long?): String {
-        if (bytes == null) return ""
-        val kilobyte: Long = 1024
-        val megabyte = kilobyte * 1024
-        val gigabyte = megabyte * 1024
-        val terabyte = gigabyte * 1024
-        return if (bytes in 0 until kilobyte) {
-            "$bytes B"
-        } else if (bytes in kilobyte until megabyte) {
-            (bytes / kilobyte).toString() + " KB"
-        } else if (bytes in megabyte until gigabyte) {
-            (bytes / megabyte).toString() + " MB"
-        } else if (bytes in gigabyte until terabyte) {
-            (bytes / gigabyte).toString() + " GB"
-        } else if (bytes >= terabyte) {
-            (bytes / terabyte).toString() + " TB"
-        } else {
-            "$bytes Bytes"
-        }
-    }
+
 
     private fun convertLongToTime(time: Long?): String {
         if (time == null) return ""

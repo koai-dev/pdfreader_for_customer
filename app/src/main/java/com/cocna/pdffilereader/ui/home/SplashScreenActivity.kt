@@ -142,7 +142,9 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
             bundle.putString(AppKeys.KEY_BUNDLE_SCREEN, AppConfig.TYPE_SCREEN_FROM_SPLASH)
             onNextScreen(LanguageActivity::class.java, bundle, true)
         } else {
-            onNextScreen(MainActivity::class.java, null, true)
+            val bundle = Bundle()
+            bundle.putString(AppKeys.KEY_BUNDLE_SCREEN, AppConfig.TYPE_SCREEN_SHOW_ADS)
+            onNextScreen(MainActivity::class.java, bundle, true)
         }
     }
 
@@ -203,7 +205,8 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                                 lastModified = item.lastModified(),
                                 extensionName = item.extension,
                                 length = item.length(),
-                                locationFile = item.parentFile?.uri?.path
+                                locationFile = item.parentFile?.uri?.path,
+                                folderName = item.parentFile?.name
                             )
                         Common.listAllData?.add(model)
                     }
@@ -235,7 +238,8 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                                         lastModified = mFile.lastModified(),
                                         extensionName = mFile.extension,
                                         length = mFile.length(),
-                                        locationFile = item.parentFile?.uri?.path
+                                        locationFile = mFile.parentFile?.uri?.path,
+                                        folderName = mFile.parentFile?.name
                                     )
                                 lstChildFile.add(model)
                             }
@@ -251,7 +255,8 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                                 lastModified = item.lastModified(),
                                 extensionName = item.extension,
                                 length = item.length(),
-                                locationFile = item.parentFile?.uri?.path
+                                locationFile = item.parentFile?.uri?.path,
+                                folderName = item.parentFile?.name
                             )
                         Common.listAllFolder?.add(model)
                     }

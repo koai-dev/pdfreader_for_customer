@@ -170,7 +170,8 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
                                     lastModified = mFile.lastModified(),
                                     extensionName = mFile.extension,
                                     length = mFile.length(),
-                                    locationFile = item.parentFile?.uri?.path
+                                    locationFile = mFile.parentFile?.uri?.path,
+                                    folderName = mFile.parentFile?.name
                                 )
                             lstChildFile.add(model)
                         }
@@ -186,7 +187,8 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
                             lastModified = item.lastModified(),
                             extensionName = item.extension,
                             length = item.length(),
-                            locationFile = item.parentFile?.uri?.path
+                            locationFile = item.parentFile?.uri?.path,
+                            folderName = item.parentFile?.name
                         )
                     lstAllFolder.add(model)
                 }
