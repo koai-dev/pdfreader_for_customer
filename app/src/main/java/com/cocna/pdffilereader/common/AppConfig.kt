@@ -29,6 +29,12 @@ object AppConfig {
     const val ID_LANGUAGE_GERMANY = "de"
 
     const val DELAY_TIME_RETRY_ADS = 3000L
+    const val MAX_COUNT_RATE_US = 6
+
+    const val TYPE_LOAD_AD_SPLASH = 1
+    const val TYPE_LOAD_AD_FILE = 2
+    const val TYPE_FILTER_FILE = 1
+    const val TYPE_FILTER_FOLDER = 2
 
 
     const val KEY_EVENT_FB_OPEN_PDF = "open_by_pdf"

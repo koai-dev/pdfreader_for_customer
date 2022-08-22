@@ -48,7 +48,7 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
     override fun initData() {
         onListenUpdateFile()
         lstAllFolder = ArrayList()
-        mFolderAdapter = MyFilesAdapter(getBaseActivity(), lstAllFolder, 0, object : MyFilesAdapter.OnItemClickListener {
+        mFolderAdapter = MyFilesAdapter(getBaseActivity(), lstAllFolder, 0,AppConfig.TYPE_FILTER_FOLDER, object : MyFilesAdapter.OnItemClickListener {
             override fun onClickItem(documentFile: MyFilesModel) {
                 if ((documentFile.lstChildFile?.size ?: 0) > 0) {
                     val bundle = Bundle()

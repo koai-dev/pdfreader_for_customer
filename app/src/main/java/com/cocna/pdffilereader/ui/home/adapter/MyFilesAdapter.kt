@@ -30,6 +30,7 @@ class MyFilesAdapter(
     val mContext: Context?,
     private var lstData: ArrayList<MyFilesModel>,
     private var typeAdapter: Int,
+    private var typeFilter: Int,
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
     var mFileFilterList = ArrayList<MyFilesModel>()
@@ -334,8 +335,16 @@ class MyFilesAdapter(
                 } else {
                     val resultList = ArrayList<MyFilesModel>()
                     for (row in lstData) {
-                        if (row.name?.lowercase()?.contains(charSearch.lowercase()) == true || row.folderName?.lowercase()?.contains(charSearch.lowercase()) == true) {
-                            resultList.add(row)
+                        if (typeFilter == AppConfig.TYPE_FILTER_FILE) {
+                            if (row.name?.lowercase()?.contains(charSearch.lowercase()) == true) {
+                                resultList.add(row)
+                            }
+                        } else {
+                            if (row.name?.lowercase()?.contains(charSearch.lowercase()) == true || row.folderName?.lowercase()
+                                    ?.contains(charSearch.lowercase()) == true
+                            ) {
+                                resultList.add(row)
+                            }
                         }
                     }
                     mFileFilterList = resultList

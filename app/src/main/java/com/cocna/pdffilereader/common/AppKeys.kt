@@ -8,5 +8,6 @@ object AppKeys {
     const val KEY_BUNDLE_ACTION = "KEY_BUNDLE_ACTION"
     const val KEY_BUNDLE_SHORTCUT_NAME = "KEY_BUNDLE_SHORTCUT_NAME"
     const val KEY_BUNDLE_SHORTCUT_PATH = "KEY_BUNDLE_SHORTCUT_PATH"
+    const val KEY_BUNDLE_URI = "KEY_BUNDLE_URI"
     // Key bundle end
 }

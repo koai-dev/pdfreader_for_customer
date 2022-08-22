@@ -1,7 +1,6 @@
 package com.cocna.pdffilereader.ui.home.dialog
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -42,9 +41,17 @@ class LoadingAdsDialog : DialogFragment() {
     companion object {
         @SuppressLint("StaticFieldLeak")
         private var mActivity: BaseActivity<*>? = null
+        private var typeLoadAds: Int? = null
         fun newInstance(mActivity: BaseActivity<*>?): LoadingAdsDialog {
             val fragment = LoadingAdsDialog()
             this.mActivity = mActivity
+            return fragment
+        }
+
+        fun newInstance(mActivity: BaseActivity<*>?, typeLoadAds: Int?): LoadingAdsDialog {
+            val fragment = LoadingAdsDialog()
+            this.mActivity = mActivity
+            this.typeLoadAds = typeLoadAds
             return fragment
         }
     }
@@ -69,7 +76,18 @@ class LoadingAdsDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        loadInterstAds()
+        if (typeLoadAds == AppConfig.TYPE_LOAD_AD_FILE) {
+//            mActivity?.apply {
+//                InterstitialUtils.sharedInstance?.showInterstitial(AppConfig.ID_ADS_INTERSTITIAL_FILE, this, object : OnCallbackLoadAds {
+//                    override fun onCallbackActionLoadAds(isSuccess: Boolean) {
+//                        dismiss()
+//                    }
+//                })
+//            }
+            loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE)
+        } else {
+            loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL)
+        }
         dialog?.run {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.MATCH_PARENT
@@ -111,15 +129,15 @@ class LoadingAdsDialog : DialogFragment() {
         _binding = null
     }
 
-    private fun loadInterstAds() {
+    private fun loadInterstAds(uuid: String) {
         val adRequest = AdRequest.Builder().build()
         activity?.run {
-            InterstitialAd.load(this, AppConfig.ID_ADS_INTERSTITIAL, adRequest, object : InterstitialAdLoadCallback() {
+            InterstitialAd.load(this, uuid, adRequest, object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     setLogDataToFirebase(
                         AdsLogModel(
-                            adsId = AppConfig.ID_ADS_INTERSTITIAL,
-                            adsName = "Ads Interstitial Splash Load",
+                            adsId = uuid,
+                            adsName = "Ads Interstitial Load",
                             message = adError.message, deviceName = Common.getDeviceName(this@run)
                         )
                     )
@@ -168,6 +186,7 @@ class LoadingAdsDialog : DialogFragment() {
 
                 override fun onAdShowedFullScreenContent() {
                     mInterstitialAd = null
+                    dismiss()
                 }
             }
             activity?.run {

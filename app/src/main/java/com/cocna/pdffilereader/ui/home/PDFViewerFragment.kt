@@ -42,6 +42,7 @@ import java.util.*
 /**
  * Created by Thuytv on 10/06/2022.
  */
+@Suppress("DEPRECATION")
 class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClickListener {
     private var myFileModel: MyFilesModel? = null
     private var isFirst = true
@@ -104,9 +105,11 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             binding.imvChangeView.setImageResource(R.drawable.ic_page_by_page)
         }
         if (myFileModel == null) {
-            val uriPath = arguments?.getParcelable<Uri>(Intent.EXTRA_STREAM)
+            var uriPath = arguments?.getParcelable<Uri>(Intent.EXTRA_STREAM)
+            if (uriPath == null) {
+                uriPath = arguments?.getParcelable(AppKeys.KEY_BUNDLE_URI)
+            }
             uriPath?.apply {
-//                val fullPath = RealPathUtil.getFilePathForN(getBaseActivity()!!, this)
                 val fullPath = RealPathUtil.getRealPath(getBaseActivity()!!, this)
                 myFileModel = MyFilesModel(uriPath = fullPath, uriOldPath = fullPath, extensionName = "pdf")
 
@@ -161,8 +164,10 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             getBaseActivity()?.enabaleNetwork()
         }
 //        getBaseActivity()?.loadNativeAds(binding.frameAdsNativePdf, AppConfig.ID_ADS_NATIVE_TOP_BAR_PDF)
-        if (Common.isFirstOpenPdf != true) {
-            Common.isFirstOpenPdf = true
+        var countRateUs = getBaseActivity()?.sharedPreferences?.getValueInteger(SharePreferenceUtils.KEY_COUNT_RATE_US, 0) ?: 0
+        Common.isFromPDFView = true
+        if (countRateUs <= AppConfig.MAX_COUNT_RATE_US && Common.countRatingApp <= AppConfig.MAX_COUNT_RATE_US) {
+            Common.countRatingApp++
         }
     }
 
@@ -236,7 +241,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
     }
 
     private fun getEdittextNumber(): Int {
-        if (binding.edtJumpPage.text.toString().isNullOrEmpty()) return 0
+        if (binding.edtJumpPage.text?.toString().isNullOrEmpty()) return 0
         return binding.edtJumpPage.text.toString().toInt()
     }
 
@@ -267,6 +272,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                         .pageSnap(true)
                         .autoSpacing(true)
                         .pageFling(true)
+                        .fitEachPage(true)
                         .scrollHandle(null)
                 } else {
                     this.swipeHorizontal(false)
@@ -357,43 +363,16 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                                 }
                             }
                             R.id.menu_favorite -> {
-//                                if (myFileModel != null) {
-//                                    getBaseActivity()?.sharedPreferences?.setFavoriteFile(myFileModel!!)
-//                                    RxBus.publish(EventsBus.RELOAD_FAVORITE)
-//                                    binding.imvViewBookmark.setImageResource(R.drawable.ic_bookmark_selected)
-//                                    if(!isNightMode){
-//                                        getBaseActivity()?.apply {
-//                                            binding.imvViewBookmark.setColorFilter(ContextCompat.getColor(this, R.color.rgb_F44336))
-//                                        }
-//                                    }
-//                                }
                                 bookMarkFile()
                             }
                             R.id.menu_un_favorite -> {
-//                                if (myFileModel != null) {
-//                                    getBaseActivity()?.sharedPreferences?.removeFavoriteFile(myFileModel!!)
-//                                    RxBus.publish(EventsBus.RELOAD_FAVORITE)
-//                                    binding.imvViewBookmark.setImageResource(R.drawable.ic_bookmark)
-//                                    if(!isNightMode){
-//                                        getBaseActivity()?.apply {
-//                                            binding.imvViewBookmark.setColorFilter(ContextCompat.getColor(this, R.color.rgb_62757F))
-//                                        }
-//                                    }
-//                                }
                                 bookMarkFile()
                             }
-//                            R.id.menu_share -> {
-//                                myFileModel?.uriPath?.let { File(it) }?.let { shareFile(it) }
-//                            }
                             R.id.menu_delete -> {
                                 getBaseActivity()?.apply {
                                     if (myFileModel != null) {
                                         val deleteFileDialog = DeleteFileDialog(this, myFileModel!!, object : OnDialogItemClickListener {
                                             override fun onClickItemConfirm(mData: MyFilesModel) {
-//                                            sharedPreferences.removeFavoriteFile(myFileModel!!)
-//                                            sharedPreferences.removeRecentFile(myFileModel!!)
-//                                            RxBus.publish(EventsBus.RELOAD_ALL_FILE)
-//                                            RxBus.publish(myFileModel!!)
                                                 finish()
                                             }
 
@@ -508,7 +487,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         super.onDestroy()
         recycleMemory()
         val endTime = System.currentTimeMillis()
-        if ((endTime - startTime) >= 10000 && !isSendShowAds) {
+        if ((endTime - startTime) >= 20000 && !isSendShowAds) {
             isSendShowAds = true
             RxBus.publish(EventsBus.SHOW_ADS_BACK)
 //                getBaseActivity()?.loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_BACK_FILE, null)

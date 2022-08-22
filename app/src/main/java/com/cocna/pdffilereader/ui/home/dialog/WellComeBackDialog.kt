@@ -90,7 +90,7 @@ class WellComeBackDialog : DialogFragment() {
 
     private fun showCountDownTime() {
         if (countDownTimer == null) {
-            countDownTimer = object : CountDownTimer(60 * 1000, 1000) {
+            countDownTimer = object : CountDownTimer(30 * 1000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     Logger.showLog("Thuytv------millisUntilFinished: $millisUntilFinished")
                 }

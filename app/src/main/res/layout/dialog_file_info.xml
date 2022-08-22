@@ -105,13 +105,14 @@
                 android:id="@+id/tt_info_location"
                 style="@style/Text_Content_Info"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginTop="@dimen/margin_all"
-                android:gravity="center"
+                android:gravity="start|top"
                 android:padding="@dimen/margin_small"
                 android:text="@string/vl_location"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line_last_modified" />
+                app:layout_constraintTop_toBottomOf="@id/line_last_modified"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
                 android:id="@+id/vl_info_location"
@@ -120,7 +121,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_small"
                 android:layout_marginStart="@dimen/margin_small"
-                android:gravity="center|end"
+                android:paddingTop="@dimen/margin_small"
+                android:gravity="top|end"
                 app:layout_constraintBottom_toBottomOf="@id/tt_info_location"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tt_info_location"

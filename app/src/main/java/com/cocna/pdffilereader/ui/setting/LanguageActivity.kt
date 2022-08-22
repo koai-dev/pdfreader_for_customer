@@ -16,6 +16,7 @@ import com.cocna.pdffilereader.ui.setting.adapter.ChangeLanguageAdapter
 import com.cocna.pdffilereader.ui.setting.model.LanguageModel
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
+import com.cocna.pdffilereader.ui.home.dialog.LoadingAdsDialog
 import com.cocna.pdffilereader.ui.home.model.AdsLogModel
 
 /**
@@ -29,17 +30,18 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
     private var typeScreen: String? = null
 
     override fun initData() {
+        typeScreen = intent.getStringExtra(AppKeys.KEY_BUNDLE_SCREEN)
+        if (typeScreen == AppConfig.TYPE_SCREEN_FROM_SPLASH) {
+            LoadingAdsDialog.newInstance(this).show(supportFragmentManager, "LOADING_ADS")
+            binding.imvAllBack.invisible()
+            preLoadAdsNativeTheme()
+        }
         if (Common.mNativeAdLanguage == null) {
             Logger.showLog("Thuytv----Refresh Ads Language")
             refreshAd()
         } else {
             Logger.showLog("Thuytv----Show Ads Language")
             showNativeAds(Common.mNativeAdLanguage!!)
-        }
-        typeScreen = intent.getStringExtra(AppKeys.KEY_BUNDLE_SCREEN)
-        if (typeScreen == AppConfig.TYPE_SCREEN_FROM_SPLASH) {
-            binding.imvAllBack.invisible()
-            preLoadAdsNativeTheme()
         }
 
         val lstLanguage: ArrayList<LanguageModel> = ArrayList()

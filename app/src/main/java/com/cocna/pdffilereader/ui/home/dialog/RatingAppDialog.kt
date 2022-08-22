@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat.startActivity
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.Logger
 import com.cocna.pdffilereader.common.MultiClickPreventer
+import com.cocna.pdffilereader.common.SharePreferenceUtils
 import com.cocna.pdffilereader.databinding.DialogRatingAppBinding
 import me.zhanghai.android.materialratingbar.MaterialRatingBar
 
@@ -36,13 +37,13 @@ class RatingAppDialog(
 
         val binding: DialogRatingAppBinding = DialogRatingAppBinding.inflate(LayoutInflater.from(mContext))
         setContentView(binding.root)
-        if (isFirst) {
-            binding.vlTitleRate.text = mContext.getString(R.string.tt_rating_app_very_good_first)
-            binding.vlContentRate.text = mContext.getString(R.string.vl_rating_app_very_good_first)
-        } else {
-            binding.vlTitleRate.text = mContext.getString(R.string.tt_rating_app_very_good)
-            binding.vlContentRate.text = mContext.getString(R.string.vl_rating_app_very_good)
-        }
+//        if (isFirst) {
+//            binding.vlTitleRate.text = mContext.getString(R.string.tt_rating_app_very_good_first)
+//            binding.vlContentRate.text = mContext.getString(R.string.vl_rating_app_very_good_first)
+//        } else {
+//            binding.vlTitleRate.text = mContext.getString(R.string.tt_rating_app_very_good)
+//            binding.vlContentRate.text = mContext.getString(R.string.vl_rating_app_very_good)
+//        }
 
         binding.rateBarApp.onRatingChangeListener =
             MaterialRatingBar.OnRatingChangeListener { _, rating -> updateViewRating(binding, rating) }
@@ -54,6 +55,8 @@ class RatingAppDialog(
             } else {
                 sendEmailFeedback()
             }
+            val sharePreferenceUtils = SharePreferenceUtils(mContext)
+            sharePreferenceUtils.setValueInteger(SharePreferenceUtils.KEY_COUNT_RATE_US, 7)
             dismiss()
         }
         binding.imvCloseRate.setOnClickListener {
@@ -63,15 +66,20 @@ class RatingAppDialog(
     }
 
     private fun updateViewRating(binding: DialogRatingAppBinding, rating: Float) {
-        if (rating >= 4) {
+        if (rating == 5f) {
             binding.imvRateStatus.setImageResource(R.mipmap.ic_rate_very_good)
-            if (isFirst) {
-                binding.vlTitleRate.text = mContext.getString(R.string.tt_rating_app_very_good_first)
-                binding.vlContentRate.text = mContext.getString(R.string.vl_rating_app_very_good_first)
-            } else {
-                binding.vlTitleRate.text = mContext.getString(R.string.tt_rating_app_very_good)
-                binding.vlContentRate.text = mContext.getString(R.string.vl_rating_app_very_good)
-            }
+            binding.vlTitleRate.text = mContext.getString(R.string.tt_rating_app_very_good_first)
+            binding.vlContentRate.text = mContext.getString(R.string.vl_rating_app_very_good_first)
+            binding.btnRateApp.text = mContext.getString(R.string.btn_rate)
+        } else if (rating == 4f) {
+            binding.imvRateStatus.setImageResource(R.mipmap.ic_rate_very_good)
+//            if (isFirst) {
+//                binding.vlTitleRate.text = mContext.getString(R.string.tt_rating_app_very_good_first)
+//                binding.vlContentRate.text = mContext.getString(R.string.vl_rating_app_very_good_first)
+//            } else {
+            binding.vlTitleRate.text = mContext.getString(R.string.tt_rating_app_very_good)
+            binding.vlContentRate.text = mContext.getString(R.string.vl_rating_app_very_good)
+//            }
             binding.btnRateApp.text = mContext.getString(R.string.btn_rate)
         } else {
             if (rating == 3f) {

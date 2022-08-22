@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 android:gravity="center"
-                android:text="@string/tt_rating_app_very_good"
+                android:text="@string/tt_rating_app_very_good_first"
                 app:layout_constraintTop_toBottomOf="@id/imv_rate_status" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -54,33 +54,34 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/margin_small"
-                android:text="@string/vl_rating_app_very_good"
+                android:text="@string/vl_rating_app_very_good_first"
                 app:layout_constraintTop_toBottomOf="@id/vl_title_rate" />
 
             <me.zhanghai.android.materialratingbar.MaterialRatingBar
                 android:id="@+id/rate_bar_app"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:mrb_progressBackgroundTint="@color/color_E57373"
-                app:mrb_progressTint="@color/color_FFCC00"
                 android:numStars="5"
                 android:rating="5"
                 android:stepSize="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/vl_content_rate" />
+                app:layout_constraintTop_toBottomOf="@id/vl_content_rate"
+                app:mrb_progressBackgroundTint="@color/color_E57373"
+                app:mrb_progressTint="@color/color_FFCC00" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_rate_app"
+                style="@style/Button_Confirm_All"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/rate_bar_app"
-                style="@style/Button_Confirm_All"
-                android:background="@drawable/bg_button_rate"
                 android:layout_marginStart="@dimen/height_button"
-                android:layout_marginEnd="@dimen/height_button"
                 android:layout_marginTop="@dimen/margin_double_all"
+                android:layout_marginEnd="@dimen/height_button"
                 android:layout_marginBottom="@dimen/margin_all"
-                android:text="@string/btn_rate"/>
+                android:background="@drawable/bg_button_rate"
+                android:text="@string/btn_rate"
+                app:layout_constraintTop_toBottomOf="@id/rate_bar_app" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

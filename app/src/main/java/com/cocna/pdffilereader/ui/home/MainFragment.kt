@@ -201,12 +201,12 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     override fun onResume() {
         super.onResume()
         adView.resume()
-        if (Common.isFirstOpenPdf == true && getBaseActivity()?.sharedPreferences?.getValueBoolean(SharePreferenceUtils.KEY_SHOW_RATE_US) != true) {
+        val countRateUs = getBaseActivity()?.sharedPreferences?.getValueInteger(SharePreferenceUtils.KEY_COUNT_RATE_US, 0) ?: 0
+        if (countRateUs <= AppConfig.MAX_COUNT_RATE_US) {
             getBaseActivity()?.apply {
-                if (isVisible) {
-                    sharedPreferences.setValueBoolean(SharePreferenceUtils.KEY_SHOW_RATE_US, true)
+                if (isVisible && Common.isFromPDFView == true && (Common.countRatingApp == 2 || Common.countRatingApp == 6)) {
                     RatingAppDialog(this, true).show()
-
+                    Common.isFromPDFView = null
                 }
             }
         }

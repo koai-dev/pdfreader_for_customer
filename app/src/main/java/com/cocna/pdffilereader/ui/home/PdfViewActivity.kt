@@ -10,6 +10,7 @@ import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.ActivityBaseBinding
 import com.cocna.pdffilereader.ui.base.BaseActivity
 import com.cocna.pdffilereader.ui.base.OnCallbackLoadAds
+import com.cocna.pdffilereader.ui.home.dialog.LoadingAdsDialog
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
@@ -34,27 +35,26 @@ class PdfViewActivity : BaseActivity<ActivityBaseBinding>() {
             intent.putExtras(bundle)
         }
         if (myModel == null && filePath.isNullOrEmpty()) {
-//            binding.prbLoadingMain.visible()
-            loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE, object : OnCallbackLoadAds {
-                override fun onCallbackActionLoadAds(isSuccess: Boolean) {
-                    Handler(Looper.myLooper()!!).postDelayed({
-                        gotoPdfViewFragment()
-                    }, 500)
-                }
-            })
+//            loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE, object : OnCallbackLoadAds {
+//                override fun onCallbackActionLoadAds(isSuccess: Boolean) {
+//                    Handler(Looper.myLooper()!!).postDelayed({
+//                        gotoPdfViewFragment()
+//                    }, 500)
+//                }
+//            })
+            gotoPdfViewFragment()
         } else {
             Common.countShowAdsPdf++
             if (Common.countShowAdsPdf == 1 || (Common.countShowAdsPdf % 2 == 1)) {
-                InterstitialUtils.sharedInstance?.showInterstitial(AppConfig.ID_ADS_INTERSTITIAL_FILE, this, object : OnCallbackLoadAds {
-                    override fun onCallbackActionLoadAds(isSuccess: Boolean) {
-                        Handler(Looper.myLooper()!!).postDelayed({
-//                            if (!isSuccess) {
-//                                Common.countShowAdsPdf = 0
-//                            }
-                            gotoPdfViewFragment()
-                        }, 500)
-                    }
-                })
+                LoadingAdsDialog.newInstance(this, AppConfig.TYPE_LOAD_AD_FILE).show(supportFragmentManager, "LOADING_ADS")
+                gotoPdfViewFragment()
+//                InterstitialUtils.sharedInstance?.showInterstitial(AppConfig.ID_ADS_INTERSTITIAL_FILE, this, object : OnCallbackLoadAds {
+//                    override fun onCallbackActionLoadAds(isSuccess: Boolean) {
+//                        Handler(Looper.myLooper()!!).postDelayed({
+//                            gotoPdfViewFragment()
+//                        }, 500)
+//                    }
+//                })
             } else {
                 gotoPdfViewFragment()
             }
@@ -65,7 +65,13 @@ class PdfViewActivity : BaseActivity<ActivityBaseBinding>() {
     private fun gotoPdfViewFragment() {
         runOnUiThread {
             if (!isFinishing && !isDestroyed) {
-                replaceFragment(PDFViewerFragment(), intent.extras, R.id.layout_container)
+                val uriData = intent.data
+                Logger.showLog("Thuytv----uriData:" + uriData?.path)
+                val mBundle = intent.extras
+                uriData?.apply {
+                    mBundle?.putParcelable(AppKeys.KEY_BUNDLE_URI, this)
+                }
+                replaceFragment(PDFViewerFragment(), mBundle, R.id.layout_container)
                 logEventFirebase(AppConfig.KEY_EVENT_FB_OPEN_PDF, AppConfig.KEY_EVENT_FB_OPEN_PDF)
             }
         }

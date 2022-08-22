@@ -45,4 +45,5 @@
     <color name="color_button_rate">#EF5350</color>
     <color name="color_bg_subs">#F50062</color>
     <color name="bg_line">#D8D8D8</color>
+    <color name="bg_line_crop">#007AFF</color>
 </resources>

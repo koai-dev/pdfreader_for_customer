@@ -181,71 +181,72 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
     private fun setupRecycleView() {
         lstDataFile?.apply {
             sortWith { o1, o2 -> o1.name!!.compareTo(o2.name!!) }
-            myFilesAdapter = MyFilesAdapter(context, lstDataFile!!, MyFilesAdapter.TYPE_VIEW_FILE, object : MyFilesAdapter.OnItemClickListener {
-                override fun onClickItem(documentFile: MyFilesModel) {
-                    Logger.showLog("Thuytv-----documentFile: " + documentFile.name)
-                    sharePreferenceUtils.setRecentFile(documentFile)
-                    isReloadRecent = true
-                    val bundle = Bundle()
-                    bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, documentFile)
-                    getBaseActivity()?.onNextScreen(PdfViewActivity::class.java, bundle, false)
-                    RxBus.publish(EventsBus.RELOAD_RECENT)
-                }
-
-                override fun onClickItemMore(view: View, documentFile: MyFilesModel) {
-                    var lstPopupMenu = R.menu.menu_more_file
-                    val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile()
-                    if (lstFavorite?.contains(documentFile) == true) {
-                        lstPopupMenu = R.menu.menu_more_file_favorite
+            myFilesAdapter =
+                MyFilesAdapter(context, lstDataFile!!, MyFilesAdapter.TYPE_VIEW_FILE, AppConfig.TYPE_FILTER_FILE, object : MyFilesAdapter.OnItemClickListener {
+                    override fun onClickItem(documentFile: MyFilesModel) {
+                        Logger.showLog("Thuytv-----documentFile: " + documentFile.name)
+                        sharePreferenceUtils.setRecentFile(documentFile)
+                        isReloadRecent = true
+                        val bundle = Bundle()
+                        bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, documentFile)
+                        getBaseActivity()?.onNextScreen(PdfViewActivity::class.java, bundle, false)
+                        RxBus.publish(EventsBus.RELOAD_RECENT)
                     }
-                    showPopupMenu(view, lstPopupMenu, object : OnPopupMenuItemClickListener {
-                        override fun onClickItemPopupMenu(menuItem: MenuItem?) {
-                            when (menuItem?.itemId) {
-                                R.id.menu_rename -> {
-                                    getBaseActivity()?.apply {
-                                        RenameFileDialog(this, documentFile, object : OnDialogItemClickListener {
-                                            override fun onClickItemConfirm(mData: MyFilesModel) {
-                                            }
 
-                                        }).show()
+                    override fun onClickItemMore(view: View, documentFile: MyFilesModel) {
+                        var lstPopupMenu = R.menu.menu_more_file
+                        val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile()
+                        if (lstFavorite?.contains(documentFile) == true) {
+                            lstPopupMenu = R.menu.menu_more_file_favorite
+                        }
+                        showPopupMenu(view, lstPopupMenu, object : OnPopupMenuItemClickListener {
+                            override fun onClickItemPopupMenu(menuItem: MenuItem?) {
+                                when (menuItem?.itemId) {
+                                    R.id.menu_rename -> {
+                                        getBaseActivity()?.apply {
+                                            RenameFileDialog(this, documentFile, object : OnDialogItemClickListener {
+                                                override fun onClickItemConfirm(mData: MyFilesModel) {
+                                                }
+
+                                            }).show()
+                                        }
                                     }
-                                }
-                                R.id.menu_favorite -> {
-                                    sharePreferenceUtils.setFavoriteFile(documentFile)
-                                    RxBus.publish(EventsBus.RELOAD_FAVORITE)
-                                }
-                                R.id.menu_un_favorite -> {
-                                    getBaseActivity()?.sharedPreferences?.removeFavoriteFile(documentFile)
-                                    RxBus.publish(EventsBus.RELOAD_FAVORITE)
-                                }
-                                R.id.menu_share -> {
-                                    documentFile.uriPath?.let { File(it) }?.let { shareFile(it) }
-                                }
-                                R.id.menu_delete -> {
-                                    getBaseActivity()?.apply {
-                                        val deleteFileDialog = DeleteFileDialog(this, documentFile, object : OnDialogItemClickListener {
-                                            override fun onClickItemConfirm(mData: MyFilesModel) {
-                                            }
-                                        })
-                                        deleteFileDialog.show()
+                                    R.id.menu_favorite -> {
+                                        sharePreferenceUtils.setFavoriteFile(documentFile)
+                                        RxBus.publish(EventsBus.RELOAD_FAVORITE)
                                     }
-                                }
-                                R.id.menu_shortcut -> {
-                                    getBaseActivity()?.apply {
-                                        setUpShortCut(this, documentFile)
+                                    R.id.menu_un_favorite -> {
+                                        getBaseActivity()?.sharedPreferences?.removeFavoriteFile(documentFile)
+                                        RxBus.publish(EventsBus.RELOAD_FAVORITE)
                                     }
-                                }
-                                R.id.menu_file_info -> {
-                                    getBaseActivity()?.apply {
-                                        FileInfoDialog(this, documentFile).show()
+                                    R.id.menu_share -> {
+                                        documentFile.uriPath?.let { File(it) }?.let { shareFile(it) }
+                                    }
+                                    R.id.menu_delete -> {
+                                        getBaseActivity()?.apply {
+                                            val deleteFileDialog = DeleteFileDialog(this, documentFile, object : OnDialogItemClickListener {
+                                                override fun onClickItemConfirm(mData: MyFilesModel) {
+                                                }
+                                            })
+                                            deleteFileDialog.show()
+                                        }
+                                    }
+                                    R.id.menu_shortcut -> {
+                                        getBaseActivity()?.apply {
+                                            setUpShortCut(this, documentFile)
+                                        }
+                                    }
+                                    R.id.menu_file_info -> {
+                                        getBaseActivity()?.apply {
+                                            FileInfoDialog(this, documentFile).show()
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                    })
-                }
-            })
+                        })
+                    }
+                })
             if (sharePreferenceUtils.getValueBoolean(SharePreferenceUtils.KEY_TYPE_VIEW_FILE) == true) {
                 binding.rcvAllFile.apply {
                     layoutManager = GridLayoutManager(getBaseActivity(), 3)

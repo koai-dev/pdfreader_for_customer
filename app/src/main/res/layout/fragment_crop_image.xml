@@ -123,6 +123,10 @@
         android:id="@+id/imv_view_image"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@drawable/bg_border_image_crop"
+        android:layout_margin="@dimen/margin_all"
+        android:padding="@dimen/dp2"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toTopOf="@id/ll_bottom_menu"
         app:layout_constraintTop_toBottomOf="@id/ll_toolbar_crop" />
 
@@ -131,6 +135,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="gone"
+        app:cropBorderCornerColor="@color/bg_line_crop"
         app:layout_constraintBottom_toTopOf="@id/ll_bottom_menu"
         app:layout_constraintTop_toBottomOf="@id/ll_toolbar_crop" />
 

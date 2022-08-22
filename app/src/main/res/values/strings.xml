@@ -113,7 +113,7 @@
     <string name="vl_rating_app_very_good_first">We are working hard for a better user experience. Please tell us your feeling with the app.</string>
     <string name="tt_rating_app_bad">Oh, no! Sorry for your experience</string>
     <string name="vl_rating_app_bad">Please leave us some feedback</string>
-    <string name="btn_rate">Rate</string>
+    <string name="btn_rate">Rate on Google play</string>
     <string name="btn_feedback">Feedback</string>
     <string name="vl_more_app">Discover More App</string>
     <string name="vl_content_subs">Document reader application</string>
@@ -122,5 +122,6 @@
     <string name="vl_location">Location</string>
     <string name="vl_last_modified">Last modified</string>
     <string name="vl_accessed">Accessed: %s</string>
+    <string name="msg_add_shortcut_success">File added to HomeScreen successfully</string>
 
 </resources>

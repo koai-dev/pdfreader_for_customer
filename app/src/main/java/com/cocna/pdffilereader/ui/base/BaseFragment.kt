@@ -2,15 +2,16 @@ package com.cocna.pdffilereader.ui.base
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import android.widget.PopupMenu
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.core.content.ContextCompat
@@ -225,17 +226,34 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
                 val pinShortcutInfo =
                     ShortcutInfo.Builder(context, shortcut_id).build()
 
-                val pinnedShortcutCallbackIntent =
-                    shortcutManager.createShortcutResultIntent(pinShortcutInfo)
+//                val pinnedShortcutCallbackIntent =
+//                    shortcutManager.createShortcutResultIntent(pinShortcutInfo)
+
+                val broadcastIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
+                // create an anonymous broadcaster.  Unregister
+                // to prevent leaks when done.
+                // create an anonymous broadcaster.  Unregister
+                // to prevent leaks when done.
+                getBaseActivity()?.registerReceiver(object : BroadcastReceiver() {
+                    override fun onReceive(c: Context?, intent: Intent) {
+                        getBaseActivity()?.unregisterReceiver(this)
+                        getBaseActivity()?.apply {
+                            Logger.showSnackbar(this, getString(R.string.msg_add_shortcut_success))
+                        }
+
+                    }
+                }, IntentFilter(Intent.ACTION_CREATE_SHORTCUT)
+                )
+
                 val successCallback: PendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     PendingIntent.getBroadcast(
                         context, /* request code */ requestCode,
-                        pinnedShortcutCallbackIntent, /* flags */ PendingIntent.FLAG_MUTABLE
+                        broadcastIntent, /* flags */ PendingIntent.FLAG_MUTABLE
                     )
                 } else {
                     PendingIntent.getBroadcast(
                         context, /* request code */ requestCode,
-                        pinnedShortcutCallbackIntent, /* flags */ 0
+                        broadcastIntent, /* flags */ 0
                     )
                 }
 
@@ -246,6 +264,4 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
             }
         }
     }
-
-
 }
