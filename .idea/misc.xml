@@ -62,7 +62,10 @@
         <entry key="app/src/main/res/layout/dialog_confirm_file.xml" value="0.16041666666666668" />
         <entry key="app/src/main/res/layout/dialog_delete_file.xml" value="0.165" />
         <entry key="app/src/main/res/layout/dialog_file_info.xml" value="0.2615458170572917" />
+<<<<<<< HEAD
+=======
         <entry key="app/src/main/res/layout/dialog_loading_ads.xml" value="0.1796875" />
+>>>>>>> develop
         <entry key="app/src/main/res/layout/dialog_progress_bar.xml" value="0.225" />
         <entry key="app/src/main/res/layout/dialog_progress_load_ads.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/dialog_rating_app.xml" value="0.165" />

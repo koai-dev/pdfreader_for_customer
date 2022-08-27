@@ -71,6 +71,7 @@
     <string name="vl_size_folder">%d Arquivo</string>
     <string name="btn_click_here_read">Clique aqui para ler agora!</string>
     <string name="vl_history_file">Arquivo de histórico (%d)</string>
+<!--    <string name="vl_loading_ads">Carregando anúncios (%s)</string>-->
     <string name="vl_loading_ads">Carregando anúncios</string>
     <string name="vl_well_comeback">Bem vindo de volta</string>
     <string name="tt_update_version">Atualizar aplicativo</string>
@@ -79,5 +80,30 @@
     <string name="btn_later">Mais tarde</string>
     <string name="msg_no_files">Nenhum arquivo ainda - É necessária permissão para ler todos os arquivos</string>
     <string name="btn_go_to_setting">Ir para a configuração</string>
+    <string name="vl_bookmark">marca páginas</string>
+    <string name="vl_capture">Capturar</string>
+    <string name="vl_share_image">Compartilhar imagem</string>
+    <string name="tt_successful">Bem sucedido</string>
+    <string name="msg_add_bookmark_success">Arquivo adicionado ao Favorito com sucesso</string>
+    <string name="msg_remove_bookmark_success">Arquivo removido para o Favorito com sucesso</string>
+    <string name="msg_save_image_success">O arquivo foi salvo na Galeria</string>
+    <string name="vl_crop">Colheita</string>
+    <string name="vl_save">Salvar</string>
+    <string name="tt_rating_app_very_good">Nós também gostamos de você!</string>
+    <string name="vl_rating_app_very_good">Obrigado por nos escolher</string>
+    <string name="tt_rating_app_very_good_first">Obrigado por nos escolher!</string>
+    <string name="vl_rating_app_very_good_first">Estamos trabalhando duro para uma melhor experiência do usuário. Por favor, diga-nos o seu sentimento com o aplicativo.</string>
+    <string name="tt_rating_app_bad">Oh não! Desculpe pela sua experiência</string>
+    <string name="vl_rating_app_bad">Por favor, deixe-nos algum feedback</string>
+    <string name="btn_rate">Avalie no Google play</string>
+    <string name="btn_feedback">Comentários</string>
+    <string name="vl_more_app">Descubra mais aplicativo</string>
+    <string name="vl_content_subs">Aplicativo leitor de documentos</string>
+    <string name="menu_file_info">Informações do arquivo</string>
+    <string name="menu_shortcut">Atalho</string>
+    <string name="vl_location">Localização</string>
+    <string name="vl_last_modified">Última modificação</string>
+    <string name="vl_accessed">Acessado: %s</string>
+    <string name="msg_add_shortcut_success">Arquivo adicionado ao HomeScreen com sucesso</string>
 
 </resources>

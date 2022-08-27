@@ -71,6 +71,7 @@
     <string name="vl_size_folder">%d het dossier</string>
     <string name="btn_click_here_read">Klik hier om nu te lezen!</string>
     <string name="vl_history_file">Geschiedenisbestand (%d)</string>
+<!--    <string name="vl_loading_ads">Advertenties laden (%s)</string>-->
     <string name="vl_loading_ads">Advertenties laden</string>
     <string name="vl_well_comeback">Welkom terug</string>
     <string name="tt_update_version">App bijwerken</string>
@@ -79,5 +80,30 @@
     <string name="btn_later">Later</string>
     <string name="msg_no_files">Nog geen bestanden - Toestemming is vereist om alle bestanden te lezen</string>
     <string name="btn_go_to_setting">Ga naar Instellingen</string>
+    <string name="vl_bookmark">Bladwijzer</string>
+    <string name="vl_capture">Vastleggen</string>
+    <string name="vl_share_image">Deel afbeelding</string>
+    <string name="tt_successful">Succesvol</string>
+    <string name="msg_add_bookmark_success">Bestand succesvol toegevoegd aan bladwijzer</string>
+    <string name="msg_remove_bookmark_success">Bestand succesvol verwijderd naar bladwijzer</string>
+    <string name="msg_save_image_success">Het bestand is opgeslagen in Galerij</string>
+    <string name="vl_crop">Bijsnijden</string>
+    <string name="vl_save">Opslaan</string>
+    <string name="tt_rating_app_very_good">Wij vinden jou ook leuk!</string>
+    <string name="vl_rating_app_very_good">Bedankt dat u ons gekozen hebt</string>
+    <string name="tt_rating_app_very_good_first">Bedankt dat u ons gekozen hebt!</string>
+    <string name="vl_rating_app_very_good_first">We werken hard aan een betere gebruikerservaring. Vertel ons uw gevoel met de app.</string>
+    <string name="tt_rating_app_bad">Oh nee! Sorry voor je ervaring</string>
+    <string name="vl_rating_app_bad">Laat alsjeblieft wat feedback achter</string>
+    <string name="btn_rate">Beoordeel op Google play</string>
+    <string name="btn_feedback">Feedback</string>
+    <string name="vl_more_app">Ontdek meer app</string>
+    <string name="vl_content_subs">Documentlezer-toepassing</string>
+    <string name="menu_file_info">Bestandsinformatie</string>
+    <string name="menu_shortcut">Snelkoppeling</string>
+    <string name="vl_location">Plaats</string>
+    <string name="vl_last_modified">Laatst gewijzigd</string>
+    <string name="vl_accessed">Betreden: %s</string>
+    <string name="msg_add_shortcut_success">Bestand succesvol toegevoegd aan HomeScreen</string>
 
 </resources>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/ll_show_notification"
+    android:background="@android:color/transparent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_all"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="@dimen/corner_radius_dialog"
+        app:cardUseCompatPadding="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_all">
+
+            <ImageView
+                android:id="@+id/imv_icon_notify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_success"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imv_close_popup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_small"
+                android:src="@drawable/ic_close_popup"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tt_notify"
+                style="@style/Text_Title_Success"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_all"
+                android:text="@string/tt_successful"
+                app:layout_constraintEnd_toStartOf="@id/imv_close_popup"
+                app:layout_constraintStart_toEndOf="@id/imv_icon_notify"
+                app:layout_constraintTop_toTopOf="@id/imv_icon_notify" />
+
+            <TextView
+                android:id="@+id/vl_content_notify"
+                style="@style/Text_Content_Success"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_all"
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="@string/msg_add_bookmark_success"
+                app:layout_constraintEnd_toStartOf="@id/imv_close_popup"
+                app:layout_constraintStart_toEndOf="@id/imv_icon_notify"
+                app:layout_constraintTop_toBottomOf="@id/tt_notify" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

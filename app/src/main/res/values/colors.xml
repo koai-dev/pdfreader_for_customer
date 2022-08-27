@@ -39,4 +39,11 @@
     <color name="color_E57373">#E57373</color>
     <color name="color_0D000000">#0D000000</color>
     <color name="color_26000000">#26000000</color>
+    <color name="color_success">#27C36E</color>
+    <color name="color_323741">#323741</color>
+    <color name="color_FFCC00">#FFCC00</color>
+    <color name="color_button_rate">#EF5350</color>
+    <color name="color_bg_subs">#F50062</color>
+    <color name="bg_line">#D8D8D8</color>
+    <color name="bg_line_crop">#007AFF</color>
 </resources>

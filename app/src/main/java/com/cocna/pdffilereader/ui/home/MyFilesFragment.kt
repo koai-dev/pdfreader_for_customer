@@ -13,13 +13,11 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.MimeTypeMap
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.documentfile.provider.DocumentFile
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager.widget.ViewPager
 import com.anggrayudi.storage.file.*
 import com.cocna.pdffilereader.R
@@ -29,8 +27,8 @@ import com.cocna.pdffilereader.myinterface.OnPopupMenuItemClickListener
 import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.base.OnCallbackTittleTab
 import com.cocna.pdffilereader.ui.home.adapter.TabFileAdapter
-import com.cocna.pdffilereader.ui.home.dialog.ProgressDialog
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
+import com.google.android.material.tabs.TabLayout
 import io.reactivex.disposables.Disposable
 import java.io.File
 
@@ -144,6 +142,20 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
             }
             binding.tabMyFile.tabRippleColor = null
         }
+        binding.tabMyFile.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab?.position == 1) {
+                    getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_HISTORY_SCREEN, AppConfig.KEY_EVENT_FB_HISTORY_SCREEN)
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
+        })
         listenClickViews(binding.imvAdapterType, binding.imvFilterFile, binding.btnGoToSetting)
         binding.swRefreshData.setOnRefreshListener {
             getBaseActivity()?.apply {
@@ -336,6 +348,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
     private fun getAllFilePdf() {
         Thread {
             getBaseActivity()?.apply {
+                val startTime = System.currentTimeMillis()
                 var root = DocumentFileCompat.getRootDocumentFile(this, "primary", true)
                 if (root == null) {
                     root = DocumentFile.fromFile(File(PATH_DEFAULT_STORE))
@@ -346,13 +359,14 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                     myFileDetailFragment?.updateData(lstFilePdf)
                     mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
                     binding.swRefreshData.isRefreshing = false
-                    if(mStrSearch.isNotEmpty()){
+                    if (mStrSearch.isNotEmpty()) {
                         myFileDetailFragment?.onSearchFile(mStrSearch)
                     }
                 }
                 if (getBaseActivity()?.isCurrentNetwork == false) {
                     getBaseActivity()?.enabaleNetwork()
                 }
+                Logger.showLog("Thuytv------getAllFilePdf----: " + (System.currentTimeMillis() - startTime))
             }
         }.start()
     }
@@ -371,6 +385,8 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                 requestPermission()
             }
             .setNegativeButton(getString(R.string.btn_cancel)) { _, _ ->
+                binding.llGoToSetting.visible()
+            }.setOnCancelListener {
                 binding.llGoToSetting.visible()
             }
         permissionDeniedDialog.show()
@@ -423,26 +439,32 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
     }
 
     private fun getFile(rootFile: DocumentFile) {
-        val pdfArray = rootFile.listFiles()
-        if (pdfArray.isNotEmpty()) {
-            for (item in pdfArray) {
-                if (item.isFile) {
-                    if (item.extension.lowercase() == "pdf") {
-                        val model =
-                            MyFilesModel(
-                                name = item.name,
-                                uriPath = item.uri.path,
-                                uriOldPath = item.uri.path,
-                                lastModified = item.lastModified(),
-                                extensionName = item.extension,
-                                length = item.length()
-                            )
-                        lstFilePdf.add(model)
+        try {
+            val pdfArray = rootFile.listFiles()
+            if (pdfArray.isNotEmpty()) {
+                for (item in pdfArray) {
+                    if (item.isFile) {
+                        if (item.extension.lowercase() == "pdf") {
+                            val model =
+                                MyFilesModel(
+                                    name = item.name,
+                                    uriPath = item.uri.path,
+                                    uriOldPath = item.uri.path,
+                                    lastModified = item.lastModified(),
+                                    extensionName = item.extension,
+                                    length = item.length(),
+                                    locationFile = item.parentFile?.uri?.path,
+                                    folderName = item.parentFile?.name
+
+                                )
+                            lstFilePdf.add(model)
+                        }
+                    } else {
+                        getFile(item)
                     }
-                } else {
-                    getFile(item)
                 }
             }
+        } catch (e: Exception) {
         }
     }
 }

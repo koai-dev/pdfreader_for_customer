@@ -13,6 +13,7 @@ import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.FragmentMainBinding
 import com.cocna.pdffilereader.ui.base.BaseFragment
+import com.cocna.pdffilereader.ui.home.dialog.RatingAppDialog
 import com.cocna.pdffilereader.ui.home.model.AdsLogModel
 import com.google.android.gms.ads.*
 
@@ -115,6 +116,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 //                            binding.edtSearchAll.setText("")
 //                        }
                         hideShowFragment(favoriteFragment, myFilesFragment, settingFragment, browseFragment)
+                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_SCREEN, AppConfig.KEY_EVENT_FB_BOOKMARK_SCREEN)
                     }
                     R.id.navigation_browse -> {
                         if (binding.imvPurchase.visibility == View.GONE) {
@@ -123,6 +125,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                             binding.ttSettingHome.gone()
                         }
                         hideShowFragment(browseFragment, myFilesFragment, favoriteFragment, browseFragment)
+                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_FOLDER_SCREEN, AppConfig.KEY_EVENT_FB_FOLDER_SCREEN)
                     }
                     R.id.navigation_setting -> {
 
@@ -132,6 +135,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                             binding.ttSettingHome.visible()
                         }
                         hideShowFragment(settingFragment, myFilesFragment, favoriteFragment, browseFragment)
+                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_SETTING_SCREEN, AppConfig.KEY_EVENT_FB_SETTING_SCREEN)
                     }
 
                 }
@@ -200,6 +204,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     override fun onResume() {
         super.onResume()
         adView.resume()
+        val countRateUs = getBaseActivity()?.sharedPreferences?.getValueInteger(SharePreferenceUtils.KEY_COUNT_RATE_US, 0) ?: 0
+        if (countRateUs <= AppConfig.MAX_COUNT_RATE_US) {
+            getBaseActivity()?.apply {
+                if (isVisible && Common.isFromPDFView == true && (Common.countRatingApp == 2 || Common.countRatingApp == 6)) {
+                    RatingAppDialog(this, true).show()
+                    Common.isFromPDFView = null
+                }
+            }
+        }
     }
 
     /** Called before the activity is destroyed  */

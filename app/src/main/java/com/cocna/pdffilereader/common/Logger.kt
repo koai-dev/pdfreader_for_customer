@@ -16,19 +16,19 @@ object Logger {
 
     fun showLog(message: String?) {
         if (BuildConfig.DEBUG) {
-            Log.d("Thuytv", message?:"")
+            Log.d("Thuytv", message ?: "")
         }
     }
 
     fun showLog(tag: String, message: String?) {
         if (BuildConfig.DEBUG) {
-            Log.d(tag, message?:"")
+            Log.d(tag, message ?: "")
         }
     }
 
     fun showLogError(message: String?) {
         if (BuildConfig.DEBUG) {
-            Log.e("Thuytv", message?:"")
+            Log.e("Thuytv", message ?: "")
         }
     }
 
@@ -37,7 +37,7 @@ object Logger {
             Snackbar.make(
                 context.findViewById(android.R.id.content),
                 message ?: "",
-                Snackbar.LENGTH_INDEFINITE
+                Snackbar.LENGTH_SHORT
             ).show()
         }
 

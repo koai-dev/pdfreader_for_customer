@@ -71,6 +71,7 @@
     <string name="vl_size_folder">%d 파일</string>
     <string name="btn_click_here_read">지금 읽으려면 여기를 클릭하십시오!</string>
     <string name="vl_history_file">기록 파일 (%d)</string>
+<!--    <string name="vl_loading_ads">광고 로드 중 (%s)</string>-->
     <string name="vl_loading_ads">광고 로드 중</string>
     <string name="vl_well_comeback">잘 컴백</string>
     <string name="tt_update_version">앱 업데이트</string>
@@ -79,5 +80,30 @@
     <string name="btn_later">나중</string>
     <string name="msg_no_files">아직 파일 없음 - 모든 파일을 읽으려면 권한이 필요합니다.</string>
     <string name="btn_go_to_setting">설정으로 이동</string>
+    <string name="vl_bookmark">서표</string>
+    <string name="vl_capture">포착</string>
+    <string name="vl_share_image">이미지 공유</string>
+    <string name="tt_successful">성공적인</string>
+    <string name="msg_add_bookmark_success">북마크에 파일이 성공적으로 추가되었습니다.</string>
+    <string name="msg_remove_bookmark_success">파일이 북마크로 성공적으로 제거되었습니다.</string>
+    <string name="msg_save_image_success">파일이 갤러리에 저장되었습니다.</string>
+    <string name="vl_crop">수확고</string>
+    <string name="vl_save">구하다</string>
+    <string name="tt_rating_app_very_good">우리도 당신을 좋아합니다!</string>
+    <string name="vl_rating_app_very_good">우리를 선택해 주셔서 감사합니다</string>
+    <string name="tt_rating_app_very_good_first">우리를 선택해 주셔서 감사합니다!</string>
+    <string name="vl_rating_app_very_good_first">우리는 더 나은 사용자 경험을 위해 열심히 노력하고 있습니다. 앱을 통해 느낀 점을 알려주세요.</string>
+    <string name="tt_rating_app_bad">안 돼! 당신의 경험에 대해 죄송합니다</string>
+    <string name="vl_rating_app_bad">피드백을 남겨주세요</string>
+    <string name="btn_rate">Google Play에서 평가</string>
+    <string name="btn_feedback">피드백</string>
+    <string name="vl_more_app">더 많은 앱 알아보기</string>
+    <string name="vl_content_subs">문서 판독기 응용 프로그램</string>
+    <string name="menu_file_info">파일 정보</string>
+    <string name="menu_shortcut">지름길</string>
+    <string name="vl_location">위치</string>
+    <string name="vl_last_modified">마지막 수정</string>
+    <string name="vl_accessed">액세스: %s</string>
+    <string name="msg_add_shortcut_success">파일이 HomeScreen에 성공적으로 추가되었습니다.</string>
 
 </resources>

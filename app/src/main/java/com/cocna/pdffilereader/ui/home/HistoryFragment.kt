@@ -105,7 +105,7 @@ private fun setBackgroundColor(isEmpty: Boolean){
             binding.rcvRecentFile.visible()
             setBackgroundColor(false)
         }
-        mRecentAdapter = MyFilesAdapter(context, lstRecent ?: ArrayList(), 0, object : MyFilesAdapter.OnItemClickListener {
+        mRecentAdapter = MyFilesAdapter(context, lstRecent ?: ArrayList(), 0,AppConfig.TYPE_FILTER_FILE, object : MyFilesAdapter.OnItemClickListener {
             override fun onClickItem(documentFile: MyFilesModel) {
                 val bundle = Bundle()
                 bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, documentFile)

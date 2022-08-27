@@ -72,6 +72,7 @@
     <string name="vl_size_folder">%d berkas</string>
     <string name="btn_click_here_read">Klik di sini untuk membaca sekarang!</string>
     <string name="vl_history_file">Berkas Riwayat (%d)</string>
+<!--    <string name="vl_loading_ads">Memuat Iklan (%s)</string>-->
     <string name="vl_loading_ads">Memuat Iklan</string>
     <string name="vl_well_comeback">Selamat datang kembali</string>
     <string name="tt_update_version">Perbarui Aplikasi</string>
@@ -80,5 +81,30 @@
     <string name="btn_later">Nanti</string>
     <string name="msg_no_files">Belum Ada File - Izin diperlukan untuk membaca semua file</string>
     <string name="btn_go_to_setting">Pergi ke Pengaturan</string>
+    <string name="vl_bookmark">Penanda buku</string>
+    <string name="vl_capture">Menangkap</string>
+    <string name="vl_share_image">Bagikan Gambar</string>
+    <string name="tt_successful">Berhasil</string>
+    <string name="msg_add_bookmark_success">File berhasil ditambahkan ke Bookmark</string>
+    <string name="msg_remove_bookmark_success">File berhasil dihapus ke Bookmark</string>
+    <string name="msg_save_image_success">File telah disimpan ke Galeri</string>
+    <string name="vl_crop">Tanaman</string>
+    <string name="vl_save">Menyimpan</string>
+    <string name="tt_rating_app_very_good">Kami juga menyukaimu!</string>
+    <string name="vl_rating_app_very_good">Terima kasih telah memilih kami</string>
+    <string name="tt_rating_app_very_good_first">Terima kasih telah memilih kami!</string>
+    <string name="vl_rating_app_very_good_first">Kami bekerja keras untuk pengalaman pengguna yang lebih baik. Tolong beri tahu kami perasaan Anda dengan aplikasi ini.</string>
+    <string name="tt_rating_app_bad">Oh tidak! Maaf atas pengalaman Anda</string>
+    <string name="vl_rating_app_bad">Silakan tinggalkan kami beberapa umpan balik</string>
+    <string name="btn_rate">Beri peringkat di Google play</string>
+    <string name="btn_feedback">Masukan</string>
+    <string name="vl_more_app">Temukan Lebih Banyak Aplikasi</string>
+    <string name="vl_content_subs">Aplikasi pembaca dokumen</string>
+    <string name="menu_file_info">Informasi berkas</string>
+    <string name="menu_shortcut">Jalan pintas</string>
+    <string name="vl_location">Lokasi</string>
+    <string name="vl_last_modified">Terakhir diubah</string>
+    <string name="vl_accessed">Diakses: %s</string>
+    <string name="msg_add_shortcut_success">File berhasil ditambahkan ke Layar Beranda</string>
 
 </resources>

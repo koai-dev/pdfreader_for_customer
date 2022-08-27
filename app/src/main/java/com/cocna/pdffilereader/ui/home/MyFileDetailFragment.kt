@@ -18,6 +18,7 @@ import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.base.OnCallbackTittleTab
 import com.cocna.pdffilereader.ui.home.adapter.MyFilesAdapter
 import com.cocna.pdffilereader.ui.home.dialog.DeleteFileDialog
+import com.cocna.pdffilereader.ui.home.dialog.FileInfoDialog
 import com.cocna.pdffilereader.ui.home.dialog.RenameFileDialog
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.google.gson.Gson
@@ -74,6 +75,7 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
             binding.ttToolbar.text = titleData
         }
         onListenDeleteFile()
+        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_FILE_LISTING, AppConfig.KEY_PARAM_FB_VIEW_MODE, AppConfig.KEY_FB_LIST)
     }
 
     override fun initEvents() {
@@ -99,8 +101,10 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                 isViewType = !isViewType
                 if (isViewType) {
                     binding.imvTypeAdapter.setImageResource(R.drawable.ic_list_type)
+                    getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_FILE_LISTING, AppConfig.KEY_PARAM_FB_VIEW_MODE, AppConfig.KEY_FB_GRID)
                 } else {
                     binding.imvTypeAdapter.setImageResource(R.drawable.ic_grid_type)
+                    getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_FILE_LISTING, AppConfig.KEY_PARAM_FB_VIEW_MODE, AppConfig.KEY_FB_LIST)
                 }
                 changeTypeViewAdapter(isViewType)
             }
@@ -127,31 +131,35 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                                     sortWith { o1, o2 -> o1.length!!.compareTo(o2.length!!) }
                                     myFilesAdapter?.updateData(this)
                                 }
-
+                                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_FILE_LISTING, AppConfig.KEY_PARAM_FB_SORT_FILE, AppConfig.KEY_FB_SIZE)
                             }
                             R.id.menu_all_name_a_z -> {
                                 lstDataFile?.apply {
                                     sortWith { o1, o2 -> o1.name!!.lowercase().compareTo(o2.name!!.lowercase()) }
                                     myFilesAdapter?.updateData(this)
                                 }
+                                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_FILE_LISTING, AppConfig.KEY_PARAM_FB_SORT_FILE, AppConfig.KEY_FB_A_Z)
                             }
                             R.id.menu_all_name_z_a -> {
                                 lstDataFile?.apply {
                                     sortWith { o1, o2 -> o2.name!!.lowercase().compareTo(o1.name!!.lowercase()) }
                                     myFilesAdapter?.updateData(this)
                                 }
+                                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_FILE_LISTING, AppConfig.KEY_PARAM_FB_SORT_FILE, AppConfig.KEY_FB_A_Z)
                             }
                             R.id.menu_all_date_modified -> {
                                 lstDataFile?.apply {
                                     sortWith { o1, o2 -> o1.lastModified!!.compareTo(o2.lastModified!!) }
                                     myFilesAdapter?.updateData(this)
                                 }
+                                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_FILE_LISTING, AppConfig.KEY_PARAM_FB_SORT_FILE, AppConfig.KEY_FB_DATE)
                             }
                             R.id.menu_all_date_added -> {
                                 lstDataFile?.apply {
                                     sortWith { o1, o2 -> o2.lastModified!!.compareTo(o1.lastModified!!) }
                                     myFilesAdapter?.updateData(this)
                                 }
+                                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_FILE_LISTING, AppConfig.KEY_PARAM_FB_SORT_FILE, AppConfig.KEY_FB_DATE)
                             }
                         }
                     }
@@ -180,61 +188,78 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
     private fun setupRecycleView() {
         lstDataFile?.apply {
             sortWith { o1, o2 -> o1.name!!.compareTo(o2.name!!) }
-            myFilesAdapter = MyFilesAdapter(context, lstDataFile!!, MyFilesAdapter.TYPE_VIEW_FILE, object : MyFilesAdapter.OnItemClickListener {
-                override fun onClickItem(documentFile: MyFilesModel) {
-                    Logger.showLog("Thuytv-----documentFile: " + documentFile.name)
-                    sharePreferenceUtils.setRecentFile(documentFile)
-                    isReloadRecent = true
-                    val bundle = Bundle()
-                    bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, documentFile)
-                    getBaseActivity()?.onNextScreen(PdfViewActivity::class.java, bundle, false)
-                    RxBus.publish(EventsBus.RELOAD_RECENT)
-                }
-
-                override fun onClickItemMore(view: View, documentFile: MyFilesModel) {
-                    var lstPopupMenu = R.menu.menu_more_file
-                    val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile()
-                    if (lstFavorite?.contains(documentFile) == true) {
-                        lstPopupMenu = R.menu.menu_more_file_favorite
+            myFilesAdapter =
+                MyFilesAdapter(context, lstDataFile!!, MyFilesAdapter.TYPE_VIEW_FILE, AppConfig.TYPE_FILTER_FILE, object : MyFilesAdapter.OnItemClickListener {
+                    override fun onClickItem(documentFile: MyFilesModel) {
+                        Logger.showLog("Thuytv-----documentFile: " + documentFile.name)
+                        sharePreferenceUtils.setRecentFile(documentFile)
+                        isReloadRecent = true
+                        val bundle = Bundle()
+                        bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, documentFile)
+                        getBaseActivity()?.onNextScreen(PdfViewActivity::class.java, bundle, false)
+                        RxBus.publish(EventsBus.RELOAD_RECENT)
                     }
-                    showPopupMenu(view, lstPopupMenu, object : OnPopupMenuItemClickListener {
-                        override fun onClickItemPopupMenu(menuItem: MenuItem?) {
-                            when (menuItem?.itemId) {
-                                R.id.menu_rename -> {
-                                    getBaseActivity()?.apply {
-                                        RenameFileDialog(this, documentFile, object : OnDialogItemClickListener {
-                                            override fun onClickItemConfirm(mData: MyFilesModel) {
-                                            }
 
-                                        }).show()
+                    override fun onClickItemMore(view: View, documentFile: MyFilesModel) {
+                        var lstPopupMenu = R.menu.menu_more_file
+                        val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile()
+                        if (lstFavorite?.contains(documentFile) == true) {
+                            lstPopupMenu = R.menu.menu_more_file_favorite
+                        }
+                        showPopupMenu(view, lstPopupMenu, object : OnPopupMenuItemClickListener {
+                            override fun onClickItemPopupMenu(menuItem: MenuItem?) {
+                                when (menuItem?.itemId) {
+                                    R.id.menu_rename -> {
+                                        getBaseActivity()?.apply {
+                                            RenameFileDialog(this, documentFile, object : OnDialogItemClickListener {
+                                                override fun onClickItemConfirm(mData: MyFilesModel) {
+                                                }
+
+                                            }).show()
+                                        }
+                                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_RENAME_FILE,AppConfig.KEY_EVENT_FB_RENAME_FILE)
                                     }
-                                }
-                                R.id.menu_favorite -> {
-                                    sharePreferenceUtils.setFavoriteFile(documentFile)
-                                    RxBus.publish(EventsBus.RELOAD_FAVORITE)
-                                }
-                                R.id.menu_un_favorite -> {
-                                    getBaseActivity()?.sharedPreferences?.removeFavoriteFile(documentFile)
-                                    RxBus.publish(EventsBus.RELOAD_FAVORITE)
-                                }
-                                R.id.menu_share -> {
-                                    documentFile.uriPath?.let { File(it) }?.let { shareFile(it) }
-                                }
-                                R.id.menu_delete -> {
-                                    getBaseActivity()?.apply {
-                                        val deleteFileDialog = DeleteFileDialog(this, documentFile, object : OnDialogItemClickListener {
-                                            override fun onClickItemConfirm(mData: MyFilesModel) {
-                                            }
-                                        })
-                                        deleteFileDialog.show()
+                                    R.id.menu_favorite -> {
+                                        sharePreferenceUtils.setFavoriteFile(documentFile)
+                                        RxBus.publish(EventsBus.RELOAD_FAVORITE)
+                                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_FILE,AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_BOOKMARK)
+                                    }
+                                    R.id.menu_un_favorite -> {
+                                        getBaseActivity()?.sharedPreferences?.removeFavoriteFile(documentFile)
+                                        RxBus.publish(EventsBus.RELOAD_FAVORITE)
+                                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_FILE,AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_UN_BOOKMARK)
+                                    }
+                                    R.id.menu_share -> {
+                                        documentFile.uriPath?.let { File(it) }?.let { shareFile(it) }
+                                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_SHARE_FILE,AppConfig.KEY_EVENT_FB_SHARE_FILE)
+                                    }
+                                    R.id.menu_delete -> {
+                                        getBaseActivity()?.apply {
+                                            val deleteFileDialog = DeleteFileDialog(this, documentFile, object : OnDialogItemClickListener {
+                                                override fun onClickItemConfirm(mData: MyFilesModel) {
+                                                    getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_DELETE_FILE,AppConfig.KEY_EVENT_FB_DELETE_FILE)
+                                                }
+                                            })
+                                            deleteFileDialog.show()
+                                        }
+                                    }
+                                    R.id.menu_shortcut -> {
+                                        getBaseActivity()?.apply {
+                                            setUpShortCut(this, documentFile)
+                                        }
+                                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_SHORTCUT_FILE,AppConfig.KEY_EVENT_FB_SHORTCUT_FILE)
+                                    }
+                                    R.id.menu_file_info -> {
+                                        getBaseActivity()?.apply {
+                                            FileInfoDialog(this, documentFile).show()
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                    })
-                }
-            })
+                        })
+                    }
+                })
             if (sharePreferenceUtils.getValueBoolean(SharePreferenceUtils.KEY_TYPE_VIEW_FILE) == true) {
                 binding.rcvAllFile.apply {
                     layoutManager = GridLayoutManager(getBaseActivity(), 3)
@@ -285,5 +310,6 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
 
     fun onSearchFile(strName: String) {
         myFilesAdapter?.filter?.filter(strName)
+        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_SEARCH_FILE, AppConfig.KEY_EVENT_FB_SEARCH_FILE)
     }
 }

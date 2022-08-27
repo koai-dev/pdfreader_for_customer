@@ -3,15 +3,16 @@ package com.cocna.pdffilereader.ui.home
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.net.Uri
-import android.os.Handler
-import android.os.Looper
-import android.os.ParcelFileDescriptor
+import android.os.*
 import android.util.DisplayMetrics
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
@@ -21,10 +22,13 @@ import com.cocna.pdffilereader.myinterface.OnPopupMenuItemClickListener
 import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.home.adapter.PreviewAdapter
 import com.cocna.pdffilereader.ui.home.dialog.DeleteFileDialog
+import com.cocna.pdffilereader.ui.home.dialog.FileInfoDialog
 import com.cocna.pdffilereader.ui.home.dialog.RenameFileDialog
 import com.cocna.pdffilereader.ui.home.model.AdsLogModel
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
+import com.github.barteksc.pdfviewer.PDFView
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener
+import com.github.barteksc.pdfviewer.listener.OnPageScrollListener
 import com.github.barteksc.pdfviewer.listener.OnTapListener
 import com.github.barteksc.pdfviewer.util.FitPolicy
 import com.google.android.gms.ads.*
@@ -38,6 +42,7 @@ import java.util.*
 /**
  * Created by Thuytv on 10/06/2022.
  */
+@Suppress("DEPRECATION")
 class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClickListener {
     private var myFileModel: MyFilesModel? = null
     private var isFirst = true
@@ -52,6 +57,12 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
     private var startTime: Long = 0L
     private var isSendShowAds = false
     private var isLoadedAds = false
+    private var isJumpEdit = false
+    private var pdfConfig: PDFView.Configurator? = null
+    private var isNightMode = false
+    private var isPageMode = false
+    private var isBookmark = false
+    private var oldPage = 0
 
     // Determine the screen width (less decorations) to use for the ad width.
     // If the ad hasn't been laid out, default to the full screen width.
@@ -84,27 +95,40 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         get() = FragmentPdfViewerBinding::inflate
 
     override fun initData() {
-        myFileModel = arguments?.getParcelable(AppKeys.KEY_BUNDLE_DATA)
         startTime = System.currentTimeMillis()
+        myFileModel = arguments?.getParcelable(AppKeys.KEY_BUNDLE_DATA)
+        isNightMode = getBaseActivity()?.sharedPreferences?.getValueBoolean(SharePreferenceUtils.KEY_NIGHT_MODE) ?: false
+        isPageMode = getBaseActivity()?.sharedPreferences?.getValueBoolean(SharePreferenceUtils.KEY_PAGE_MODE) ?: false
+        if (isPageMode) {
+            binding.imvChangeView.setImageResource(R.drawable.ic_continuos_page)
+        } else {
+            binding.imvChangeView.setImageResource(R.drawable.ic_page_by_page)
+        }
         if (myFileModel == null) {
-            val uriPath = arguments?.getParcelable<Uri>(Intent.EXTRA_STREAM)
-            getBaseActivity()?.apply {
-                if (uriPath != null) {
-                    val fullPath = RealPathUtil.getRealPath(this, uriPath)
-                    var fileName = ""
-                    if (fullPath?.isNotEmpty() == true) {
-                        val cut = fullPath.lastIndexOf("/")
-                        if (cut != -1) {
-                            fileName = fullPath.substring(cut + 1)
-                            binding.ttToolbarPdf.text = fileName
-                        }
+            var uriPath = arguments?.getParcelable<Uri>(Intent.EXTRA_STREAM)
+            if (uriPath == null) {
+                uriPath = arguments?.getParcelable(AppKeys.KEY_BUNDLE_URI)
+                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_OPEN_PDF, AppConfig.KEY_PARAM_FB_OPEN_SOURCE, AppConfig.KEY_FB_CLICK_SUGGEST_APP)
+            } else {
+                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_OPEN_PDF, AppConfig.KEY_PARAM_FB_OPEN_SOURCE, AppConfig.KEY_FB_CLICK_SHORT_CUT)
+
+            }
+            uriPath?.apply {
+                val fullPath = RealPathUtil.getRealPath(getBaseActivity()!!, this)
+                myFileModel = MyFilesModel(uriPath = fullPath, uriOldPath = fullPath, extensionName = "pdf")
+
+                if (fullPath?.isNotEmpty() == true) {
+                    val cut = fullPath.lastIndexOf("/")
+                    if (cut != -1) {
+                        val fileName = fullPath.substring(cut + 1)
+                        binding.ttToolbarPdf.text = fileName
+                        myFileModel?.name = fileName
                     }
-                    myFileModel = MyFilesModel(uriPath = fullPath, uriOldPath = fullPath, name = fileName, extensionName = "pdf")
-                    openFDPFile(fullPath)
-                    Handler(Looper.myLooper()!!).postDelayed({
-                        loadDataFile()
-                    }, 500)
                 }
+                openFDPFile(fullPath)
+                Handler(Looper.myLooper()!!).postDelayed({
+                    loadDataFile()
+                }, 500)
             }
         } else {
             myFileModel?.apply {
@@ -116,7 +140,18 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                     loadDataFile()
                 }, 500)
             }
+            getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_OPEN_PDF, AppConfig.KEY_PARAM_FB_OPEN_SOURCE, AppConfig.KEY_FB_CLICK_LIST_FILE)
         }
+
+        val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile()
+        if (lstFavorite?.contains(myFileModel) == true) {
+            isBookmark = true
+            binding.imvViewBookmark.setImageResource(R.drawable.ic_bookmark_selected)
+        } else {
+            isBookmark = false
+            binding.imvViewBookmark.setImageResource(R.drawable.ic_bookmark)
+        }
+        changeViewMode(isNightMode)
         getBaseActivity()?.apply {
             adView = AdView(this)
             binding.adViewContainer.addView(adView)
@@ -134,10 +169,23 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             getBaseActivity()?.enabaleNetwork()
         }
 //        getBaseActivity()?.loadNativeAds(binding.frameAdsNativePdf, AppConfig.ID_ADS_NATIVE_TOP_BAR_PDF)
+        var countRateUs = getBaseActivity()?.sharedPreferences?.getValueInteger(SharePreferenceUtils.KEY_COUNT_RATE_US, 0) ?: 0
+        Common.isFromPDFView = true
+        if (countRateUs <= AppConfig.MAX_COUNT_RATE_US && Common.countRatingApp <= AppConfig.MAX_COUNT_RATE_US) {
+            Common.countRatingApp++
+        }
     }
 
     override fun initEvents() {
-        listenClickViews(binding.imvPdfBack, binding.imvPdfMore)
+        listenClickViews(
+            binding.imvPdfBack,
+            binding.imvPdfMore,
+            binding.imvChangeView,
+            binding.imvChangeMode,
+            binding.btnViewBookmark,
+            binding.btnViewCapture,
+            binding.btnShareFile
+        )
         binding.seekbarJumpToPage.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
             @SuppressLint("RestrictedApi")
             override fun onStartTrackingTouch(slider: Slider) {
@@ -188,7 +236,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                     binding.groupPageViewer.visible()
                     binding.llJumpToPageEdit.gone()
                     getBaseActivity()?.hideKeyboard()
-
+                    isJumpEdit = true
                     return true
                 }
                 return false
@@ -198,41 +246,68 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
     }
 
     private fun getEdittextNumber(): Int {
-        if (binding.edtJumpPage.text.toString().isNullOrEmpty()) return 0
+        if (binding.edtJumpPage.text?.toString().isNullOrEmpty()) return 0
         return binding.edtJumpPage.text.toString().toInt()
     }
 
     private fun openFDPFile(uriPath: String?) {
         uriPath?.apply {
-            binding.pdfViewer.fromFile(File(uriPath))
-                .spacing(10)
-                .defaultPage(0)
-                .enableSwipe(true)
-                .enableDoubletap(true)
-                .swipeHorizontal(false)
-                .fitEachPage(true)
-                .pageFitPolicy(FitPolicy.WIDTH)
-                .onPageChange(onPageChangeListener)
-                .pageFitPolicy(FitPolicy.WIDTH)
-                .scrollHandle(MyScrollHandle(context, false))
-                .onTap(onTapListener)
-                .onLoad {
-                    val totalPage = binding.pdfViewer.pageCount
-                    Logger.showLog("Thuytv-----onLoad---totalPage: $totalPage ---isFirst: $isFirst")
-                    if (totalPage > 1 && isFirst) {
-                        binding.seekbarJumpToPage.valueFrom = 1f
+            pdfConfig = binding.pdfViewer.fromFile(File(uriPath))
+            pdfConfig?.apply {
+                this.spacing(10)
+                    .defaultPage(0)
+                    .enableSwipe(true)
+                    .enableDoubletap(true)
+                    .nightMode(isNightMode)
+                    .fitEachPage(true)
+                    .pageFitPolicy(FitPolicy.WIDTH)
+                    .onPageChange(onPageChangeListener)
+                    .onPageScroll(onPageScrollListener)
+                    .pageFitPolicy(FitPolicy.WIDTH)
+                    .onTap(onTapListener)
+                    .onLoad {
+                        val totalPage = binding.pdfViewer.pageCount
+                        Logger.showLog("Thuytv-----onLoad---totalPage: $totalPage ---isFirst: $isFirst")
+                        if (totalPage > 1 && isFirst) {
+                            binding.seekbarJumpToPage.valueFrom = 1f
+                        }
                     }
+                if (isPageMode) {
+                    this.swipeHorizontal(true)
+                        .pageSnap(true)
+                        .autoSpacing(true)
+                        .pageFling(true)
+                        .fitEachPage(true)
+                        .scrollHandle(null)
+                } else {
+                    this.swipeHorizontal(false)
+                        .pageSnap(false)
+                        .autoSpacing(false)
+                        .pageFling(false)
+                        .scrollHandle(MyScrollHandle(context, false))
                 }
-                .load()
+                this.load()
+            }
+        }
+    }
+
+    private val onPageScrollListener = OnPageScrollListener { page, positionOffset ->
+        Logger.showLog("Thuytv-----onPageScrollListener---page: $page ---oldPage: $oldPage ----isJumpEdit: $isJumpEdit")
+        if (binding.llToolbarPdf.visibility == View.VISIBLE && page > 0 && oldPage != page && !isJumpEdit) {
+            oldPage = page
+            binding.llToolbarPdf.gone()
+            binding.groupPageViewer.gone()
+        } else {
+            if (isJumpEdit) {
+                isJumpEdit = false
+            }
+            oldPage = page
         }
     }
 
     @SuppressLint("SetTextI18n")
     private val onPageChangeListener = OnPageChangeListener { page, pageCount ->
         if (!isLoadedAds) {
-            if (binding.groupPageViewer.visibility == View.GONE) {
-                binding.groupPageViewer.visible()
-            }
             currentPage = page + 1
             binding.vlPageAndTotalPage.text = getString(R.string.vl_total_page, currentPage, pageCount)
             binding.vlJumpPage.text = getString(R.string.vl_page, currentPage)
@@ -240,6 +315,9 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             isTouchSlider = false
             binding.seekbarJumpToPage.value = currentPage.toFloat()
             if (isFirst) {
+                if (binding.groupPageViewer.visibility == View.GONE) {
+                    binding.groupPageViewer.visible()
+                }
                 binding.seekbarJumpToPage.valueTo = pageCount.toFloat()
                 binding.vlTotalPage.text = "/ $pageCount"
                 binding.vlJumpTotalPageEdit.text = "/ $pageCount"
@@ -250,6 +328,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             isLoadedAds = false
         }
     }
+
     private val onTapListener = OnTapListener {
         if (binding.llToolbarPdf.visibility == View.GONE) {
             binding.llToolbarPdf.visible()
@@ -258,79 +337,125 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             binding.llToolbarPdf.gone()
             binding.groupPageViewer.gone()
         }
-        true
+        false
     }
 
     override fun onClick(v: View?) {
+        MultiClickPreventer.preventMultiClick(v)
         when (v?.id) {
             R.id.imvPdfBack -> {
                 getBaseActivity()?.finish()
             }
             R.id.imvPdfMore -> {
-                if (myFileModel != null) {
-                    var lstPopupMenu = R.menu.menu_more_detail_file
-                    val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile()
-                    if (lstFavorite?.contains(myFileModel) == true) {
-                        lstPopupMenu = R.menu.menu_more_detail_file_unfavorite
-                    }
-                    showPopupMenu(binding.imvPdfMore, lstPopupMenu, object : OnPopupMenuItemClickListener {
-                        override fun onClickItemPopupMenu(menuItem: MenuItem?) {
-                            when (menuItem?.itemId) {
-                                R.id.menu_rename -> {
+                var lstPopupMenu = R.menu.menu_more_detail_file
+                val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile()
+                if (lstFavorite?.contains(myFileModel) == true) {
+                    lstPopupMenu = R.menu.menu_more_detail_file_unfavorite
+                }
+                showPopupMenu(binding.imvPdfMore, lstPopupMenu, object : OnPopupMenuItemClickListener {
+                    override fun onClickItemPopupMenu(menuItem: MenuItem?) {
+                        when (menuItem?.itemId) {
+                            R.id.menu_rename -> {
+                                getBaseActivity()?.apply {
                                     if (myFileModel != null) {
-                                        getBaseActivity()?.apply {
-                                            RenameFileDialog(this, myFileModel!!, object : OnDialogItemClickListener {
-                                                override fun onClickItemConfirm(mData: MyFilesModel) {
-                                                    binding.ttToolbarPdf.text = mData.name
-                                                }
+                                        RenameFileDialog(this, myFileModel!!, object : OnDialogItemClickListener {
+                                            override fun onClickItemConfirm(mData: MyFilesModel) {
+                                                binding.ttToolbarPdf.text = mData.name
+                                            }
 
-                                            }).show()
-                                        }
+                                        }).show()
                                     }
                                 }
-                                R.id.menu_favorite -> {
+                                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_RENAME_FILE, AppConfig.KEY_EVENT_FB_RENAME_FILE)
+                            }
+                            R.id.menu_favorite -> {
+                                bookMarkFile()
+                                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_FILE, AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_BOOKMARK)
+                            }
+                            R.id.menu_un_favorite -> {
+                                bookMarkFile()
+                                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_FILE, AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_UN_BOOKMARK)
+                            }
+                            R.id.menu_delete -> {
+                                getBaseActivity()?.apply {
                                     if (myFileModel != null) {
-                                        getBaseActivity()?.sharedPreferences?.setFavoriteFile(myFileModel!!)
-                                        RxBus.publish(EventsBus.RELOAD_FAVORITE)
-                                    }
-                                }
-                                R.id.menu_un_favorite -> {
-                                    if (myFileModel != null) {
-                                        getBaseActivity()?.sharedPreferences?.removeFavoriteFile(myFileModel!!)
-                                        RxBus.publish(EventsBus.RELOAD_FAVORITE)
-                                    }
-                                }
-                                R.id.menu_share -> {
-                                    myFileModel?.uriPath?.let { File(it) }?.let { shareFile(it) }
-                                }
-                                R.id.menu_delete -> {
-                                    if (myFileModel != null) {
-                                        getBaseActivity()?.apply {
-                                            val deleteFileDialog = DeleteFileDialog(this, myFileModel!!, object : OnDialogItemClickListener {
-                                                override fun onClickItemConfirm(mData: MyFilesModel) {
-//                                            sharedPreferences.removeFavoriteFile(myFileModel!!)
-//                                            sharedPreferences.removeRecentFile(myFileModel!!)
-//                                            RxBus.publish(EventsBus.RELOAD_ALL_FILE)
-//                                            RxBus.publish(myFileModel!!)
-                                                    finish()
-                                                }
+                                        val deleteFileDialog = DeleteFileDialog(this, myFileModel!!, object : OnDialogItemClickListener {
+                                            override fun onClickItemConfirm(mData: MyFilesModel) {
+                                                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_DELETE_FILE, AppConfig.KEY_EVENT_FB_DELETE_FILE)
+                                                finish()
+                                            }
 
-                                            })
-                                            deleteFileDialog.show()
-                                        }
-
+                                        })
+                                        deleteFileDialog.show()
                                     }
                                 }
-                                R.id.menu_print -> {
-                                    myFileModel?.apply {
-                                        getBaseActivity()?.printFile(this)
+                            }
+                            R.id.menu_print -> {
+                                myFileModel?.apply {
+                                    getBaseActivity()?.printFile(this)
+                                }
+                                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_PRINT_FILE, AppConfig.KEY_EVENT_FB_PRINT_FILE)
+                            }
+                            R.id.menu_shortcut -> {
+                                getBaseActivity()?.apply {
+                                    if (myFileModel != null) {
+                                        setUpShortCut(this, myFileModel!!)
+                                    }
+                                }
+                                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_SHORTCUT_FILE, AppConfig.KEY_EVENT_FB_SHORTCUT_FILE)
+                            }
+                            R.id.menu_file_info -> {
+                                getBaseActivity()?.apply {
+                                    if (myFileModel != null) {
+                                        FileInfoDialog(this, myFileModel!!).show()
                                     }
                                 }
                             }
                         }
-
-                    })
+                    }
+                })
+            }
+            R.id.imv_change_mode -> {
+                isNightMode = !isNightMode
+                getBaseActivity()?.sharedPreferences?.setValueBoolean(SharePreferenceUtils.KEY_NIGHT_MODE, isNightMode)
+                changeViewMode(isNightMode)
+                if (isNightMode) {
+                    getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_DARK_MODE, AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_ON)
+                } else {
+                    getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_DARK_MODE, AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_OFF)
                 }
+            }
+            R.id.imv_change_view -> {
+                isPageMode = !isPageMode
+                getBaseActivity()?.sharedPreferences?.setValueBoolean(SharePreferenceUtils.KEY_PAGE_MODE, isPageMode)
+                changePageMode(isPageMode)
+                if (isPageMode) {
+                    getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_SWIPE_MODE, AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_CONTINUOUS)
+                } else {
+                    getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_SWIPE_MODE, AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_PAGE_BY_PAGE)
+                }
+            }
+            R.id.btn_view_bookmark -> {
+                bookMarkFile()
+            }
+            R.id.btn_view_capture -> {
+                captureScreen(binding.pdfViewer)?.apply {
+//                    val outputStream = ByteArrayOutputStream()
+//                    this.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+//                    val b = outputStream.toByteArray()
+//                    val encodedBitmap = Base64.encodeToString(b, Base64.DEFAULT)
+                    val bundle = Bundle()
+                    bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, this)
+//                    bundle.putString(AppKeys.KEY_BUNDLE_DATA, encodedBitmap)
+                    getBaseActivity()?.addFragment(CropImageFragment(), bundle, R.id.layout_container)
+                }
+            }
+            R.id.btn_share_file -> {
+//                val bundle = Bundle()
+//                bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, myFileModel)
+//                getBaseActivity()?.onNextScreen(PdfPreviewActivity::class.java, bundle, false)
+                myFileModel?.uriPath?.let { File(it) }?.let { shareFile(it) }
+                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_SHARE_FILE, AppConfig.KEY_EVENT_FB_SHARE_FILE)
             }
         }
     }
@@ -384,7 +509,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         super.onDestroy()
         recycleMemory()
         val endTime = System.currentTimeMillis()
-        if ((endTime - startTime) >= 10000 && !isSendShowAds) {
+        if ((endTime - startTime) >= 20000 && !isSendShowAds) {
             isSendShowAds = true
             RxBus.publish(EventsBus.SHOW_ADS_BACK)
 //                getBaseActivity()?.loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_BACK_FILE, null)
@@ -454,5 +579,146 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             pdfiumCore = null
         }
         PreviewUtils.getInstance().imageCache.clearCache()
+    }
+
+    private fun changeViewMode(isNightMode: Boolean) {
+        getBaseActivity()?.apply {
+            pdfConfig?.apply {
+                this.nightMode(isNightMode).load()
+            }
+            if (isNightMode) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    binding.llToolbarPdf.setBackgroundColor(resources.getColor(R.color.text_rgb_102027, this.theme))
+                    binding.llBottomMenu.setBackgroundColor(resources.getColor(R.color.text_rgb_102027, this.theme))
+                    binding.vlViewBookmark.setTextColor(resources.getColor(R.color.color_white, this.theme))
+                    binding.vlViewCapture.setTextColor(resources.getColor(R.color.color_white, this.theme))
+                    binding.vlViewShareImage.setTextColor(resources.getColor(R.color.color_white, this.theme))
+                    binding.ttToolbarPdf.setTextColor(resources.getColor(R.color.color_white, this.theme))
+                } else {
+                    binding.llToolbarPdf.setBackgroundColor(resources.getColor(R.color.text_rgb_102027))
+                    binding.llBottomMenu.setBackgroundColor(resources.getColor(R.color.text_rgb_102027))
+                    binding.vlViewBookmark.setBackgroundColor(resources.getColor(R.color.color_white))
+                    binding.vlViewCapture.setBackgroundColor(resources.getColor(R.color.color_white))
+                    binding.vlViewShareImage.setBackgroundColor(resources.getColor(R.color.color_white))
+                    binding.ttToolbarPdf.setBackgroundColor(resources.getColor(R.color.color_white))
+                }
+                binding.imvPdfBack.setColorFilter(ContextCompat.getColor(this, R.color.color_white))
+                binding.imvChangeMode.setImageResource(R.drawable.ic_light_mode)
+                binding.imvChangeView.setColorFilter(ContextCompat.getColor(this, R.color.color_white))
+                binding.imvPdfMore.setColorFilter(ContextCompat.getColor(this, R.color.color_white))
+                binding.imvViewBookmark.setColorFilter(ContextCompat.getColor(this, R.color.color_white))
+                binding.imvViewCapture.setColorFilter(ContextCompat.getColor(this, R.color.color_white))
+                binding.imvViewShareImage.setColorFilter(ContextCompat.getColor(this, R.color.color_white))
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    binding.llToolbarPdf.setBackgroundColor(resources.getColor(R.color.color_bg_toolbar, this.theme))
+                    binding.llBottomMenu.setBackgroundColor(resources.getColor(R.color.color_bg_toolbar, this.theme))
+
+                    binding.vlViewBookmark.setTextColor(resources.getColor(R.color.rgb_62757F, this.theme))
+                    binding.vlViewCapture.setTextColor(resources.getColor(R.color.rgb_62757F, this.theme))
+                    binding.vlViewShareImage.setTextColor(resources.getColor(R.color.rgb_62757F, this.theme))
+                    binding.ttToolbarPdf.setTextColor(resources.getColor(R.color.text_rgb_102027, this.theme))
+                } else {
+                    binding.llToolbarPdf.setBackgroundColor(resources.getColor(R.color.color_bg_toolbar))
+                    binding.llBottomMenu.setBackgroundColor(resources.getColor(R.color.color_bg_toolbar))
+                    binding.vlViewBookmark.setBackgroundColor(resources.getColor(R.color.rgb_62757F))
+                    binding.vlViewCapture.setBackgroundColor(resources.getColor(R.color.rgb_62757F))
+                    binding.vlViewShareImage.setBackgroundColor(resources.getColor(R.color.rgb_62757F))
+                    binding.ttToolbarPdf.setBackgroundColor(resources.getColor(R.color.text_rgb_102027))
+                }
+                binding.imvChangeMode.setImageResource(R.drawable.ic_dark_mode)
+                binding.imvPdfBack.setColorFilter(ContextCompat.getColor(this, R.color.text_rgb_102027))
+                binding.imvChangeView.setColorFilter(ContextCompat.getColor(this, R.color.rgb_34515E))
+                binding.imvPdfMore.setColorFilter(ContextCompat.getColor(this, R.color.text_rgb_102027))
+                if (isBookmark) {
+                    binding.imvViewBookmark.setColorFilter(ContextCompat.getColor(this, R.color.rgb_F44336))
+                } else {
+                    binding.imvViewBookmark.setColorFilter(ContextCompat.getColor(this, R.color.rgb_62757F))
+                }
+                binding.imvViewCapture.setColorFilter(ContextCompat.getColor(this, R.color.rgb_62757F))
+                binding.imvViewShareImage.setColorFilter(ContextCompat.getColor(this, R.color.rgb_62757F))
+            }
+        }
+    }
+
+    private fun changePageMode(isPageMode: Boolean) {
+        if (isPageMode) { // continues page
+            pdfConfig?.apply {
+                this.swipeHorizontal(true)
+                    .pageSnap(true)
+                    .autoSpacing(true)
+                    .pageFling(true)
+                    .scrollHandle(null).load()
+            }
+            binding.imvChangeView.setImageResource(R.drawable.ic_continuos_page)
+        } else { // page by page
+            pdfConfig?.apply {
+                this.swipeHorizontal(false)
+                    .pageSnap(false)
+                    .autoSpacing(false)
+                    .pageFling(false)
+                    .scrollHandle(MyScrollHandle(context, false)).load()
+            }
+            binding.imvChangeView.setImageResource(R.drawable.ic_page_by_page)
+        }
+    }
+
+    private fun bookMarkFile() {
+        myFileModel?.apply {
+            val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile()
+            if (lstFavorite?.contains(myFileModel) == true) { // da bookmark
+                getBaseActivity()?.sharedPreferences?.removeFavoriteFile(myFileModel!!)
+                RxBus.publish(EventsBus.RELOAD_FAVORITE)
+                binding.llShowNotification.vlContentNotify.text = getString(R.string.msg_remove_bookmark_success)
+                binding.llShowNotification.llShowNotification.visible()
+                binding.imvViewBookmark.setImageResource(R.drawable.ic_bookmark)
+                getBaseActivity()?.apply {
+                    binding.imvViewBookmark.setColorFilter(ContextCompat.getColor(this, R.color.rgb_62757F))
+                }
+                isBookmark = false
+                binding.llShowNotification.imvClosePopup.setOnClickListener {
+                    binding.llShowNotification.llShowNotification.gone()
+                }
+                Handler(Looper.myLooper()!!).postDelayed({
+                    if (isVisible && getBaseActivity()?.isFinishing == false
+                        && binding.llShowNotification.llShowNotification.visibility == View.VISIBLE
+                    ) {
+                        binding.llShowNotification.llShowNotification.gone()
+                    }
+                }, 2000)
+                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_FILE,AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_UN_BOOKMARK)
+            } else {
+                getBaseActivity()?.sharedPreferences?.setFavoriteFile(myFileModel!!)
+                RxBus.publish(EventsBus.RELOAD_FAVORITE)
+                binding.imvViewBookmark.setImageResource(R.drawable.ic_bookmark_selected)
+                getBaseActivity()?.apply {
+                    binding.imvViewBookmark.setColorFilter(ContextCompat.getColor(this, R.color.rgb_F44336))
+                }
+                isBookmark = true
+                binding.llShowNotification.vlContentNotify.text = getString(R.string.msg_add_bookmark_success)
+                binding.llShowNotification.llShowNotification.visible()
+                binding.llShowNotification.imvClosePopup.setOnClickListener {
+                    binding.llShowNotification.llShowNotification.gone()
+                }
+                Handler(Looper.myLooper()!!).postDelayed({
+                    if (isVisible && getBaseActivity()?.isFinishing == false
+                        && binding.llShowNotification.llShowNotification.visibility == View.VISIBLE
+                    ) {
+                        binding.llShowNotification.llShowNotification.gone()
+                    }
+                }, 2000)
+                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_FILE,AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_BOOKMARK)
+            }
+        }
+    }
+
+    private fun captureScreen(view: View): Bitmap? {
+        val bitmap = Bitmap.createBitmap(
+            view.width,
+            view.height, Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
+        return bitmap
     }
 }

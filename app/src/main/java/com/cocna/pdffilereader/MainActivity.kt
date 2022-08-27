@@ -1,6 +1,8 @@
 package com.cocna.pdffilereader
 
 import android.view.LayoutInflater
+import com.cocna.pdffilereader.common.AppConfig
+import com.cocna.pdffilereader.common.AppKeys
 import com.cocna.pdffilereader.databinding.ActivityBaseBinding
 import com.cocna.pdffilereader.ui.base.BaseActivity
 import com.cocna.pdffilereader.ui.home.MainFragment
@@ -11,7 +13,10 @@ class MainActivity : BaseActivity<ActivityBaseBinding>() {
 
 
     override fun initData() {
-        LoadingAdsDialog.newInstance(this).show(supportFragmentManager, "LOADING_ADS")
+        val typeScreen = intent.extras?.getString(AppKeys.KEY_BUNDLE_SCREEN)
+        if (typeScreen == AppConfig.TYPE_SCREEN_SHOW_ADS) {
+            LoadingAdsDialog.newInstance(this).show(supportFragmentManager, "LOADING_ADS")
+        }
         replaceFragment(MainFragment(), intent.extras, R.id.layout_container)
     }
 

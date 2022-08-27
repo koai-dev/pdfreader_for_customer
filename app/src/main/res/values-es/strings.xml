@@ -71,6 +71,7 @@
     <string name="msg_import_please_wait">Importando… Por favor espere</string>
     <string name="btn_click_here_read">Haga clic aquí para leer ahora!</string>
     <string name="vl_history_file">Archivo de historial (%d)</string>
+<!--    <string name="vl_loading_ads">Cargando Anuncios (%s)</string>-->
     <string name="vl_loading_ads">Cargando Anuncios</string>
     <string name="vl_well_comeback">Bienvenido de nuevo</string>
     <string name="tt_update_version">Actualizar aplicación</string>
@@ -79,5 +80,30 @@
     <string name="btn_later">Luego</string>
     <string name="msg_no_files">Aún no hay archivos: se requiere permiso para leer todos los archivos</string>
     <string name="btn_go_to_setting">Ir a Configuración</string>
+    <string name="vl_bookmark">Marcador</string>
+    <string name="vl_capture">Captura</string>
+    <string name="vl_share_image">Compartir imagen</string>
+    <string name="tt_successful">Exitoso</string>
+    <string name="msg_add_bookmark_success">Archivo agregado a Favoritos con éxito</string>
+    <string name="msg_remove_bookmark_success">Archivo eliminado para marcar con éxito</string>
+    <string name="msg_save_image_success">El archivo se ha guardado en la Galería.</string>
+    <string name="vl_crop">Cultivo</string>
+    <string name="vl_save">Ahorrar</string>
+    <string name="tt_rating_app_very_good">¡Nosotros también nos gustas!</string>
+    <string name="vl_rating_app_very_good">Gracias por elegirnos</string>
+    <string name="tt_rating_app_very_good_first">¡Gracias por elegirnos!</string>
+    <string name="vl_rating_app_very_good_first">Estamos trabajando duro para una mejor experiencia de usuario. Por favor, díganos su sensación con la aplicación.</string>
+    <string name="tt_rating_app_bad">¡Oh, no! Lo siento por tu experiencia</string>
+    <string name="vl_rating_app_bad">Por favor déjenos algunos comentarios</string>
+    <string name="btn_rate">Calificar en Google Play</string>
+    <string name="btn_feedback">Retroalimentación</string>
+    <string name="vl_more_app">Descubre más aplicaciones</string>
+    <string name="vl_content_subs">aplicación lector de documentos</string>
+    <string name="menu_file_info">Información del archivo</string>
+    <string name="menu_shortcut">Atajo</string>
+    <string name="vl_location">Ubicación</string>
+    <string name="vl_last_modified">Última modificación</string>
+    <string name="vl_accessed">Accedido: %s</string>
+    <string name="msg_add_shortcut_success">Archivo agregado a la pantalla de inicio con éxito</string>
 
 </resources>

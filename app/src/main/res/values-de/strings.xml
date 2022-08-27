@@ -72,6 +72,7 @@
     <string name="msg_recent_empty">Sie haben in letzter Zeit keine Datei gelesen</string>
     <string name="btn_click_here_read">Klicken Sie hier, um jetzt zu lesen!</string>
     <string name="vl_history_file">Verlaufsdatei (%d)</string>
+<!--    <string name="vl_loading_ads">Anzeigen werden geladen (%s)</string>-->
     <string name="vl_loading_ads">Anzeigen werden geladen</string>
     <string name="vl_well_comeback">Willkommen zurück</string>
     <string name="tt_update_version">App aktualisieren</string>
@@ -80,5 +81,30 @@
     <string name="btn_later">Später</string>
     <string name="msg_no_files">Noch keine Dateien - Zum Lesen aller Dateien ist eine Berechtigung erforderlich</string>
     <string name="btn_go_to_setting">Gehen Sie zu Einstellung</string>
+    <string name="vl_bookmark">Lesezeichen</string>
+    <string name="vl_capture">Erfassung</string>
+    <string name="vl_share_image">Bild teilen</string>
+    <string name="tt_successful">Erfolgreich</string>
+    <string name="msg_add_bookmark_success">Datei erfolgreich zum Lesezeichen hinzugefügt</string>
+    <string name="msg_remove_bookmark_success">Datei erfolgreich in Lesezeichen entfernt</string>
+    <string name="msg_save_image_success">Die Datei wurde in der Galerie gespeichert</string>
+    <string name="vl_crop">Ernte</string>
+    <string name="vl_save">Speichern</string>
+    <string name="tt_rating_app_very_good">Wir mögen dich auch!</string>
+    <string name="vl_rating_app_very_good">Danke, daß Sie uns gewählt haben</string>
+    <string name="tt_rating_app_very_good_first">Danke, daß Sie uns gewählt haben!</string>
+    <string name="vl_rating_app_very_good_first">Wir arbeiten hart an einer besseren Benutzererfahrung. Bitte teilen Sie uns Ihr Gefühl mit der App mit.</string>
+    <string name="tt_rating_app_bad">Ach nein! Entschuldigung für Ihre Erfahrung</string>
+    <string name="vl_rating_app_bad">Bitte hinterlassen Sie uns ein Feedback</string>
+    <string name="btn_rate">Bewerten Sie auf Google Play</string>
+    <string name="btn_feedback">Feedback</string>
+    <string name="vl_more_app">Entdecken Sie mehr App</string>
+    <string name="vl_content_subs">Document Reader-Anwendung</string>
+    <string name="menu_file_info">Dateiinformation</string>
+    <string name="menu_shortcut">Abkürzung</string>
+    <string name="vl_location">Ort</string>
+    <string name="vl_last_modified">Zuletzt bearbeitet</string>
+    <string name="vl_accessed">Zugriff: %s</string>
+    <string name="msg_add_shortcut_success">Datei erfolgreich zum Startbildschirm hinzugefügt</string>
 
 </resources>

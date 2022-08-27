@@ -25,7 +25,6 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
-import com.cocna.pdffilereader.myinterface.OnUpdateVersionClickListener
 import com.cocna.pdffilereader.print.PDFDocumentAdapter
 import com.cocna.pdffilereader.print.PrintJobMonitorService
 import com.cocna.pdffilereader.ui.home.dialog.ProgressDialogLoadingAds
@@ -42,10 +41,6 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.ktx.remoteConfig
-import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
-import com.ironsource.mediationsdk.IronSource
 import io.reactivex.disposables.Disposable
 import java.io.File
 import java.util.*
@@ -113,12 +108,12 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
                 showInterstitial(mUUIDAds, mOnCallbackLoadAds)
             }, 500)
         }
-        IronSource.onResume(this)
+//        IronSource.onResume(this)
     }
 
     override fun onPause() {
         super.onPause()
-        IronSource.onPause(this)
+//        IronSource.onPause(this)
     }
 
     override fun onDestroy() {
@@ -237,6 +232,16 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         fragmentTransaction.commit()
     }
 
+    fun addFragment(fragment: Fragment, bundle: Bundle?, containerId: Int) {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        bundle?.let {
+            fragment.arguments = it
+        }
+        fragmentTransaction.add(containerId, fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
+
     fun printFile(myFilesModel: MyFilesModel) {
         try {
 //            val printManager: PrintManager = primaryBaseActivity?.getSystemService(Context.PRINT_SERVICE) as PrintManager
@@ -295,7 +300,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
             }
 
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                Logger.showLog("---onAdLoaded--Success")
+                Logger.showLog("---onAdLoaded--Success---BaseActivity")
                 mInterstitialAd = interstitialAd
                 mUUIDAds = uuidAds
                 if (!isFinishing && !isDestroyed) {
@@ -356,6 +361,12 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
     fun logEventFirebase(eventName: String, method: String) {
         firebaseAnalytics.logEvent(eventName) {
             param(FirebaseAnalytics.Param.ITEM_NAME, method)
+        }
+    }
+
+    fun logEventFirebase(eventName: String, paramName: String, value: String) {
+        firebaseAnalytics.logEvent(eventName) {
+            param(paramName, value)
         }
     }
 

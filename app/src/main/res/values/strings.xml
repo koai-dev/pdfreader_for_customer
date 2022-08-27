@@ -9,7 +9,7 @@
 
 
     <string name="title_my_file">My File</string>
-    <string name="title_favorite">Favorite</string>
+    <string name="title_favorite">Bookmark</string>
     <string name="title_browse">Folder</string>
     <string name="title_setting">Setting</string>
 
@@ -20,15 +20,15 @@
     <string name="menu_date_added">Date added</string>
 
     <string name="menu_rename">Rename</string>
-    <string name="menu_favorite">Favorite</string>
-    <string name="menu_unfavorite">UnFavorite</string>
+    <string name="menu_favorite">Bookmark</string>
+    <string name="menu_unfavorite">UnMark</string>
     <string name="menu_share">Share</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_print">Print</string>
 
     <string name="vl_hint_search_file">Search file</string>
     <string name="vl_recent_file">Recent file</string>
-    <string name="vl_favorite_file">Favorite file</string>
+    <string name="vl_favorite_file">Bookmark file</string>
     <string name="vl_home_my_file">All PDF File (%d)</string>
     <string name="vl_history_file">History File (%d)</string>
     <string name="vl_home_pdf">PDF (%d)</string>
@@ -55,7 +55,7 @@
     <string name="tt_change_theme">Change theme</string>
     <string name="tt_share_file">Share File</string>
     <string name="tt_theme">Theme</string>
-    <string name="tt_rate_application">Rate Application</string>
+    <string name="tt_rate_application">Rate us</string>
     <string name="tt_share_app">Share App</string>
     <string name="tt_term_codition">Privacy Policy</string>
     <string name="tt_have_pdf_file">You have %d PDF file</string>
@@ -91,10 +91,37 @@
     <string name="ad_attribution" translatable="false">Ad</string>
     <string name="vl_loading" translatable="false">LOADING… </string>
     <string name="vl_well_comeback">Welcome back</string>
+    <!--    <string name="vl_loading_ads">Loading Ads (%s)</string>-->
     <string name="vl_loading_ads">Loading Ads</string>
     <string name="tt_update_version">Update App</string>
     <string name="vl_contetn_update_version">A new version of Upgrade is available. Would you like to update it now?</string>
     <string name="btn_update_now">Update Now</string>
     <string name="btn_later">Later</string>
+
+    <string name="vl_bookmark">Bookmark</string>
+    <string name="vl_capture">Capture</string>
+    <string name="vl_share_image">Share Image</string>
+    <string name="tt_successful">Successful</string>
+    <string name="msg_add_bookmark_success">File added to Bookmark successfully</string>
+    <string name="msg_remove_bookmark_success">File removed to Bookmark successfully</string>
+    <string name="msg_save_image_success">The file has been saved to Gallery</string>
+    <string name="vl_crop">Crop</string>
+    <string name="vl_save">Save</string>
+    <string name="tt_rating_app_very_good">We like you too!</string>
+    <string name="vl_rating_app_very_good">Thank you for choosing us</string>
+    <string name="tt_rating_app_very_good_first">Thank you for choosing us!</string>
+    <string name="vl_rating_app_very_good_first">We are working hard for a better user experience. Please tell us your feeling with the app.</string>
+    <string name="tt_rating_app_bad">Oh, no! Sorry for your experience</string>
+    <string name="vl_rating_app_bad">Please leave us some feedback</string>
+    <string name="btn_rate">Rate on Google play</string>
+    <string name="btn_feedback">Feedback</string>
+    <string name="vl_more_app">Discover More App</string>
+    <string name="vl_content_subs">Document reader application</string>
+    <string name="menu_file_info">File info</string>
+    <string name="menu_shortcut">Shortcut</string>
+    <string name="vl_location">Location</string>
+    <string name="vl_last_modified">Last modified</string>
+    <string name="vl_accessed">Accessed: %s</string>
+    <string name="msg_add_shortcut_success">File added to HomeScreen successfully</string>
 
 </resources>

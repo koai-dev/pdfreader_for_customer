@@ -1,6 +1,5 @@
 package com.cocna.pdffilereader.ui.home
 
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
@@ -11,6 +10,7 @@ import com.cocna.pdffilereader.common.MultiClickPreventer
 import com.cocna.pdffilereader.common.listenClickViews
 import com.cocna.pdffilereader.databinding.FragmentSettingBinding
 import com.cocna.pdffilereader.ui.base.BaseFragment
+import com.cocna.pdffilereader.ui.home.dialog.RatingAppDialog
 import com.cocna.pdffilereader.ui.setting.ChangeThemeActivity
 import com.cocna.pdffilereader.ui.setting.LanguageActivity
 import com.cocna.pdffilereader.ui.setting.PrivatePolicyFragment
@@ -25,7 +25,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(), View.OnClickList
     }
 
     override fun initEvents() {
-        listenClickViews(binding.llSettingLanguage, binding.llSettingTheme, binding.llSettingShare, binding.llSettingRate, binding.llSettingTerm)
+        listenClickViews(binding.llSettingLanguage, binding.llSettingTheme, binding.llSettingShare, binding.llSettingRate, binding.llSettingTerm, binding.llSettingMoreApp)
     }
 
     override fun onClick(v: View?) {
@@ -41,10 +41,16 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(), View.OnClickList
                 shareApplication()
             }
             R.id.llSettingRate -> {
-                getBaseActivity()?.gotoPlayStore()
+                getBaseActivity()?.apply {
+                    RatingAppDialog(this, false).show()
+                }
             }
             R.id.llSettingTerm -> {
                 getBaseActivity()?.onNextScreen(PrivatePolicyFragment::class.java, null, false)
+            }
+            R.id.llSettingMoreApp ->{
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=Cocna"))
+                startActivity(browserIntent)
             }
         }
     }

@@ -40,7 +40,7 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>() {
         } else {
             MyFilesAdapter.TYPE_VIEW_FILE
         }
-        mFavoriteAdapter = MyFilesAdapter(getBaseActivity(), lstFavorite, typeAdapter, object : MyFilesAdapter.OnItemClickListener {
+        mFavoriteAdapter = MyFilesAdapter(getBaseActivity(), lstFavorite, typeAdapter,AppConfig.TYPE_FILTER_FILE, object : MyFilesAdapter.OnItemClickListener {
             override fun onClickItem(documentFile: MyFilesModel) {
                 val bundle = Bundle()
                 bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, documentFile)

@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_toolbar_all"
         android:background="@color/color_bg_toolbar"
+        android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -35,6 +36,28 @@
             android:singleLine="true" />
 
         <ImageView
+            android:id="@+id/imv_change_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_all"
+            android:src="@drawable/ic_dark_mode" />
+
+        <ImageView
+            android:id="@+id/imv_change_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_all"
+            android:src="@drawable/ic_page_by_page" />
+
+        <ImageView
+            android:id="@+id/imv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_all"
+            android:src="@drawable/ic_search_normal"
+            android:visibility="gone" />
+
+        <ImageView
             android:id="@+id/imvPdfMore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,6 +74,89 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
+        android:id="@+id/ll_bottom_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_bg_menu"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/ad_view_container"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/btn_view_bookmark"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/margin_small">
+
+            <ImageView
+                android:id="@+id/imv_view_bookmark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_small"
+                android:src="@drawable/ic_bookmark" />
+
+            <TextView
+                android:id="@+id/vl_view_bookmark"
+                style="@style/Text_Item_Date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/vl_bookmark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_view_capture"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/margin_small">
+
+            <ImageView
+                android:id="@+id/imv_view_capture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_small"
+                android:src="@drawable/ic_camera" />
+
+            <TextView
+                android:id="@+id/vl_view_capture"
+                style="@style/Text_Item_Date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/vl_capture" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_share_file"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/margin_small">
+
+            <ImageView
+                android:id="@+id/imv_view_share_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_small"
+                android:src="@drawable/ic_share_image" />
+
+            <TextView
+                android:id="@+id/vl_view_share_image"
+                style="@style/Text_Item_Date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tt_share_file" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/llJumpToPage"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_toolbar_all"
@@ -59,7 +165,7 @@
         android:orientation="horizontal"
         android:paddingStart="@dimen/margin_all"
         android:paddingEnd="@dimen/margin_all"
-        app:layout_constraintBottom_toTopOf="@id/ad_view_container">
+        app:layout_constraintBottom_toTopOf="@id/ll_bottom_menu">
 
         <!--        <androidx.appcompat.widget.AppCompatSeekBar-->
         <!--            android:id="@+id/seekbarJumpToPage"-->
@@ -107,13 +213,23 @@
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/llToolbarPdf" />
 
+
     <com.github.barteksc.pdfviewer.PDFView
         android:id="@+id/pdfViewer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/llJumpToPage"
         app:layout_constraintTop_toBottomOf="@id/frame_ads_native_pdf" />
+
+    <include
+        android:id="@+id/ll_show_notification"
+        layout="@layout/view_show_notification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/pdfViewer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!--    <com.itsrts.pptviewer.PPTViewer-->
     <!--        android:id="@+id/pptViewer"-->
@@ -144,20 +260,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="viewBgPage, vlPageAndTotalPage,llJumpToPage" />
+        app:constraint_referenced_ids="viewBgPage, vlPageAndTotalPage,llJumpToPage, ll_bottom_menu" />
 
     <LinearLayout
         android:id="@+id/llJumpToPageEdit"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_toolbar_home"
         android:background="@color/color_EDEDED"
+        android:clickable="true"
+        android:focusable="true"
         android:gravity="center|start"
         android:orientation="horizontal"
         android:paddingStart="@dimen/margin_all"
         android:paddingEnd="@dimen/margin_all"
         android:visibility="gone"
-        android:clickable="true"
-        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
@@ -210,4 +326,5 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_rcv_preview" />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

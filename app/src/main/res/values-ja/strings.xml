@@ -72,6 +72,7 @@
     <string name="vl_size_folder">%d ファイル</string>
     <string name="btn_click_here_read">今すぐ読むにはここをクリックしてください！</string>
     <string name="vl_history_file">履歴ファイル（(%d)</string>
+<!--    <string name="vl_loading_ads">広告の読み込み (%s)</string>-->
     <string name="vl_loading_ads">広告の読み込み</string>
     <string name="vl_well_comeback">お帰りなさい</string>
     <string name="tt_update_version">アプリを更新</string>
@@ -80,5 +81,30 @@
     <string name="btn_later">後で</string>
     <string name="msg_no_files">まだファイルがありません - すべてのファイルを読み取るには権限が必要です</string>
     <string name="btn_go_to_setting">設定に移動</string>
+    <string name="vl_bookmark">ブックマーク</string>
+    <string name="vl_capture">捕獲</string>
+    <string name="vl_share_image">画像を共有</string>
+    <string name="tt_successful">成功</string>
+    <string name="msg_add_bookmark_success">ファイルがブックマークに正常に追加されました</string>
+    <string name="msg_remove_bookmark_success">ファイルをブックマークに削除しました</string>
+    <string name="msg_save_image_success">ファイルがギャラリーに保存されました</string>
+    <string name="vl_crop">作物</string>
+    <string name="vl_save">保存</string>
+    <string name="tt_rating_app_very_good">私たちもあなたが好きです！</string>
+    <string name="vl_rating_app_very_good">私達を選んで頂き有難うございます</string>
+    <string name="tt_rating_app_very_good_first">私達を選んで頂き有難うございます！</string>
+    <string name="vl_rating_app_very_good_first">私たちはより良いユーザーエクスペリエンスのために一生懸命働いています。 アプリであなたの気持ちを教えてください。</string>
+    <string name="tt_rating_app_bad">大野！ あなたの経験について申し訳ありません</string>
+    <string name="vl_rating_app_bad">フィードバックをお寄せください</string>
+    <string name="btn_rate">Google Play で評価する</string>
+    <string name="btn_feedback">フィードバック</string>
+    <string name="vl_more_app">アプリをもっと発見</string>
+    <string name="vl_content_subs">ドキュメント リーダー アプリケーション</string>
+    <string name="menu_file_info">ファイル情報</string>
+    <string name="menu_shortcut">ショートカット</string>
+    <string name="vl_location">位置</string>
+    <string name="vl_last_modified">最終更新日</string>
+    <string name="vl_accessed">アクセス: %s</string>
+    <string name="msg_add_shortcut_success">ファイルがホームスクリーンに正常に追加されました</string>
 
 </resources>

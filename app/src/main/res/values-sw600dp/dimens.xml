@@ -104,6 +104,9 @@
   <dimen name="height_image_change_theme">
     500.0dp
   </dimen>
+  <dimen name="height_rating_bar">
+    41.67dp
+  </dimen>
   <dimen name="text_size_title">
     30.0sp
   </dimen>
@@ -130,6 +133,9 @@
   </dimen>
   <dimen name="text_size_sp24">
     40.0sp
+  </dimen>
+  <dimen name="text_size_sp22">
+    36.67sp
   </dimen>
   <dimen name="text_size_menu_change_theme">
     10.0sp

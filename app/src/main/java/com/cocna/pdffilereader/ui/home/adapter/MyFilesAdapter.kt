@@ -30,6 +30,7 @@ class MyFilesAdapter(
     val mContext: Context?,
     private var lstData: ArrayList<MyFilesModel>,
     private var typeAdapter: Int,
+    private var typeFilter: Int,
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
     var mFileFilterList = ArrayList<MyFilesModel>()
@@ -142,8 +143,10 @@ class MyFilesAdapter(
         fun bind(mData: MyFilesModel) {
             val binding = ItemViewMyFilesBinding.bind(itemView)
             binding.vlItemName.text = mData.name
-            binding.vlItemDate.text = Common.covertTimeLongToString(mData.lastModified)
+            binding.vlItemDate.text = mContext?.getString(R.string.vl_accessed, Common.covertTimeLongToString(mData.lastModified))
             setIconFile(binding.imvItemFile, mData.extensionName ?: "")
+            binding.vlItemSize.text = Common.convertByteToString(mData.length)
+            binding.vlItemLocation.text = mData.folderName
 
             binding.llItemMyFile.setOnClickListener {
                 MultiClickPreventer.preventMultiClick(it)
@@ -332,8 +335,16 @@ class MyFilesAdapter(
                 } else {
                     val resultList = ArrayList<MyFilesModel>()
                     for (row in lstData) {
-                        if (row.name?.lowercase()?.contains(charSearch.lowercase()) == true || row.folderName?.lowercase()?.contains(charSearch.lowercase()) == true) {
-                            resultList.add(row)
+                        if (typeFilter == AppConfig.TYPE_FILTER_FILE) {
+                            if (row.name?.lowercase()?.contains(charSearch.lowercase()) == true) {
+                                resultList.add(row)
+                            }
+                        } else {
+                            if (row.name?.lowercase()?.contains(charSearch.lowercase()) == true || row.folderName?.lowercase()
+                                    ?.contains(charSearch.lowercase()) == true
+                            ) {
+                                resultList.add(row)
+                            }
                         }
                     }
                     mFileFilterList = resultList

@@ -90,7 +90,7 @@ class WellComeBackDialog : DialogFragment() {
 
     private fun showCountDownTime() {
         if (countDownTimer == null) {
-            countDownTimer = object : CountDownTimer(60 * 1000, 1000) {
+            countDownTimer = object : CountDownTimer(30 * 1000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     Logger.showLog("Thuytv------millisUntilFinished: $millisUntilFinished")
                 }
@@ -137,73 +137,6 @@ class WellComeBackDialog : DialogFragment() {
                         }
                     }
                 })
-        }
-    }
-
-    private fun loadInterstAds() {
-        val adRequest = AdRequest.Builder().build()
-        activity?.run {
-            InterstitialAd.load(this, AppConfig.ID_ADS_INTERSTITIAL_BACKGROUND, adRequest, object : InterstitialAdLoadCallback() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    setLogDataToFirebase(
-                        AdsLogModel(
-                            adsId = AppConfig.ID_ADS_INTERSTITIAL_BACKGROUND,
-                            adsName = "Ads Interstitial Resume Load",
-                            message = adError.message, deviceName = Common.getDeviceName(this@run)
-                        )
-                    )
-//                    Handler(Looper.myLooper()!!).postDelayed({
-                    mInterstitialAd = null
-//                        if (countRetry < 2) {
-//                            countRetry++
-//                            loadInterstAds()
-//                        } else {
-                    dismiss()
-//                        }
-//                    }, AppConfig.DELAY_TIME_RETRY_ADS)
-                }
-
-                override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                    Logger.showLog("---onAdLoaded--Success")
-                    mInterstitialAd = interstitialAd
-                    showInterstitial()
-                }
-            })
-        }
-    }
-
-    private fun showInterstitial() {
-        // Show the ad if it"s ready. Otherwise toast and reload the ad.
-        if (mInterstitialAd != null) {
-            mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
-                override fun onAdDismissedFullScreenContent() {
-                    dismiss()
-                }
-
-                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                    mInterstitialAd = null
-
-                    if (isVisible && activity != null) {
-                        setLogDataToFirebase(
-                            AdsLogModel(
-                                adsId = AppConfig.ID_ADS_INTERSTITIAL_BACKGROUND,
-                                adsName = "Ads Interstitial Resume Show",
-                                message = adError.message, deviceName = Common.getDeviceName(activity!!)
-                            )
-                        )
-                        dismiss()
-                    }
-                }
-
-                override fun onAdShowedFullScreenContent() {
-                    mInterstitialAd = null
-                }
-            }
-            activity?.run {
-                mInterstitialAd!!.show(this)
-            }
-        } else {
-            dismiss()
         }
     }
 

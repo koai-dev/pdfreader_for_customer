@@ -72,6 +72,7 @@
     <string name="msg_import_please_wait">आयात किया जा रहा है… कृपया प्रतीक्षा करें</string>
     <string name="btn_click_here_read">अभी पढ़ने के लिए यहां क्लिक करें!</string>
     <string name="vl_history_file">इतिहास फ़ाइल (%d)</string>
+<!--    <string name="vl_loading_ads">विज्ञापन लोड हो रहा है (%s)</string>-->
     <string name="vl_loading_ads">विज्ञापन लोड हो रहा है</string>
     <string name="vl_well_comeback">फिर स्वागत है</string>
     <string name="tt_update_version">अपडेट ऐप</string>
@@ -80,5 +81,30 @@
     <string name="btn_later">बाद में</string>
     <string name="msg_no_files">अभी तक कोई फाइल नहीं - सभी फाइलों को पढ़ने के लिए अनुमति की आवश्यकता है</string>
     <string name="btn_go_to_setting">सेटिंग पर जाएं</string>
+    <string name="vl_bookmark">बुकमार्क</string>
+    <string name="vl_capture">कब्ज़ा करना</string>
+    <string name="vl_share_image">चित्र साझा करें</string>
+    <string name="tt_successful">सफल</string>
+    <string name="msg_add_bookmark_success">फ़ाइल को बुकमार्क में सफलतापूर्वक जोड़ा गया</string>
+    <string name="msg_remove_bookmark_success">फ़ाइल सफलतापूर्वक बुकमार्क करने के लिए निकाली गई</string>
+    <string name="msg_save_image_success">फ़ाइल को गैलरी में सहेजा गया है</string>
+    <string name="vl_crop">फसल</string>
+    <string name="vl_save">बचाना</string>
+    <string name="tt_rating_app_very_good">हम भी आपको पसंद करते हैं!</string>
+    <string name="vl_rating_app_very_good">हमें चुनने के लिए धन्यवाद</string>
+    <string name="tt_rating_app_very_good_first">हमें चुनने के लिए धन्यवाद!</string>
+    <string name="vl_rating_app_very_good_first">हम बेहतर उपयोगकर्ता अनुभव के लिए कड़ी मेहनत कर रहे हैं। कृपया हमें ऐप के साथ अपनी भावना बताएं।</string>
+    <string name="tt_rating_app_bad">धत्तेरे की! आपके अनुभव के लिए खेद है</string>
+    <string name="vl_rating_app_bad">कृपया हमें कुछ प्रतिक्रिया दें</string>
+    <string name="btn_rate">गूगल प्ले पर रेट करें</string>
+    <string name="btn_feedback">प्रतिपुष्टि</string>
+    <string name="vl_more_app">अधिक ऐप खोजें</string>
+    <string name="vl_content_subs">दस्तावेज़ पाठक आवेदन</string>
+    <string name="menu_file_info">फाइल के बारे में</string>
+    <string name="menu_shortcut">छोटा रास्ता</string>
+    <string name="vl_location">स्थान</string>
+    <string name="vl_last_modified">अंतिम बार संशोधित</string>
+    <string name="vl_accessed">एक्सेस किया गया:%s</string>
+    <string name="msg_add_shortcut_success">फ़ाइल को होमस्क्रीन में सफलतापूर्वक जोड़ा गया</string>
 
 </resources>

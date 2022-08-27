@@ -47,9 +47,9 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
         get() = ActivitySplassScreenBinding::inflate
 
     override fun initData() {
-//        val testDeviceIds = Arrays.asList("B8D2F4981BD1CDC61FB420D2A9CC64E0", "391347B342346395839E0B6C68235561")
-//        val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
-//        MobileAds.setRequestConfiguration(configuration)
+        val testDeviceIds = Arrays.asList("B8D2F4981BD1CDC61FB420D2A9CC64E0", "391347B342346395839E0B6C68235561")
+        val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
+        MobileAds.setRequestConfiguration(configuration)
 
         getAllFilePdf()
         getAllFileInDevice()
@@ -142,7 +142,9 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
             bundle.putString(AppKeys.KEY_BUNDLE_SCREEN, AppConfig.TYPE_SCREEN_FROM_SPLASH)
             onNextScreen(LanguageActivity::class.java, bundle, true)
         } else {
-            onNextScreen(MainActivity::class.java, null, true)
+            val bundle = Bundle()
+            bundle.putString(AppKeys.KEY_BUNDLE_SCREEN, AppConfig.TYPE_SCREEN_SHOW_ADS)
+            onNextScreen(MainActivity::class.java, bundle, true)
         }
     }
 
@@ -202,7 +204,9 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                                 uriOldPath = item.uri.path,
                                 lastModified = item.lastModified(),
                                 extensionName = item.extension,
-                                length = item.length()
+                                length = item.length(),
+                                locationFile = item.parentFile?.uri?.path,
+                                folderName = item.parentFile?.name
                             )
                         Common.listAllData?.add(model)
                     }
@@ -233,7 +237,9 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                                         uriOldPath = mFile.uri.path,
                                         lastModified = mFile.lastModified(),
                                         extensionName = mFile.extension,
-                                        length = mFile.length()
+                                        length = mFile.length(),
+                                        locationFile = mFile.parentFile?.uri?.path,
+                                        folderName = mFile.parentFile?.name
                                     )
                                 lstChildFile.add(model)
                             }
@@ -248,7 +254,9 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                                 uriOldPath = item.uri.path,
                                 lastModified = item.lastModified(),
                                 extensionName = item.extension,
-                                length = item.length()
+                                length = item.length(),
+                                locationFile = item.parentFile?.uri?.path,
+                                folderName = item.parentFile?.name
                             )
                         Common.listAllFolder?.add(model)
                     }

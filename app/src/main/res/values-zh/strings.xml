@@ -72,6 +72,7 @@
 
     <string name="btn_click_here_read">点击这里立即阅读！</string>
     <string name="vl_history_file">历史文件 (%d)</string>
+<!--    <string name="vl_loading_ads">加载广告 (%s)</string>-->
     <string name="vl_loading_ads">加载广告</string>
     <string name="btn_update_now">现在更新</string>
     <string name="tt_update_version">更新应用</string>
@@ -80,5 +81,30 @@
     <string name="btn_later">之后</string>
     <string name="msg_no_files">还没有文件 - 需要权限才能读取所有文件</string>
     <string name="btn_go_to_setting">进入设置</string>
+    <string name="vl_bookmark">书签</string>
+    <string name="vl_capture">捕获</string>
+    <string name="vl_share_image">分享图像</string>
+    <string name="tt_successful">成功的</string>
+    <string name="msg_add_bookmark_success">文件添加到书签成功</string>
+    <string name="msg_remove_bookmark_success">文件已成功删除到书签</string>
+    <string name="msg_save_image_success">文件已保存到图库</string>
+    <string name="vl_crop">庄稼</string>
+    <string name="vl_save">节省</string>
+    <string name="tt_rating_app_very_good">我们也喜欢你！</string>
+    <string name="vl_rating_app_very_good">感谢您选择我们</string>
+    <string name="tt_rating_app_very_good_first">感谢您选择我们！</string>
+    <string name="vl_rating_app_very_good_first">我们正在努力提供更好的用户体验。 请告诉我们您对应用程序的感受。</string>
+    <string name="tt_rating_app_bad">不好了！ 对不起你的经历</string>
+    <string name="vl_rating_app_bad">请给我们一些反馈</string>
+    <string name="btn_rate">在 Google Play 上评分</string>
+    <string name="btn_feedback">反馈</string>
+    <string name="vl_more_app">发现更多应用</string>
+    <string name="vl_content_subs">文档阅读器应用程序</string>
+    <string name="menu_file_info">文件信息</string>
+    <string name="menu_shortcut">捷径</string>
+    <string name="vl_location">地点</string>
+    <string name="vl_last_modified">最后修改</string>
+    <string name="vl_accessed">已访问：%s</string>
+    <string name="msg_add_shortcut_success">文件已成功添加到 HomeScreen</string>
 
 </resources>

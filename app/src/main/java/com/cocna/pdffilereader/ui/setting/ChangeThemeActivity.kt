@@ -99,6 +99,7 @@ class ChangeThemeActivity : BaseActivity<ActivityChangeThemeBinding>() {
         }
         binding.imvConfirmTheme.setOnClickListener {
             MultiClickPreventer.preventMultiClick(it)
+            logEventFirebase(AppConfig.KEY_EVENT_FB_THEME_CHANGE, AppConfig.KEY_EVENT_FB_THEME_CHANGE)
             if (typeScreen == AppConfig.TYPE_SCREEN_FROM_SPLASH) {
                 mThemeModel?.apply {
                     sharedPreferences.setThemeApp(strTheme)
