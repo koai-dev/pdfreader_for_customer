@@ -356,11 +356,13 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                 lstFilePdf = ArrayList()
                 getFile(root)
                 getBaseActivity()?.runOnUiThread {
-                    myFileDetailFragment?.updateData(lstFilePdf)
-                    mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
-                    binding.swRefreshData.isRefreshing = false
-                    if (mStrSearch.isNotEmpty()) {
-                        myFileDetailFragment?.onSearchFile(mStrSearch)
+                    if (isVisible) {
+                        myFileDetailFragment?.updateData(lstFilePdf)
+                        mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
+                        binding.swRefreshData.isRefreshing = false
+                        if (mStrSearch.isNotEmpty()) {
+                            myFileDetailFragment?.onSearchFile(mStrSearch)
+                        }
                     }
                 }
                 if (getBaseActivity()?.isCurrentNetwork == false) {

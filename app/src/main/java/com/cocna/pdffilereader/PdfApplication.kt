@@ -16,6 +16,7 @@ import com.google.android.gms.ads.*
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.firebase.FirebaseApp
 import com.cocna.pdffilereader.common.Logger
+import com.kochava.tracker.Tracker
 import java.util.*
 
 /**
@@ -35,6 +36,7 @@ class PdfApplication : MultiDexApplication(), LifecycleObserver, Application.Act
         // Initialize the Mobile Ads SDK.
         MobileAds.initialize(this)
         appOpenAdManager = AppOpenAdManager()
+        Tracker.getInstance().startWithAppGuid(applicationContext, "kopdf-reader-8uxpczix")
     }
 
     // ads start
