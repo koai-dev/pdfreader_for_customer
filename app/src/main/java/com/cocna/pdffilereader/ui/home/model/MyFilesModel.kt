@@ -1,8 +1,10 @@
 package com.cocna.pdffilereader.ui.home.model
 
+import android.net.Uri
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import java.io.File
 
 @Parcelize
 data class MyFilesModel(
@@ -51,5 +53,17 @@ data class MyFilesModel(
         result = 31 * result + (folderName?.hashCode() ?: 0)
         result = 31 * result + (lstChildFile?.hashCode() ?: 0)
         return result
+    }
+    companion object {
+        fun fromFile(file: File): MyFilesModel {
+            return MyFilesModel(
+                uriPath = Uri.fromFile(file)?.path,
+                uriOldPath = Uri.fromFile(file)?.path,
+                name = file.name,
+                length = file.length(),
+                lastModified = file.lastModified(),
+                extensionName = file.extension
+            )
+        }
     }
 }

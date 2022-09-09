@@ -13,7 +13,7 @@ android {
         applicationId "com.cocna.pdfreader.viewpdf"
         minSdk 21
         targetSdk 32
-        versionCode 18
+        versionCode 19
         versionName "1.1.6"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -73,7 +73,7 @@ dependencies {
 
     implementation platform('com.google.firebase:firebase-bom:30.1.0')
     implementation 'com.google.firebase:firebase-crashlytics'
-    implementation 'com.google.firebase:firebase-config-ktx'
+    implementation group: 'com.google.firebase', name: 'firebase-config-ktx', version: '21.0.2'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.google.code.gson:gson:2.8.9'

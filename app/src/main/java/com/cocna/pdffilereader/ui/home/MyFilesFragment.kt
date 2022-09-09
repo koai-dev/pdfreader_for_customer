@@ -23,6 +23,8 @@ import com.anggrayudi.storage.file.*
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.FragmentMyFilesBinding
+import com.cocna.pdffilereader.filemanager.FileManager
+import com.cocna.pdffilereader.filemanager.SupportDocumentType
 import com.cocna.pdffilereader.myinterface.OnPopupMenuItemClickListener
 import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.base.OnCallbackTittleTab
@@ -348,13 +350,13 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
     private fun getAllFilePdf() {
         Thread {
             getBaseActivity()?.apply {
-                val startTime = System.currentTimeMillis()
                 var root = DocumentFileCompat.getRootDocumentFile(this, "primary", true)
                 if (root == null) {
                     root = DocumentFile.fromFile(File(PATH_DEFAULT_STORE))
                 }
                 lstFilePdf = ArrayList()
-                getFile(root)
+//                getFile(root)
+                getAllDir(root)
                 getBaseActivity()?.runOnUiThread {
                     if (isVisible) {
                         myFileDetailFragment?.updateData(lstFilePdf)
@@ -368,9 +370,16 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                 if (getBaseActivity()?.isCurrentNetwork == false) {
                     getBaseActivity()?.enabaleNetwork()
                 }
-                Logger.showLog("Thuytv------getAllFilePdf----: " + (System.currentTimeMillis() - startTime))
             }
         }.start()
+
+//        val lstData = FileManager.getDocument(SupportDocumentType.Pdf, FileManager.SortType.LastModified)
+//        myFileDetailFragment?.updateData(lstData)
+//        mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstData.size))
+//        binding.swRefreshData.isRefreshing = false
+//        if (mStrSearch.isNotEmpty()) {
+//            myFileDetailFragment?.onSearchFile(mStrSearch)
+//        }
     }
 
     fun onSearchFile(strName: String) {
@@ -437,6 +446,32 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
             RxBus.publish(EventsBus.PERMISSION_STORED_GRANTED)
         } else {
             binding.llGoToSetting.visible()
+        }
+    }
+
+    private fun getAllDir(rootFile: DocumentFile) {
+        rootFile.listFiles().let { files ->
+            for (i in files.indices) {
+                val item = files[i]
+                if (item.isDirectory) {
+                    getAllDir(item)
+                } else {
+                    if (item.extension.lowercase() == "pdf") {
+                        val model =
+                            MyFilesModel(
+                                name = item.name,
+                                uriPath = item.uri.path,
+                                uriOldPath = item.uri.path,
+                                lastModified = item.lastModified(),
+                                extensionName = item.extension,
+                                length = item.length(),
+                                locationFile = item.parentFile?.uri?.path,
+                                folderName = item.parentFile?.name
+                            )
+                        lstFilePdf.add(model)
+                    }
+                }
+            }
         }
     }
 

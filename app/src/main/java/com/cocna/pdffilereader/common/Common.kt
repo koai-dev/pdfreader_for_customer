@@ -26,6 +26,7 @@ object Common {
     var listAllFolder: ArrayList<MyFilesModel>? = null
     var countRatingApp: Int = 0
     var isFromPDFView: Boolean? = null
+    var isShowTheme: Boolean = true
 
     @Keep
     var mNativeAdLanguage: NativeAd? = null

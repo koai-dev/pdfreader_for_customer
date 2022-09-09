@@ -26,7 +26,6 @@ import com.cocna.pdffilereader.ui.home.dialog.UpdateVersionDialog
 import com.cocna.pdffilereader.ui.home.model.AdsLogModel
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.cocna.pdffilereader.ui.setting.LanguageActivity
-import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -85,7 +84,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
 //                val totalTime = (endTime - startTime) / 1000
 //                Logger.showLog("Thuytv------totalTime: $totalTime")
 //                if (totalTime > 3) {
-                    gotoMainScreen()
+        gotoMainScreen()
 //                } else {
 //                    Handler(Looper.myLooper()!!).postDelayed({
 //                        gotoMainScreen()
@@ -107,6 +106,8 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                     val playStoreVersionCode: Long = FirebaseRemoteConfig.getInstance().getLong(
                         "android_latest_version_code"
                     )
+                    Common.isShowTheme = FirebaseRemoteConfig.getInstance().getBoolean("android_is_show_theme")
+
                     val pInfo = this.packageManager.getPackageInfo(packageName, 0)
                     val currentAppVersionCode = PackageInfoCompat.getLongVersionCode(pInfo)
                     Logger.showLog("Thuytv-------playStoreVersionCode: $playStoreVersionCode ----currentAppVersionCode: $currentAppVersionCode")
@@ -185,17 +186,19 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                 if (root == null) {
                     root = DocumentFile.fromFile(File(PATH_DEFAULT_STORE))
                 }
-                getFilePdf(root)
+                getAllDir(root)
 //                RxBus.publish(EventsBus.RELOAD_ALL_FILE)
             }
         }.start()
     }
 
-    private fun getFilePdf(rootFile: DocumentFile) {
-        val pdfArray = rootFile.listFiles()
-        if (pdfArray.isNotEmpty()) {
-            for (item in pdfArray) {
-                if (item.isFile) {
+    private fun getAllDir(rootFile: DocumentFile) {
+        rootFile.listFiles().let { files ->
+            for (i in files.indices) {
+                val item = files[i]
+                if (item.isDirectory) {
+                    getAllDir(item)
+                } else {
                     if (item.extension.lowercase() == "pdf") {
                         val model =
                             MyFilesModel(
@@ -210,12 +213,37 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                             )
                         Common.listAllData?.add(model)
                     }
-                } else {
-                    getFilePdf(item)
                 }
             }
         }
     }
+
+
+//    private fun getFilePdf(rootFile: DocumentFile) {
+//        val pdfArray = rootFile.listFiles()
+//        if (pdfArray.isNotEmpty()) {
+//            for (item in pdfArray) {
+//                if (item.isFile) {
+//                    if (item.extension.lowercase() == "pdf") {
+//                        val model =
+//                            MyFilesModel(
+//                                name = item.name,
+//                                uriPath = item.uri.path,
+//                                uriOldPath = item.uri.path,
+//                                lastModified = item.lastModified(),
+//                                extensionName = item.extension,
+//                                length = item.length(),
+//                                locationFile = item.parentFile?.uri?.path,
+//                                folderName = item.parentFile?.name
+//                            )
+//                        Common.listAllData?.add(model)
+//                    }
+//                } else {
+//                    getFilePdf(item)
+//                }
+//            }
+//        }
+//    }
 
     private fun getAllFileInDevice() {
         Thread {
@@ -224,43 +252,46 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                 Logger.showLog("Thuytv---------getAllFileInDevice--Spalsh")
                 val root = DocumentFile.fromFile(File(PATH_DEFAULT_STORE))
                 val mimePDF = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")!!
-                for (item in root.listFiles()) {
-                    if (!item.isFile) {
-                        val rootFile = item.search(true, DocumentFileType.FILE, arrayOf(mimePDF))
-                        if (rootFile.isNotEmpty()) {
-                            val lstChildFile: ArrayList<MyFilesModel> = ArrayList()
-                            for (mFile in rootFile) {
-                                val model =
-                                    MyFilesModel(
-                                        name = mFile.name,
-                                        uriPath = mFile.uri.path,
-                                        uriOldPath = mFile.uri.path,
-                                        lastModified = mFile.lastModified(),
-                                        extensionName = mFile.extension,
-                                        length = mFile.length(),
-                                        locationFile = mFile.parentFile?.uri?.path,
-                                        folderName = mFile.parentFile?.name
-                                    )
-                                lstChildFile.add(model)
+                root.listFiles().let {
+                    for (item in it) {
+                        if (!item.isFile) {
+                            val rootFile = item.search(true, DocumentFileType.FILE, arrayOf(mimePDF))
+                            if (rootFile.isNotEmpty()) {
+                                val lstChildFile: ArrayList<MyFilesModel> = ArrayList()
+                                for (mFile in rootFile) {
+                                    val model =
+                                        MyFilesModel(
+                                            name = mFile.name,
+                                            uriPath = mFile.uri.path,
+                                            uriOldPath = mFile.uri.path,
+                                            lastModified = mFile.lastModified(),
+                                            extensionName = mFile.extension,
+                                            length = mFile.length(),
+                                            locationFile = mFile.parentFile?.uri?.path,
+                                            folderName = mFile.parentFile?.name
+                                        )
+                                    lstChildFile.add(model)
+                                }
+                                val mFolder = MyFilesModel(folderName = item.name, lstChildFile = lstChildFile)
+                                Common.listAllFolder?.add(mFolder)
                             }
-                            val mFolder = MyFilesModel(folderName = item.name, lstChildFile = lstChildFile)
-                            Common.listAllFolder?.add(mFolder)
+                        } else if (item.extension.lowercase() == "pdf") {
+                            val model =
+                                MyFilesModel(
+                                    name = item.name,
+                                    uriPath = item.uri.path,
+                                    uriOldPath = item.uri.path,
+                                    lastModified = item.lastModified(),
+                                    extensionName = item.extension,
+                                    length = item.length(),
+                                    locationFile = item.parentFile?.uri?.path,
+                                    folderName = item.parentFile?.name
+                                )
+                            Common.listAllFolder?.add(model)
                         }
-                    } else if (item.extension.lowercase() == "pdf") {
-                        val model =
-                            MyFilesModel(
-                                name = item.name,
-                                uriPath = item.uri.path,
-                                uriOldPath = item.uri.path,
-                                lastModified = item.lastModified(),
-                                extensionName = item.extension,
-                                length = item.length(),
-                                locationFile = item.parentFile?.uri?.path,
-                                folderName = item.parentFile?.name
-                            )
-                        Common.listAllFolder?.add(model)
                     }
                 }
+
 //                RxBus.publish(EventsBus.RELOAD_ALL_FOLDER)
             }
         }.start()

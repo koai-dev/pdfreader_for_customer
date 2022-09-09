@@ -87,7 +87,11 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
             logEventFirebase(AppConfig.KEY_EVENT_FB_LANGUAGE_CHANGE, AppConfig.KEY_EVENT_FB_LANGUAGE_CHANGE)
             if (typeScreen == AppConfig.TYPE_SCREEN_FROM_SPLASH) {
                 sharedPreferences.setLanguage(mLanguageModelSelected!!.idLanguage)
-                onNextScreenClearTop(ChangeThemeActivity::class.java, intent.extras)
+                if(Common.isShowTheme) {
+                    onNextScreenClearTop(ChangeThemeActivity::class.java, intent.extras)
+                }else{
+                    onNextScreenClearTop(MainActivity::class.java, null)
+                }
             } else {
                 if (mLanguageModelSelected?.idLanguage != sharedPreferences.getLanguage()) {
                     sharedPreferences.setLanguage(mLanguageModelSelected!!.idLanguage)

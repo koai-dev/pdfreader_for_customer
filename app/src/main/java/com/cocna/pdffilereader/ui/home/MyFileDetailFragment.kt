@@ -307,6 +307,10 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
         lstDataFile = lstData
         myFilesAdapter?.updateData(lstData)
     }
+    fun updateData(lstData: List<MyFilesModel>) {
+        lstDataFile?.addAll(lstData)
+        myFilesAdapter?.updateData(lstData)
+    }
 
     fun onSearchFile(strName: String) {
         myFilesAdapter?.filter?.filter(strName)

@@ -78,6 +78,12 @@ class MyFilesAdapter(
         updateDataAds(lstData)
         notifyDataSetChanged()
     }
+    fun updateData(mlstData: List<MyFilesModel>) {
+        lstData.addAll(mlstData)
+//        mFileFilterList = lstData
+        updateDataAds(lstData)
+        notifyDataSetChanged()
+    }
 
     fun renameData(mData: MyFilesModel) {
         val indexItem = mFileListWithAds.indexOf(mData)

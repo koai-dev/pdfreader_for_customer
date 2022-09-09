@@ -16,6 +16,8 @@ import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.home.dialog.RatingAppDialog
 import com.cocna.pdffilereader.ui.home.model.AdsLogModel
 import com.google.android.gms.ads.*
+import com.kochava.tracker.Tracker
+import com.kochava.tracker.events.Event
 
 @Suppress("DEPRECATION")
 class MainFragment : BaseFragment<FragmentMainBinding>() {
@@ -190,6 +192,16 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                         deviceName = Common.getDeviceName(getBaseActivity())
                     )
                 )
+
+            }
+
+            override fun onAdLoaded() {
+                Tracker.sendEvent(new Event(Tracker.EVENT_TYPE_AD_VIEW)
+                    .setAdNetworkName("AdMob")
+                    .setAdType("Banner")
+                    .setAdSize("SMART_BANNER")
+                    .setAdPlacement("_INSERT_YOUR_AD_UNIT_ID_")
+                );
             }
         }
 
