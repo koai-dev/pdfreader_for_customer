@@ -86,11 +86,20 @@ class PrivatePolicyFragment : BaseActivity<FragmentPrivatePolicyBinding>() {
 
         // Start loading the ad in the background.
         adView.loadAd(adRequest)
-        adView.adListener = object : AdListener(){
+        adView.adListener = object : AdListener() {
             override fun onAdFailedToLoad(loadAdsError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdsError)
-                setLogDataToFirebase(AdsLogModel(adsId = AppConfig.ID_ADS_BANNER_MAIN, adsName = "Ads Banner Policy", message = loadAdsError.message,
-                    deviceName = Common.getDeviceName(this@PrivatePolicyFragment)))
+                setLogDataToFirebase(
+                    AdsLogModel(
+                        adsId = AppConfig.ID_ADS_BANNER_MAIN, adsName = "Ads Banner Policy", message = loadAdsError.message,
+                        deviceName = Common.getDeviceName(this@PrivatePolicyFragment)
+                    )
+                )
+            }
+
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                Common.setEventAdsBanner(AppConfig.ID_ADS_BANNER_MAIN)
             }
         }
     }

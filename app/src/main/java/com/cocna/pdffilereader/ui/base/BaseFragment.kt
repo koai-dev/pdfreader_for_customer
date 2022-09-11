@@ -24,6 +24,8 @@ import com.cocna.pdffilereader.myinterface.OnPopupMenuItemClickListener
 import com.cocna.pdffilereader.ui.home.PdfViewActivity
 import com.cocna.pdffilereader.ui.home.SplashScreenActivity
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
+import com.kochava.tracker.events.Event
+import com.kochava.tracker.events.EventType
 import io.reactivex.disposables.Disposable
 import java.io.File
 import java.net.URLConnection
@@ -189,7 +191,8 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
             }
         }
     }
-    fun setUpShortCut(context: Context,myFileModel: MyFilesModel) {
+
+    fun setUpShortCut(context: Context, myFileModel: MyFilesModel) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             val shortcutManager = ContextCompat.getSystemService(context, ShortcutManager::class.java)
 
@@ -234,15 +237,16 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
                 // to prevent leaks when done.
                 // create an anonymous broadcaster.  Unregister
                 // to prevent leaks when done.
-                getBaseActivity()?.registerReceiver(object : BroadcastReceiver() {
-                    override fun onReceive(c: Context?, intent: Intent) {
-                        getBaseActivity()?.unregisterReceiver(this)
-                        getBaseActivity()?.apply {
-                            Logger.showSnackbar(this, getString(R.string.msg_add_shortcut_success))
-                        }
+                getBaseActivity()?.registerReceiver(
+                    object : BroadcastReceiver() {
+                        override fun onReceive(c: Context?, intent: Intent) {
+                            getBaseActivity()?.unregisterReceiver(this)
+                            getBaseActivity()?.apply {
+                                Logger.showSnackbar(this, getString(R.string.msg_add_shortcut_success))
+                            }
 
-                    }
-                }, IntentFilter(Intent.ACTION_CREATE_SHORTCUT)
+                        }
+                    }, IntentFilter(Intent.ACTION_CREATE_SHORTCUT)
                 )
 
                 val successCallback: PendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -264,4 +268,6 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
             }
         }
     }
+
+
 }

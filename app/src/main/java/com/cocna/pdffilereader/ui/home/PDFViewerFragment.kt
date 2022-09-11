@@ -487,6 +487,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                 Handler(Looper.myLooper()!!).postDelayed({
                     isLoadedAds = false
                 }, 500)
+                Common.setEventAdsBanner(AppConfig.ID_ADS_BANNER_READER)
             }
         }
 

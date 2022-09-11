@@ -63,6 +63,7 @@ class InterstitialUtils {
                     Logger.showLog("Thuytv---2--fullScreenContentCallback--onAdShowedFullScreenContent")
                     mInterstitialAd = null
                     onCallbackLoadAds?.onCallbackActionLoadAds(true)
+
                 }
             }
             mInterstitialAd!!.show(context)

@@ -110,7 +110,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
 
                     val pInfo = this.packageManager.getPackageInfo(packageName, 0)
                     val currentAppVersionCode = PackageInfoCompat.getLongVersionCode(pInfo)
-                    Logger.showLog("Thuytv-------playStoreVersionCode: $playStoreVersionCode ----currentAppVersionCode: $currentAppVersionCode")
+                    Logger.showLog("Thuytv-------playStoreVersionCode: $playStoreVersionCode ----currentAppVersionCode: $currentAppVersionCode ---isShowTheme: " + Common.isShowTheme)
                     if (playStoreVersionCode > currentAppVersionCode) {
                         UpdateVersionDialog(this, object : OnUpdateVersionClickListener {
                             override fun onClickButtonDialog(isUpdateNow: Boolean) {
@@ -320,6 +320,11 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                         deviceName = Common.getDeviceName(this@SplashScreenActivity)
                     )
                 )
+            }
+
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                Common.setEventAdsNative(AppConfig.ID_ADS_NATIVE_LANGUAGE)
             }
         }).build()
 

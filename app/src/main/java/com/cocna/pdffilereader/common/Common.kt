@@ -6,6 +6,8 @@ import android.os.Build
 import androidx.annotation.Keep
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.google.android.gms.ads.nativead.NativeAd
+import com.kochava.tracker.events.Event
+import com.kochava.tracker.events.EventType
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -111,5 +113,27 @@ object Common {
         } else {
             "$bytes Bytes"
         }
+    }
+    fun setEventAdsBanner(unitID: String) {
+        Event.buildWithEventType(EventType.AD_VIEW)
+            .setName("AdMob")
+            .setAdSize("SMART_BANNER")
+            .setAdPlacement(unitID)
+            .send()
+    }
+    fun setEventAdsInterstitial(unitID: String) {
+        Event.buildWithEventType(EventType.AD_VIEW)
+            .setName("AdMob")
+            .setAdType("Interstitial")
+            .setAdPlacement(unitID)
+            .send()
+    }
+    fun setEventAdsNative(unitID: String) {
+        Event.buildWithEventType(EventType.AD_VIEW)
+            .setName("AdMob")
+            .setAdType("Native")
+            .setAdSize("Small")
+            .setAdPlacement(unitID)
+            .send()
     }
 }

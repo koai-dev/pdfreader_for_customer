@@ -89,10 +89,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             }
         }
 
-        getBaseActivity()?.apply {
-            InterstitialUtils.sharedInstance?.loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE, this)
-//            loadNativeAds(binding.frameAdsNative, AppConfig.ID_ADS_NATIVE_TOP_BAR)
-        }
+//        getBaseActivity()?.apply {
+//            InterstitialUtils.sharedInstance?.loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE, this)
+////            loadNativeAds(binding.frameAdsNative, AppConfig.ID_ADS_NATIVE_TOP_BAR)
+//        }
     }
 
     override fun initEvents() {
@@ -196,12 +196,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             }
 
             override fun onAdLoaded() {
-                Tracker.sendEvent(new Event(Tracker.EVENT_TYPE_AD_VIEW)
-                    .setAdNetworkName("AdMob")
-                    .setAdType("Banner")
-                    .setAdSize("SMART_BANNER")
-                    .setAdPlacement("_INSERT_YOUR_AD_UNIT_ID_")
-                );
+                Common.setEventAdsBanner(AppConfig.ID_ADS_BANNER_MAIN)
             }
         }
 

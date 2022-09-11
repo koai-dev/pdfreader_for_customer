@@ -23,8 +23,6 @@ import com.anggrayudi.storage.file.*
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.FragmentMyFilesBinding
-import com.cocna.pdffilereader.filemanager.FileManager
-import com.cocna.pdffilereader.filemanager.SupportDocumentType
 import com.cocna.pdffilereader.myinterface.OnPopupMenuItemClickListener
 import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.base.OnCallbackTittleTab

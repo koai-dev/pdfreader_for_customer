@@ -155,13 +155,13 @@ class LoadingAdsDialog : DialogFragment() {
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
                     Logger.showLog("---onAdLoaded--Success Loading ads dialog")
                     mInterstitialAd = interstitialAd
-                    showInterstitial()
+                    showInterstitial(uuid)
                 }
             })
         }
     }
 
-    private fun showInterstitial() {
+    private fun showInterstitial(uuid: String) {
         // Show the ad if it"s ready. Otherwise toast and reload the ad.
         if (mInterstitialAd != null) {
             mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
@@ -186,6 +186,7 @@ class LoadingAdsDialog : DialogFragment() {
 
                 override fun onAdShowedFullScreenContent() {
                     mInterstitialAd = null
+                    Common.setEventAdsInterstitial(uuid)
                     dismiss()
                 }
             }

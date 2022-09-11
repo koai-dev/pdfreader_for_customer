@@ -256,6 +256,11 @@ class ChangeThemeActivity : BaseActivity<ActivityChangeThemeBinding>() {
                     )
                 )
             }
+
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                Common.setEventAdsNative(AppConfig.ID_ADS_NATIVE_THEME)
+            }
         }).build()
 
         adLoader.loadAd(AdRequest.Builder().build())

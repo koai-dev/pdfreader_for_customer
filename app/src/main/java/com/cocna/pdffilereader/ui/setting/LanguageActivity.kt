@@ -245,6 +245,11 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
                     )
                 )
             }
+
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                Common.setEventAdsNative(AppConfig.ID_ADS_NATIVE_LANGUAGE)
+            }
         }).build()
 
         adLoader.loadAd(AdRequest.Builder().build())
@@ -304,6 +309,11 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
                         deviceName = Common.getDeviceName(this@LanguageActivity)
                     )
                 )
+            }
+
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                Common.setEventAdsNative(AppConfig.ID_ADS_NATIVE_THEME)
             }
         }).build()
 

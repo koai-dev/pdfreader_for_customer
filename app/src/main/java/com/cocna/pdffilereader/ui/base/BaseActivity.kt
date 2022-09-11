@@ -41,6 +41,8 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import com.kochava.tracker.events.Event
+import com.kochava.tracker.events.EventType
 import io.reactivex.disposables.Disposable
 import java.io.File
 import java.util.*
@@ -345,11 +347,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
                 override fun onAdShowedFullScreenContent() {
                     Logger.showLog("---fullScreenContentCallback--onAdShowedFullScreenContent")
                     mInterstitialAd = null
-                }
-
-                override fun onAdImpression() {
-                    super.onAdImpression()
-                    Logger.showLog("---fullScreenContentCallback--onAdImpression")
+                    Common.setEventAdsInterstitial(uuidAds ?: "")
                 }
             }
             mInterstitialAd!!.show(this)
@@ -362,12 +360,14 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         firebaseAnalytics.logEvent(eventName) {
             param(FirebaseAnalytics.Param.ITEM_NAME, method)
         }
+        Event.buildWithEventType(EventType.VIEW).setName(eventName).setAction(method).send()
     }
 
     fun logEventFirebase(eventName: String, paramName: String, value: String) {
         firebaseAnalytics.logEvent(eventName) {
             param(paramName, value)
         }
+        Event.buildWithEventType(EventType.VIEW).setName(eventName).setAction(eventName).send()
     }
 
     fun loadNativeAds(frameAdsNative: FrameLayout, uuidAds: String) {
@@ -401,6 +401,11 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
                         deviceName = Common.getDeviceName(this@BaseActivity)
                     )
                 )
+            }
+
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                Common.setEventAdsNative(uuidAds)
             }
         }).build()
 
