@@ -360,14 +360,15 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         firebaseAnalytics.logEvent(eventName) {
             param(FirebaseAnalytics.Param.ITEM_NAME, method)
         }
-        Event.buildWithEventType(EventType.VIEW).setName(eventName).setAction(method).send()
+        Event.buildWithEventType(EventType.LEVEL_COMPLETE).setName(eventName).send()
+
     }
 
     fun logEventFirebase(eventName: String, paramName: String, value: String) {
         firebaseAnalytics.logEvent(eventName) {
             param(paramName, value)
         }
-        Event.buildWithEventType(EventType.VIEW).setName(eventName).setAction(eventName).send()
+        Event.buildWithEventType(EventType.LEVEL_COMPLETE).setName(eventName).setCustomStringValue(paramName, value).send()
     }
 
     fun loadNativeAds(frameAdsNative: FrameLayout, uuidAds: String) {
