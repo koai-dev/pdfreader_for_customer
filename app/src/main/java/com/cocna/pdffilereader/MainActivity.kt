@@ -14,9 +14,9 @@ class MainActivity : BaseActivity<ActivityBaseBinding>() {
 
     override fun initData() {
         val typeScreen = intent.extras?.getString(AppKeys.KEY_BUNDLE_SCREEN)
-        if (typeScreen == AppConfig.TYPE_SCREEN_SHOW_ADS) {
-            LoadingAdsDialog.newInstance(this).show(supportFragmentManager, "LOADING_ADS")
-        }
+//        if (typeScreen == AppConfig.TYPE_SCREEN_SHOW_ADS) {
+//            LoadingAdsDialog.newInstance(this).show(supportFragmentManager, "LOADING_ADS")
+//        }
         replaceFragment(MainFragment(), intent.extras, R.id.layout_container)
     }
 

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/height_ads_change_theme"
+    android:background="@drawable/bg_tools_pdf"
+    android:padding="@dimen/margin_all">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tt_tools"
+        style="@style/Text_Button_All"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tt_tool"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imv_close_tools_pdf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_close_black_tool"
+        android:padding="@dimen/margin_small"
+        app:layout_constraintBottom_toBottomOf="@id/tt_tools"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tt_tools" />
+
+    <View
+        android:id="@+id/view_center"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tt_tools" />
+
+    <ImageView
+        android:id="@+id/imv_scan_document"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_double_all"
+        android:src="@drawable/ic_scan_document"
+        app:layout_constraintEnd_toEndOf="@id/view_center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tt_tools" />
+
+    <TextView
+        style="@style/Text_Page_View"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_all"
+        android:text="@string/tt_scan_document"
+        app:layout_constraintEnd_toEndOf="@id/view_center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imv_scan_document" />
+
+    <ImageView
+        android:id="@+id/imv_images_to_pdf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_image_to_pdf"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/view_center"
+        app:layout_constraintTop_toTopOf="@id/imv_scan_document" />
+
+    <TextView
+        style="@style/Text_Page_View"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_all"
+        android:text="@string/tt_image_to_pdf"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/view_center"
+        app:layout_constraintTop_toBottomOf="@id/imv_images_to_pdf" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

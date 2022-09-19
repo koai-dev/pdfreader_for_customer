@@ -47,6 +47,9 @@
   <dimen name="corner_button">
     14.22dp
   </dimen>
+  <dimen name="corner_button_toolbar">
+    28.44dp
+  </dimen>
   <dimen name="size_image_item">
     85.33dp
   </dimen>
@@ -107,6 +110,9 @@
   <dimen name="height_rating_bar">
     44.44dp
   </dimen>
+  <dimen name="dp7">
+    12.44dp
+  </dimen>
   <dimen name="text_size_title">
     32.0sp
   </dimen>
@@ -137,7 +143,28 @@
   <dimen name="text_size_sp22">
     39.11sp
   </dimen>
+  <dimen name="text_size_sp20">
+    35.56sp
+  </dimen>
   <dimen name="text_size_menu_change_theme">
     10.67sp
+  </dimen>
+  <dimen name="imagepicker_size_selected">
+    26.67dp
+  </dimen>
+  <dimen name="imagepicker_padding_small">
+    7.11dp
+  </dimen>
+  <dimen name="imagepicker_padding_medium">
+    14.22dp
+  </dimen>
+  <dimen name="imagepicker_padding_large">
+    28.44dp
+  </dimen>
+  <dimen name="imagepicker_margin_large">
+    28.44dp
+  </dimen>
+  <dimen name="imagepicker_grid_spacing">
+    3.56dp
   </dimen>
 </resources>

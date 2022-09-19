@@ -31,6 +31,10 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import com.cocna.pdffilereader.imagepicker.model.GridCount
+import com.cocna.pdffilereader.imagepicker.model.Image
+import com.cocna.pdffilereader.imagepicker.model.ImagePickerConfig
+import com.cocna.pdffilereader.imagepicker.ui.imagepicker.registerImagePicker
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
@@ -70,11 +74,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
         }
         startTime = System.currentTimeMillis()
         checkNewVersionApp()
-//        loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL, object : OnCallbackLoadAds {
-//            override fun onCallbackActionLoadAds(isSuccess: Boolean) {
-//                gotoMainScreen()
-//            }
-//        })
+
     }
 
     private fun loadAds() {
@@ -330,4 +330,6 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
 
         adLoader.loadAd(AdRequest.Builder().build())
     }
+
+
 }

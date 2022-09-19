@@ -46,4 +46,16 @@
     <color name="color_bg_subs">#F50062</color>
     <color name="bg_line">#D8D8D8</color>
     <color name="bg_line_crop">#007AFF</color>
+    <color name="bg_swipe">#F4F4F4</color>
+
+
+    <color name="imagepicker_black">#000000</color>
+    <color name="imagepicker_white">#FFFFFF</color>
+    <color name="imagepicker_black_alpha_30">#4D000000</color>
+    <color name="imagepicker_grey">#424242</color>
+    <color name="imagepicker_dark">#323232</color>
+    <color name="imagepicker_teal">#009688</color>
+    <color name="imagepicker_blue">#1976D2</color>
+
+    <color name="imagepicker_un_selected">#33FFFFFF</color>
 </resources>

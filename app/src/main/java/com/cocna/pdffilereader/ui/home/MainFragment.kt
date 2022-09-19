@@ -1,5 +1,9 @@
 package com.cocna.pdffilereader.ui.home
 
+import android.content.res.AssetManager
+import android.graphics.BitmapFactory
+import android.os.Bundle
+import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.DisplayMetrics
@@ -7,17 +11,30 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.google.android.material.navigation.NavigationBarView
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.FragmentMainBinding
+import com.cocna.pdffilereader.imagepicker.model.GridCount
+import com.cocna.pdffilereader.imagepicker.model.Image
+import com.cocna.pdffilereader.imagepicker.model.ImagePickerConfig
+import com.cocna.pdffilereader.imagepicker.ui.imagepicker.registerImagePicker
 import com.cocna.pdffilereader.ui.base.BaseFragment
+import com.cocna.pdffilereader.ui.home.dialog.BottomSheetToolsPdf
 import com.cocna.pdffilereader.ui.home.dialog.RatingAppDialog
 import com.cocna.pdffilereader.ui.home.model.AdsLogModel
 import com.google.android.gms.ads.*
-import com.kochava.tracker.Tracker
-import com.kochava.tracker.events.Event
+import com.google.android.material.navigation.NavigationBarView
+import com.tom_roush.pdfbox.pdmodel.PDDocument
+import com.tom_roush.pdfbox.pdmodel.PDPage
+import com.tom_roush.pdfbox.pdmodel.PDPageContentStream
+import com.tom_roush.pdfbox.pdmodel.common.PDRectangle
+import com.tom_roush.pdfbox.pdmodel.graphics.image.JPEGFactory
+import com.tom_roush.pdfbox.pdmodel.graphics.image.LosslessFactory
+import com.tom_roush.pdfbox.pdmodel.graphics.image.PDImageXObject
+import java.io.InputStream
+
 
 @Suppress("DEPRECATION")
 class MainFragment : BaseFragment<FragmentMainBinding>() {
@@ -35,6 +52,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     private lateinit var adView: AdView
 
     private var initialLayoutComplete = false
+    private val lstImageSelected = ArrayList<Image>()
 
     // Determine the screen width (less decorations) to use for the ad width.
     // If the ad hasn't been laid out, default to the full screen width.
@@ -162,6 +180,18 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             }
 
         })
+
+        binding.btnToolsPdf.setOnClickListener {
+            MultiClickPreventer.preventMultiClick(it)
+            getBaseActivity()?.let {
+                BottomSheetToolsPdf(it, object : BottomSheetToolsPdf.OnItemClickToolsPdf {
+                    override fun onItemClickImageToPdf() {
+                        lstImageSelected.clear()
+                        selectImage()
+                    }
+                }).show(childFragmentManager, "TOOLS_PDF")
+            }
+        }
     }
 
     private fun loadFragment(fragment: Fragment) {
@@ -226,5 +256,38 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     override fun onDestroy() {
         adView.destroy()
         super.onDestroy()
+    }
+
+    private fun selectImage() {
+        val config = ImagePickerConfig(
+            toolbarColor = "#FAFAFA",
+            toolbarIconColor = "#292D32",
+            toolbarTextColor = "#102027",
+            isLightStatusBar = false,
+            isFolderMode = false,
+            isMultipleMode = true,
+            isShowCamera = true,
+            subDirectory = "Photos",
+            imageTitle = getString(R.string.tt_select_photo),
+            imageGridCount = GridCount(4, 5),
+            selectedIndicatorColor = "#F44336",
+            isShowNumberIndicator = true,
+            selectedImages = lstImageSelected,
+            // See more at configuration attributes table below
+        )
+        launcher.launch(config)
+    }
+
+    private val launcher = registerImagePicker { images ->
+        // Selected images are ready to use
+        Logger.showLog("Thuytv------registerImagePicker: " + images.size)
+        if (images.isNotEmpty()) {
+            lstImageSelected.clear()
+            lstImageSelected.addAll(images)
+            Logger.showLog("Thuytv------images: " + images.size)
+            val bundle = Bundle()
+            bundle.putParcelableArrayList(AppKeys.KEY_BUNDLE_DATA, lstImageSelected)
+            getBaseActivity()?.onNextScreen(CreateImageToPdfActivity::class.java, bundle, false)
+        }
     }
 }

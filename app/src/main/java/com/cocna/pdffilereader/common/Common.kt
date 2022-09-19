@@ -8,6 +8,7 @@ import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.google.android.gms.ads.nativead.NativeAd
 import com.kochava.tracker.events.Event
 import com.kochava.tracker.events.EventType
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -114,6 +115,7 @@ object Common {
             "$bytes Bytes"
         }
     }
+
     fun setEventAdsBanner(unitID: String) {
         Event.buildWithEventType(EventType.AD_VIEW)
             .setName("AdMob")
@@ -121,6 +123,7 @@ object Common {
             .setAdPlacement(unitID)
             .send()
     }
+
     fun setEventAdsInterstitial(unitID: String) {
         Event.buildWithEventType(EventType.AD_VIEW)
             .setName("AdMob")
@@ -128,6 +131,7 @@ object Common {
             .setAdPlacement(unitID)
             .send()
     }
+
     fun setEventAdsNative(unitID: String) {
         Event.buildWithEventType(EventType.AD_VIEW)
             .setName("AdMob")
@@ -135,5 +139,28 @@ object Common {
             .setAdSize("Small")
             .setAdPlacement(unitID)
             .send()
+    }
+
+    @JvmStatic
+    fun covertDateLongToString(time: Long?): String {
+        time?.let {
+            val sdf = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+            return sdf.format(Date(time*1000))
+//            return DateFormat.getDateInstance().format(Date(time * 1000))
+        }
+        return ""
+    }
+    @JvmStatic
+    fun getDateCreatePdf(): String {
+            val sdf = SimpleDateFormat("dd.MM.yyyy-hh:MM:ss", Locale.getDefault())
+            return sdf.format(Date())
+    }
+
+    fun formatDateCompare(strDate: String): String {
+        if (strDate.isEmpty()) return ""
+        val dfDisplay = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+        val displayDate = dfDisplay.parse(strDate)
+        val dfServer = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+        return dfServer.format(displayDate)
     }
 }
