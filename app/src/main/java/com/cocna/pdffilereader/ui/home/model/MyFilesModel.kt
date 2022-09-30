@@ -32,7 +32,9 @@ data class MyFilesModel(
     @field:SerializedName("is_ads")
     var isAds: Boolean? = null,
     @field:SerializedName("location_file")
-    var locationFile: String? = null
+    var locationFile: String? = null,
+    @field:SerializedName("uri_save_file")
+    var uriSaveFile: Uri? = null
 ) : Parcelable {
     override fun equals(other: Any?): Boolean {
         if (other == null) {

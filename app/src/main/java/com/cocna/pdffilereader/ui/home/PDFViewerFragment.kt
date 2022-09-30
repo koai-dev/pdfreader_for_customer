@@ -19,10 +19,12 @@ import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.FragmentPdfViewerBinding
 import com.cocna.pdffilereader.myinterface.OnDialogItemClickListener
 import com.cocna.pdffilereader.myinterface.OnPopupMenuItemClickListener
+import com.cocna.pdffilereader.myinterface.OnShowAdsBackListener
 import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.home.adapter.PreviewAdapter
 import com.cocna.pdffilereader.ui.home.dialog.DeleteFileDialog
 import com.cocna.pdffilereader.ui.home.dialog.FileInfoDialog
+import com.cocna.pdffilereader.ui.home.dialog.LoadingAdsDialog
 import com.cocna.pdffilereader.ui.home.dialog.RenameFileDialog
 import com.cocna.pdffilereader.ui.home.model.AdsLogModel
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
@@ -447,7 +449,14 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                     val bundle = Bundle()
                     bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, this)
 //                    bundle.putString(AppKeys.KEY_BUNDLE_DATA, encodedBitmap)
-                    getBaseActivity()?.addFragment(CropImageFragment(), bundle, R.id.layout_container)
+                    getBaseActivity()?.addFragment(CropImageFragment.newInstance(object : OnShowAdsBackListener{
+                        override fun onShowAds() {
+                            getBaseActivity()?.let {
+                                LoadingAdsDialog.newInstance(it,AppConfig.ID_ADS_INTERSTITIAL_BACK).show(childFragmentManager, "LOADING_ADS")
+                            }
+                        }
+
+                    }), bundle, R.id.layout_container)
                 }
             }
             R.id.btn_share_file -> {
@@ -510,7 +519,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         super.onDestroy()
         recycleMemory()
         val endTime = System.currentTimeMillis()
-        if ((endTime - startTime) >= 20000 && !isSendShowAds) {
+        if ((endTime - startTime) >= 10000 && !isSendShowAds) {
             isSendShowAds = true
             RxBus.publish(EventsBus.SHOW_ADS_BACK)
 //                getBaseActivity()?.loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_BACK_FILE, null)

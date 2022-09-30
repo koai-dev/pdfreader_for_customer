@@ -132,7 +132,13 @@
     <string name="msg_coming_soon">Coming soon</string>
     <string name="tt_select_photo">Select Photo</string>
     <string name="btn_add_image">Add Image</string>
+    <string name="btn_add_image_num">Add Image (%d)</string>
     <string name="msg_swipe_edit_image">Swipe to edit the other images</string>
+    <string name="tt_save_file">Save file</string>
+    <string name="tt_open_file">Open file</string>
+    <string name="tt_back_to_home">Back to Home</string>
+    <string name="tt_result_success">Convert successfully</string>
+    <string name="tt_add">Add</string>
 
 
     <string name="imagepicker_action_ok">OK</string>

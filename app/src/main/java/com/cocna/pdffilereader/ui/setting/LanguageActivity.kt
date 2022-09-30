@@ -32,7 +32,7 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
     override fun initData() {
         typeScreen = intent.getStringExtra(AppKeys.KEY_BUNDLE_SCREEN)
         if (typeScreen == AppConfig.TYPE_SCREEN_FROM_SPLASH) {
-            LoadingAdsDialog.newInstance(this).show(supportFragmentManager, "LOADING_ADS")
+            LoadingAdsDialog.newInstance(this,AppConfig.ID_ADS_INTERSTITIAL).show(supportFragmentManager, "LOADING_ADS")
             binding.imvAllBack.invisible()
             preLoadAdsNativeTheme()
         }
@@ -90,6 +90,7 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
                 if(Common.isShowTheme) {
                     onNextScreenClearTop(ChangeThemeActivity::class.java, intent.extras)
                 }else{
+                    sharedPreferences.setValueBoolean(SharePreferenceUtils.KEY_FIRST_LOGIN, true)
                     onNextScreenClearTop(MainActivity::class.java, null)
                 }
             } else {

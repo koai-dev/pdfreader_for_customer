@@ -14,7 +14,10 @@ import androidx.fragment.app.DialogFragment
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.FragmentCropImageBinding
+import com.cocna.pdffilereader.myinterface.OnShowAdsBackListener
 import com.cocna.pdffilereader.ui.base.BaseFragment
+import com.cocna.pdffilereader.ui.base.OnCallbackLoadAds
+import com.cocna.pdffilereader.ui.base.OnCallbackTittleTab
 import com.cocna.pdffilereader.ui.home.dialog.ConfirmDeleteDialog
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
@@ -35,6 +38,14 @@ class CropImageFragment : BaseFragment<FragmentCropImageBinding>(), View.OnClick
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCropImageBinding
         get() = FragmentCropImageBinding::inflate
 
+    companion object {
+        private var mOnCallbackLoadAds: OnShowAdsBackListener? = null
+        fun newInstance(onCallbackLoadAds: OnShowAdsBackListener?): CropImageFragment {
+            val fragment = CropImageFragment()
+            mOnCallbackLoadAds = onCallbackLoadAds
+            return fragment
+        }
+    }
 
     override fun initData() {
 //        strBitmap = arguments?.getString(AppKeys.KEY_BUNDLE_DATA)
@@ -43,13 +54,7 @@ class CropImageFragment : BaseFragment<FragmentCropImageBinding>(), View.OnClick
         strFileName = "Screen_capture-$timeStamp"
         binding.ttToolbarCrop.text = strFileName
         mBitmap = arguments?.getParcelable(AppKeys.KEY_BUNDLE_DATA)
-//        strBitmap?.apply {
-//            val b = Base64.decode(this, Base64.DEFAULT)
-//            val bitmap = BitmapFactory.decodeByteArray(b, 0, b.size)
-//            bitmap?.apply {
-//                binding.imvViewImage.setImageBitmap(bitmap)
-//            }
-//        }
+
         mBitmap?.apply {
             binding.imvCropImage.setImageBitmap(this)
             binding.imvViewImage.setImageBitmap(this)
@@ -64,12 +69,14 @@ class CropImageFragment : BaseFragment<FragmentCropImageBinding>(), View.OnClick
         MultiClickPreventer.preventMultiClick(v)
         when (v?.id) {
             R.id.imv_back_crop -> {
+                mOnCallbackLoadAds?.onShowAds()
                 onBackFragment()
             }
             R.id.btn_image_delete -> {
                 getBaseActivity()?.apply {
                     ConfirmDeleteDialog(this, object : ConfirmDeleteDialog.OnDialogItemClickListener {
                         override fun onClickItemYes() {
+                            mOnCallbackLoadAds?.onShowAds()
                             getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_CAPTURE_FILE, AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_DELETE)
                             onBackFragment()
                         }
@@ -113,7 +120,7 @@ class CropImageFragment : BaseFragment<FragmentCropImageBinding>(), View.OnClick
         }
     }
 
-    fun saveBitmapToStorage(context: Context, bitmap: Bitmap) {
+    private fun saveBitmapToStorage(context: Context, bitmap: Bitmap) {
         val executor = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
         val storePath = "/storage/emulated/0/DCIM/Screenshots"
@@ -139,16 +146,12 @@ class CropImageFragment : BaseFragment<FragmentCropImageBinding>(), View.OnClick
             }
             handler.post {
                 bitmap.recycle()
-//                showSnackbarSaveImage(file.absolutePath)
-//                onBackFragment()
                 showSnackbarSaveImage()
             }
         }
     }
 
     private fun showSnackbarSaveImage() {
-//        Snackbar.make(binding.llBottomMenu, "Save Image Success : $pathFile", Snackbar.LENGTH_SHORT).show()
-//        Toast.makeText(getBaseActivity(), "Save Image Success : $pathFile", Toast.LENGTH_SHORT).show()
         binding.llShowNotify.vlContentNotify.text = getString(R.string.msg_save_image_success)
         binding.llShowNotify.llShowNotification.visible()
         binding.llShowNotify.imvIconNotify.setOnClickListener {
@@ -157,6 +160,7 @@ class CropImageFragment : BaseFragment<FragmentCropImageBinding>(), View.OnClick
         Handler(Looper.myLooper()!!).postDelayed({
             if (isVisible && getBaseActivity()?.isFinishing == false) {
                 binding.llShowNotify.llShowNotification.gone()
+                mOnCallbackLoadAds?.onShowAds()
                 onBackFragment()
             }
         }, 1000)

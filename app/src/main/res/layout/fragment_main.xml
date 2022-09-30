@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_main_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_bg"
-    android:id="@+id/ll_main_fragment"
     tools:context=".ui.home.MainFragment">
 
     <LinearLayout
@@ -73,12 +73,14 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/navigation_bottom" />
+
     <FrameLayout
         android:id="@+id/frame_ads_native"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/llToolbarHome"/>
+        app:layout_constraintTop_toBottomOf="@id/llToolbarHome" />
+
     <FrameLayout
         android:id="@+id/fm_container"
         android:layout_width="match_parent"
@@ -87,14 +89,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/frame_ads_native" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_tools_pdf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/fm_container"
-        app:layout_constraintEnd_toEndOf="@id/fm_container"
+        android:layout_margin="@dimen/margin_all"
         android:src="@drawable/ic_camera_float_button"
         app:backgroundTint="@color/rgb_F44336"
-        android:layout_margin="@dimen/margin_all"/>
+        app:layout_constraintBottom_toBottomOf="@id/fm_container"
+        app:layout_constraintEnd_toEndOf="@id/fm_container"
+        tools:ignore="ContentDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

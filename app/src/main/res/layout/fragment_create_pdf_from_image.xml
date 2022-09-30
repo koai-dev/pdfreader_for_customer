@@ -76,14 +76,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/margin_small"
-                android:src="@drawable/ic_save_image" />
+                android:src="@drawable/ic_gallery_add" />
 
             <TextView
                 android:id="@+id/vl_image_save"
                 style="@style/Text_Item_Date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/vl_save" />
+                android:text="@string/tt_add" />
         </LinearLayout>
 
         <LinearLayout
@@ -99,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/margin_small"
-                android:src="@drawable/ic_delete" />
+                android:src="@drawable/ic_rotate_pdf" />
 
             <TextView
                 style="@style/Text_Item_Date"
@@ -173,6 +173,14 @@
         app:layout_constraintBottom_toTopOf="@id/ll_bottom_menu"
         app:layout_constraintTop_toBottomOf="@id/frame_ads_native_pdf" />
 
+    <com.canhub.cropper.CropImageView
+        android:id="@+id/cropImageViewEdit"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/viewPagerImage"
+        app:layout_constraintEnd_toEndOf="@id/viewPagerImage"
+        app:layout_constraintStart_toStartOf="@id/viewPagerImage"
+        app:layout_constraintTop_toTopOf="@id/viewPagerImage" />
 
     <View
         android:id="@+id/viewBgPage"

@@ -41,17 +41,17 @@ class LoadingAdsDialog : DialogFragment() {
     companion object {
         @SuppressLint("StaticFieldLeak")
         private var mActivity: BaseActivity<*>? = null
-        private var typeLoadAds: Int? = null
-        fun newInstance(mActivity: BaseActivity<*>?): LoadingAdsDialog {
-            val fragment = LoadingAdsDialog()
-            this.mActivity = mActivity
-            return fragment
-        }
+        private var uuidLoadAds: String? = null
+//        fun newInstance(mActivity: BaseActivity<*>?): LoadingAdsDialog {
+//            val fragment = LoadingAdsDialog()
+//            this.mActivity = mActivity
+//            return fragment
+//        }
 
-        fun newInstance(mActivity: BaseActivity<*>?, typeLoadAds: Int?): LoadingAdsDialog {
+        fun newInstance(mActivity: BaseActivity<*>?, uuidLoadAds: String?): LoadingAdsDialog {
             val fragment = LoadingAdsDialog()
             this.mActivity = mActivity
-            this.typeLoadAds = typeLoadAds
+            this.uuidLoadAds = uuidLoadAds
             return fragment
         }
     }
@@ -76,17 +76,20 @@ class LoadingAdsDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        if (typeLoadAds == AppConfig.TYPE_LOAD_AD_FILE) {
-//            mActivity?.apply {
-//                InterstitialUtils.sharedInstance?.showInterstitial(AppConfig.ID_ADS_INTERSTITIAL_FILE, this, object : OnCallbackLoadAds {
-//                    override fun onCallbackActionLoadAds(isSuccess: Boolean) {
-//                        dismiss()
-//                    }
-//                })
-//            }
-            loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE)
-        } else {
-            loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL)
+//        if (typeLoadAds == AppConfig.TYPE_LOAD_AD_FILE) {
+////            mActivity?.apply {
+////                InterstitialUtils.sharedInstance?.showInterstitial(AppConfig.ID_ADS_INTERSTITIAL_FILE, this, object : OnCallbackLoadAds {
+////                    override fun onCallbackActionLoadAds(isSuccess: Boolean) {
+////                        dismiss()
+////                    }
+////                })
+////            }
+//            loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_FILE)
+//        } else {
+//            loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL)
+//        }
+        uuidLoadAds?.let {
+            loadInterstAds(it)
         }
         dialog?.run {
             val width = ViewGroup.LayoutParams.MATCH_PARENT

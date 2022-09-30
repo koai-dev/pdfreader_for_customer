@@ -1,9 +1,16 @@
 package com.cocna.pdffilereader.imagepicker.helper
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.ParcelFileDescriptor
 import android.provider.MediaStore
 import com.cocna.pdffilereader.imagepicker.model.Folder
 import com.cocna.pdffilereader.imagepicker.model.Image
+import java.io.FileDescriptor
+import java.io.IOException
+
 
 object ImageHelper {
 
@@ -78,5 +85,20 @@ object ImageHelper {
     fun getImageCollectionUri(): Uri {
         return if (DeviceHelper.isMinSdk29) MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         else MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+    }
+
+    fun uriToBitmap(mContext: Context?, selectedFileUri: Uri?): Bitmap? {
+        try {
+            if (mContext == null || selectedFileUri == null) return null
+            val parcelFileDescriptor: ParcelFileDescriptor? = mContext.getContentResolver().openFileDescriptor(selectedFileUri, "r")
+            val fileDescriptor: FileDescriptor? = parcelFileDescriptor?.fileDescriptor
+
+            val image = BitmapFactory.decodeFileDescriptor(fileDescriptor)
+            parcelFileDescriptor?.close()
+            return image
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return null
     }
 }

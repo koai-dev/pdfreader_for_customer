@@ -63,6 +63,7 @@ class SharePreferenceUtils(context: Context?) {
     fun getValueInteger(key: String): Int? {
         return IShare?.getInt(key, -1)
     }
+
     fun getValueInteger(key: String, default: Int): Int? {
         return IShare?.getInt(key, default)
     }
@@ -177,13 +178,18 @@ class SharePreferenceUtils(context: Context?) {
     }
 
     fun getFavoriteFile(): ArrayList<MyFilesModel> {
-        val data = getValueString(KEY_FAVORITE_FILE)
-        if (data.isNullOrEmpty()) return ArrayList()
-        return Gson().fromJson<ArrayList<MyFilesModel>>(
-            data,
-            object : TypeToken<ArrayList<MyFilesModel>>() {}.type
-        )
-            ?: ArrayList()
+        try {
+            val data = getValueString(KEY_FAVORITE_FILE)
+            if (data.isNullOrEmpty()) return ArrayList()
+            return Gson().fromJson<ArrayList<MyFilesModel>>(
+                data,
+                object : TypeToken<ArrayList<MyFilesModel>>() {}.type
+            )
+                ?: ArrayList()
+        } catch (e: Exception) {
+
+        }
+        return ArrayList()
     }
 
     companion object {

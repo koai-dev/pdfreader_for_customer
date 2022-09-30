@@ -23,5 +23,7 @@ data class Image(
     @field:SerializedName("number_files")
     var numberFiles: Int? = null,
     @field:SerializedName("rotate")
-    var rotate: Int = 0
+    var rotate: Int = 0,
+    @field:SerializedName("is_crop")
+    var isCrop: Int = 0
 ) : Parcelable

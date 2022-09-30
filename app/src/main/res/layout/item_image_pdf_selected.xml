@@ -4,13 +4,14 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.theartofdev.edmodo.cropper.CropImageView
-        android:id="@+id/imv_item_selected"
+    <com.canhub.cropper.CropImageView
+        android:id="@+id/imv_crop_image_view"
         android:layout_width="match_parent"
         android:visibility="gone"
         android:layout_height="match_parent"/>
     <ImageView
-        android:id="@+id/imv_item_selected_test"
+        android:id="@+id/imv_item_selected_image"
         android:layout_width="match_parent"
+
         android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

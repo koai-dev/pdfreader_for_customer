@@ -96,6 +96,13 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
             if (binding.btnSelectDone.visibility == View.GONE) {
                 binding.btnSelectDone.visibility = View.VISIBLE
             }
+            if (!isFinishing && !isDestroyed) {
+                if (it.isNullOrEmpty()) {
+                    binding.btnSelectDone.text = getString(R.string.btn_add_image)
+                } else {
+                    binding.btnSelectDone.text = getString(R.string.btn_add_image_num, it.size)
+                }
+            }
             binding.btnSelectDone.isEnabled = it.isNotEmpty()
         }
 

@@ -151,6 +151,15 @@ object Common {
         return ""
     }
     @JvmStatic
+    fun covertTimeDisplayResult(time: Long?): String {
+        time?.let {
+            val sdf = SimpleDateFormat("dd/MM/yyyy-hh:MM:ss", Locale.getDefault())
+            return sdf.format(Date(time))
+//            return DateFormat.getDateInstance().format(Date(time * 1000))
+        }
+        return ""
+    }
+    @JvmStatic
     fun getDateCreatePdf(): String {
             val sdf = SimpleDateFormat("dd.MM.yyyy-hh:MM:ss", Locale.getDefault())
             return sdf.format(Date())
