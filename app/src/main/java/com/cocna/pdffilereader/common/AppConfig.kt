@@ -61,6 +61,10 @@ object AppConfig {
     const val KEY_EVENT_FB_SHARE_FILE = "share_file"
     const val KEY_EVENT_FB_LANGUAGE_CHANGE = "language_change"
     const val KEY_EVENT_FB_THEME_CHANGE = "theme_change"
+    const val KEY_EVENT_TOOL_CLICK = "tool_click"
+    const val KEY_EVENT_TOOL_IMGTOPDF_CLICK = "tool_imgtopdf_click"
+    const val KEY_EVENT_TOOL_IMGTOPDF_SAVE = "tool_imgtopdf_save"
+    const val KEY_EVENT_TOOL_SCAN_CLICK = "tool_scan_click"
 
     const val KEY_PARAM_FB_OPEN_SOURCE = "open_source"
     const val KEY_PARAM_FB_STATUS = "status"

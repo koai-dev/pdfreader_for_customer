@@ -183,9 +183,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
         binding.btnToolsPdf.setOnClickListener {
             MultiClickPreventer.preventMultiClick(it)
+            getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_TOOL_CLICK,AppConfig.KEY_EVENT_TOOL_CLICK )
             getBaseActivity()?.let {
                 BottomSheetToolsPdf(it, object : BottomSheetToolsPdf.OnItemClickToolsPdf {
                     override fun onItemClickImageToPdf() {
+                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_TOOL_IMGTOPDF_CLICK,AppConfig.KEY_EVENT_TOOL_IMGTOPDF_CLICK )
                         lstImageSelected.clear()
                         selectImage()
                     }

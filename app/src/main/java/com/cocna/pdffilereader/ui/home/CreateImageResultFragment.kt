@@ -27,6 +27,7 @@ class CreateImageResultFragment : BaseFragment<FragmentCreatePdfResultBinding>()
         getBaseActivity()?.let {
             LoadingAdsDialog.newInstance(it, AppConfig.ID_ADS_INTERSTITIAL_RESULT_IMGTOPDF).show(childFragmentManager, "LOADING_ADS")
         }
+        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_TOOL_IMGTOPDF_SAVE, AppConfig.KEY_EVENT_TOOL_IMGTOPDF_SAVE)
 
         myFilesModel = arguments?.getParcelable(AppKeys.KEY_BUNDLE_DATA)
         myFilesModel?.let {
