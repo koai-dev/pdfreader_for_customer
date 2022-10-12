@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:background="@color/color_bg_toolbar">
+
+    <com.cocna.pdffilereader.imagepicker.widget.ImagePickerToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_select_done"
+        style="@style/Button_Confirm_All"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/margin_all"
+        android:layout_marginTop="@dimen/margin_all"
+        android:layout_marginEnd="@dimen/margin_all"
+        android:layout_marginBottom="@dimen/margin_all"
+        android:background="@drawable/bg_button_rate"
+        android:enabled="false"
+        android:text="@string/btn_add_image" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/btn_select_done"
+        android:layout_below="@+id/toolbar" />
+
+    <com.cocna.pdffilereader.imagepicker.widget.SnackBarView
+        android:id="@+id/snackbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone" />
+
+
+</RelativeLayout>

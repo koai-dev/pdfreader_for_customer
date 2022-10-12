@@ -53,8 +53,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/height_image_change_theme">
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/margin_small">
 
             <ImageView
                 android:id="@+id/imv_change_theme"
@@ -169,14 +169,17 @@
                         android:text="@string/title_setting" />
                 </LinearLayout>
             </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/ad_frame_theme"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:minHeight="@dimen/height_ads_change_theme"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rcvThemeApp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <FrameLayout
-        android:id="@+id/ad_frame_theme"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/height_ads_change_theme"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

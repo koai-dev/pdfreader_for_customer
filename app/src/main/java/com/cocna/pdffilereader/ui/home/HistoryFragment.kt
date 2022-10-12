@@ -17,6 +17,7 @@ import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.base.OnCallbackTittleTab
 import com.cocna.pdffilereader.ui.home.adapter.MyFilesAdapter
 import com.cocna.pdffilereader.ui.home.dialog.DeleteFileDialog
+import com.cocna.pdffilereader.ui.home.dialog.FileInfoDialog
 import com.cocna.pdffilereader.ui.home.dialog.RenameFileDialog
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import io.reactivex.disposables.Disposable
@@ -204,7 +205,12 @@ private fun setBackgroundColor(isEmpty: Boolean){
     }
 
     private fun showPopupItemRecentMore(view: View, myFileModel: MyFilesModel) {
-        showPopupMenu(view, R.menu.menu_more_file, object : OnPopupMenuItemClickListener {
+        var lstPopupMenu = R.menu.menu_more_file
+        val lstFavorite = getBaseActivity()?.sharedPreferences?.getFavoriteFile()
+        if (lstFavorite?.contains(myFileModel) == true) {
+            lstPopupMenu = R.menu.menu_more_file_favorite
+        }
+        showPopupMenu(view, lstPopupMenu, object : OnPopupMenuItemClickListener {
             override fun onClickItemPopupMenu(menuItem: MenuItem?) {
                 when (menuItem?.itemId) {
                     R.id.menu_rename -> {
@@ -215,22 +221,42 @@ private fun setBackgroundColor(isEmpty: Boolean){
 
                             }).show()
                         }
+                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_RENAME_FILE,AppConfig.KEY_EVENT_FB_RENAME_FILE)
                     }
                     R.id.menu_favorite -> {
                         getBaseActivity()?.sharedPreferences?.setFavoriteFile(myFileModel)
                         RxBus.publish(EventsBus.RELOAD_FAVORITE)
+                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_FILE,AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_BOOKMARK)
+                    }
+                    R.id.menu_un_favorite -> {
+                        getBaseActivity()?.sharedPreferences?.removeFavoriteFile(myFileModel)
+                        RxBus.publish(EventsBus.RELOAD_FAVORITE)
+                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_FILE,AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_UN_BOOKMARK)
                     }
                     R.id.menu_share -> {
                         myFileModel.uriPath?.let { File(it) }?.let { shareFile(it) }
+                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_SHARE_FILE,AppConfig.KEY_EVENT_FB_SHARE_FILE)
                     }
                     R.id.menu_delete -> {
                         getBaseActivity()?.apply {
                             val deleteFileDialog = DeleteFileDialog(this, myFileModel, object : OnDialogItemClickListener {
                                 override fun onClickItemConfirm(mData: MyFilesModel) {
+                                    getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_DELETE_FILE,AppConfig.KEY_EVENT_FB_DELETE_FILE)
                                 }
 
                             })
                             deleteFileDialog.show()
+                        }
+                    }
+                    R.id.menu_shortcut -> {
+                        getBaseActivity()?.apply {
+                            setUpShortCut(this, myFileModel)
+                        }
+                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_SHORTCUT_FILE,AppConfig.KEY_EVENT_FB_SHORTCUT_FILE)
+                    }
+                    R.id.menu_file_info -> {
+                        getBaseActivity()?.apply {
+                            FileInfoDialog(this, myFileModel).show()
                         }
                     }
                 }

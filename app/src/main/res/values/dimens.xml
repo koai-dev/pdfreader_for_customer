@@ -17,6 +17,7 @@
     <dimen name="size_image_home">32dp</dimen>
     <dimen name="dp2">2dp</dimen>
     <dimen name="corner_button">8dp</dimen>
+    <dimen name="corner_button_toolbar">16dp</dimen>
     <dimen name="size_image_item">48dp</dimen>
     <dimen name="size_image_item_theme">42dp</dimen>
     <dimen name="size_image_splash">160dp</dimen>
@@ -37,6 +38,7 @@
     <dimen name="height_image_menu_home">16dp</dimen>
     <dimen name="height_image_change_theme">300dp</dimen>
     <dimen name="height_rating_bar">25dp</dimen>
+    <dimen name="dp7">7dp</dimen>
 
     <dimen name="text_size_title">18sp</dimen>
     <dimen name="text_size_content">13sp</dimen>
@@ -48,5 +50,14 @@
     <dimen name="text_size_sp15">15sp</dimen>
     <dimen name="text_size_sp24">24sp</dimen>
     <dimen name="text_size_sp22">22sp</dimen>
+    <dimen name="text_size_sp20">20sp</dimen>
     <dimen name="text_size_menu_change_theme">6sp</dimen>
+
+
+    <dimen name="imagepicker_size_selected">15dp</dimen>
+    <dimen name="imagepicker_padding_small">4dp</dimen>
+    <dimen name="imagepicker_padding_medium">8dp</dimen>
+    <dimen name="imagepicker_padding_large">16dp</dimen>
+    <dimen name="imagepicker_margin_large">16dp</dimen>
+    <dimen name="imagepicker_grid_spacing">2dp</dimen>
 </resources>

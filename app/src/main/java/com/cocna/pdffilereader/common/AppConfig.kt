@@ -61,6 +61,10 @@ object AppConfig {
     const val KEY_EVENT_FB_SHARE_FILE = "share_file"
     const val KEY_EVENT_FB_LANGUAGE_CHANGE = "language_change"
     const val KEY_EVENT_FB_THEME_CHANGE = "theme_change"
+    const val KEY_EVENT_TOOL_CLICK = "tool_click"
+    const val KEY_EVENT_TOOL_IMGTOPDF_CLICK = "tool_imgtopdf_click"
+    const val KEY_EVENT_TOOL_IMGTOPDF_SAVE = "tool_imgtopdf_save"
+    const val KEY_EVENT_TOOL_SCAN_CLICK = "tool_scan_click"
 
     const val KEY_PARAM_FB_OPEN_SOURCE = "open_source"
     const val KEY_PARAM_FB_STATUS = "status"
@@ -86,6 +90,8 @@ object AppConfig {
     const val ID_ADS_BANNER_READER = "ca-app-pub-5660050540886911/7756533412"
     const val ID_ADS_INTERSTITIAL = "ca-app-pub-5660050540886911/9799139171"
     const val ID_ADS_INTERSTITIAL_FILE = "ca-app-pub-5660050540886911/7948105103"
+    const val ID_ADS_INTERSTITIAL_RESULT_IMGTOPDF = "ca-app-pub-5660050540886911/6778917061"
+    const val ID_ADS_INTERSTITIAL_BACK = "ca-app-pub-5660050540886911/7295057854"
     const val ID_ADS_INTERSTITIAL_BACKGROUND = "ca-app-pub-5660050540886911/6635023430"
     const val ID_ADS_NATIVE_FILE = "ca-app-pub-5660050540886911/1191125067"
     const val ID_ADS_NATIVE_TOP_BAR = "ca-app-pub-5660050540886911/7600620748"
@@ -94,5 +100,6 @@ object AppConfig {
     const val ID_ADS_OPEN_RESUME = "ca-app-pub-5660050540886911/2291635506"
     const val ID_ADS_INTERSTITIAL_BACK_FILE = "ca-app-pub-5660050540886911/1365839713"
     const val ID_ADS_NATIVE_THEME = "ca-app-pub-5660050540886911/7627416140"
+    const val ID_ADS_NATIVE_RESULT = "ca-app-pub-5660050540886911/5465835393"
     const val AF_DEV_KEY = "Z4BgR2ULBqGNjcK8LG4LAi"
 }

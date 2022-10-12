@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_bg_search"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:id="@+id/llToolbarPdf"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_toolbar_all"
+        android:background="@color/color_bg_toolbar"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imvPdfBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="@dimen/margin_all"
+            android:src="@drawable/ic_back_all" />
+
+        <TextView
+            android:id="@+id/ttToolbarPdf"
+            style="@style/Text_Title_All"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_all"
+            android:layout_weight="1"
+            android:ellipsize="middle"
+            android:gravity="center|start"
+            android:singleLine="true" />
+    </LinearLayout>
+    <FrameLayout
+        android:id="@+id/ad_frame_result"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:minHeight="@dimen/height_ads_change_theme"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/ad_frame_result"
+        app:layout_constraintTop_toBottomOf="@id/llToolbarPdf">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_all">
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/vl_result_file_name"
+                style="@style/Text_Title_All"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_all"
+                android:textSize="@dimen/text_size_sp16"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/vl_result_file_time"
+                style="@style/Text_Content_Info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/margin_all"
+                android:textSize="@dimen/text_size_sp16"
+                app:layout_constraintEnd_toEndOf="@id/vl_result_file_name"
+                app:layout_constraintStart_toStartOf="@id/vl_result_file_name"
+                app:layout_constraintTop_toBottomOf="@id/vl_result_file_name" />
+
+            <ImageView
+                android:id="@+id/imv_cover_pdf"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_image_empty"
+                android:layout_marginTop="@dimen/margin_double_all"
+                android:scaleType="fitCenter"
+                app:layout_constraintEnd_toEndOf="@id/vl_result_file_name"
+                app:layout_constraintStart_toStartOf="@id/vl_result_file_name"
+                app:layout_constraintTop_toBottomOf="@id/vl_result_file_time" />
+
+            <LinearLayout
+                android:id="@+id/ll_bottom_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_all"
+                android:layout_marginTop="@dimen/margin_double_all"
+                android:layout_marginEnd="@dimen/margin_all"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imv_cover_pdf">
+
+                <LinearLayout
+                    android:id="@+id/btn_result_share_file"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/margin_small">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/margin_small"
+                        android:src="@drawable/ic_result_share_file" />
+
+                    <TextView
+                        style="@style/Text_Item_Date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:text="@string/tt_share_file" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_result_open_file"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/margin_small">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/margin_small"
+                        android:src="@drawable/ic_result_open_file" />
+
+                    <TextView
+                        style="@style/Text_Item_Date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:text="@string/tt_open_file" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_result_back_to_home"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/margin_small">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/margin_small"
+                        android:src="@drawable/ic_result_back_home" />
+
+                    <TextView
+                        style="@style/Text_Item_Date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:text="@string/tt_back_to_home" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

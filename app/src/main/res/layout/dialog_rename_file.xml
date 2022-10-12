@@ -20,6 +20,7 @@
             android:padding="@dimen/margin_all">
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tt_dialog_file"
                 style="@style/Text_Title_Dialog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

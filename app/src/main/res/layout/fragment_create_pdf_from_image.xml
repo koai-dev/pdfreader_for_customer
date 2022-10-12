@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_bg"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:id="@+id/llToolbarPdf"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_toolbar_all"
+        android:background="@color/color_bg_toolbar"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imvPdfBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="@dimen/margin_all"
+            android:src="@drawable/ic_back_all" />
+
+        <TextView
+            android:id="@+id/ttToolbarPdf"
+            style="@style/Text_Title_All"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_all"
+            android:layout_weight="1"
+            android:ellipsize="middle"
+            android:gravity="center|start"
+            android:singleLine="true" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_save_pdf"
+            style="@style/Button_Confirm_All"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp7"
+            android:background="@drawable/bg_button_toolbar"
+            android:text="@string/vl_save" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/ad_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/ll_bottom_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_bg_menu"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/ad_view_container"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/btn_image_add"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/margin_small">
+
+            <ImageView
+                android:id="@+id/imv_image_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_small"
+                android:src="@drawable/ic_gallery_add" />
+
+            <TextView
+                android:id="@+id/vl_image_save"
+                style="@style/Text_Item_Date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tt_add" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_image_rotate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/margin_small">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_small"
+                android:src="@drawable/ic_rotate_pdf" />
+
+            <TextView
+                style="@style/Text_Item_Date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_menu_rotate" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_image_crop"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/margin_small">
+
+            <ImageView
+                android:id="@+id/imv_image_crop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_small"
+                android:src="@drawable/ic_crop" />
+
+            <TextView
+                android:id="@+id/vl_image_crop"
+                style="@style/Text_Item_Date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/vl_crop" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_image_delete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/margin_small">
+
+            <ImageView
+                android:id="@+id/imv_image_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_small"
+                android:src="@drawable/ic_delete" />
+
+            <TextView
+                android:id="@+id/vl_image_delete"
+                style="@style/Text_Item_Date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/menu_delete" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:id="@+id/frame_ads_native_pdf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/llToolbarPdf" />
+
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPagerImage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/ll_bottom_menu"
+        app:layout_constraintTop_toBottomOf="@id/frame_ads_native_pdf" />
+
+    <com.canhub.cropper.CropImageView
+        android:id="@+id/cropImageViewEdit"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/viewPagerImage"
+        app:layout_constraintEnd_toEndOf="@id/viewPagerImage"
+        app:layout_constraintStart_toStartOf="@id/viewPagerImage"
+        app:layout_constraintTop_toTopOf="@id/viewPagerImage" />
+
+    <View
+        android:id="@+id/viewBgPage"
+        android:layout_width="@dimen/width_page"
+        android:layout_height="@dimen/height_page"
+        android:layout_marginTop="@dimen/margin_double_all"
+        android:background="@drawable/bg_page_view"
+        app:layout_constraintStart_toStartOf="@id/viewPagerImage"
+        app:layout_constraintTop_toTopOf="@id/viewPagerImage" />
+
+    <TextView
+        android:id="@+id/vlPageAndTotalPage"
+        style="@style/Text_Page_View"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/viewBgPage"
+        app:layout_constraintEnd_toEndOf="@id/viewBgPage"
+        app:layout_constraintStart_toStartOf="@id/viewBgPage"
+        app:layout_constraintTop_toTopOf="@id/viewBgPage" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_double_all"
+        android:layout_marginEnd="@dimen/margin_double_all"
+        android:layout_marginBottom="@dimen/margin_all"
+        android:background="@drawable/bg_border_swipe_edit_image"
+        android:fontFamily="@font/googlesans_regular"
+        android:gravity="center"
+        android:padding="@dimen/margin_all"
+        android:text="@string/msg_swipe_edit_image"
+        android:textColor="@color/rgb_808E95"
+        android:textSize="@dimen/text_size_sp12"
+        app:layout_constraintBottom_toTopOf="@id/ll_bottom_menu" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
