@@ -122,18 +122,13 @@ class CreateImageToPdfFragment : BaseFragment<FragmentCreatePdfFromImageBinding>
                             binding.btnImageDelete.isEnabled = false
                             binding.btnImageRotate.isEnabled = false
                         } else {
-//                        val itemView = binding.viewPagerImage.findViewWithTag<View>("VIEW$imageCurrent")
-//                        if (isCropClick) {
-//                            viewPagerAdapter.cropImage(itemView, imageCurrent)
-//                        } else {
-//                            viewPagerAdapter.saveCropImage(itemView, imageCurrent)
-//                        }
-//                        viewPagerAdapter.saveCropImage(imageCurrent)
                             binding.cropImageViewEdit.croppedImage?.let {
-                                val uri = saveBitmapToStorage(getBaseActivity()!!, it, imageSelected?.uri!!)
-                                Logger.showLog("Thuytv---------croppedImage: " + uri?.path)
-                                imageSelected.uri = uri
-                                viewPagerAdapter.cropImage(imageSelected, imageCurrent)
+                                if (getBaseActivity() != null && imageSelected?.uri != null) {
+                                    val uri = saveBitmapToStorage(getBaseActivity()!!, it, imageSelected.uri!!)
+                                    Logger.showLog("Thuytv---------croppedImage: " + uri?.path)
+                                    imageSelected.uri = uri
+                                    viewPagerAdapter.cropImage(imageSelected, imageCurrent)
+                                }
                             }
                             binding.viewPagerImage.visible()
                             binding.cropImageViewEdit.invisible()
@@ -300,6 +295,7 @@ class CreateImageToPdfFragment : BaseFragment<FragmentCreatePdfFromImageBinding>
                 uriSaveFile = lstImageSelected?.get(0)?.uri
             )
         } catch (e: Exception) {
+            e.printStackTrace()
             Toast.makeText(getBaseActivity(), "Save Image Fail", Toast.LENGTH_LONG).show()
         }
         return null

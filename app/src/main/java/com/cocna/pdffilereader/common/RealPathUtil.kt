@@ -149,18 +149,18 @@ object RealPathUtil {
 
     @SuppressLint("Recycle")
     fun getFilePathForN(context: Context, uri: Uri): String? {
-        val returnCursor = context.contentResolver.query(uri, null, null, null, null)
-        /*
-     * Get the column indexes of the data in the Cursor,
-     *     * move to the first row in the Cursor, get the data,
-     *     * and display it.
-     * */
-        val nameIndex = returnCursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-        val sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE)
-        returnCursor.moveToFirst()
-        val name = returnCursor.getString(nameIndex)
-        val file = File(context.filesDir, name)
         try {
+            val returnCursor = context.contentResolver.query(uri, null, null, null, null)
+            /*
+         * Get the column indexes of the data in the Cursor,
+         *     * move to the first row in the Cursor, get the data,
+         *     * and display it.
+         * */
+            val nameIndex = returnCursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            val sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE)
+            returnCursor.moveToFirst()
+            val name = returnCursor.getString(nameIndex)
+            val file = File(context.filesDir, name)
             val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
             inputStream?.apply {
                 val outputStream = FileOutputStream(file)
@@ -177,8 +177,9 @@ object RealPathUtil {
                 inputStream.close()
                 outputStream.close()
             }
+            return file.path
         } catch (e: java.lang.Exception) {
         }
-        return file.path
+        return ""
     }
 }

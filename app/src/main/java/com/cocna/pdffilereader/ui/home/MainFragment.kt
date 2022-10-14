@@ -24,6 +24,7 @@ import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.home.dialog.BottomSheetToolsPdf
 import com.cocna.pdffilereader.ui.home.dialog.RatingAppDialog
 import com.cocna.pdffilereader.ui.home.model.AdsLogModel
+import com.cocna.pdffilereader.ui.scan.ScanCameraActivity
 import com.google.android.gms.ads.*
 import com.google.android.material.navigation.NavigationBarView
 import com.tom_roush.pdfbox.pdmodel.PDDocument
@@ -183,13 +184,17 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
         binding.btnToolsPdf.setOnClickListener {
             MultiClickPreventer.preventMultiClick(it)
-            getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_TOOL_CLICK,AppConfig.KEY_EVENT_TOOL_CLICK )
+            getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_TOOL_CLICK, AppConfig.KEY_EVENT_TOOL_CLICK)
             getBaseActivity()?.let {
                 BottomSheetToolsPdf(it, object : BottomSheetToolsPdf.OnItemClickToolsPdf {
                     override fun onItemClickImageToPdf() {
-                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_TOOL_IMGTOPDF_CLICK,AppConfig.KEY_EVENT_TOOL_IMGTOPDF_CLICK )
+                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_TOOL_IMGTOPDF_CLICK, AppConfig.KEY_EVENT_TOOL_IMGTOPDF_CLICK)
                         lstImageSelected.clear()
                         selectImage()
+                    }
+
+                    override fun onItemClickScan() {
+                        getBaseActivity()?.onNextScreen(ScanCameraActivity::class.java, null, false)
                     }
                 }).show(childFragmentManager, "TOOLS_PDF")
             }

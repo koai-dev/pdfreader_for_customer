@@ -17,7 +17,17 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
-
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-feature
+        android:name="android.hardware.camera2"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
     <application
         android:name=".PdfApplication"
         android:allowBackup="false"
@@ -96,6 +106,9 @@
             android:exported="true"
             android:screenOrientation="unspecified"
             android:theme="@style/imagepicker_CameraTheme" />
+        <activity
+            android:name=".ui.scan.ScanCameraActivity"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
 
 
         <receiver
