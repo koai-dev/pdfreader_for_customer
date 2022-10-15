@@ -35,6 +35,8 @@ import com.github.barteksc.pdfviewer.listener.OnTapListener
 import com.github.barteksc.pdfviewer.util.FitPolicy
 import com.google.android.gms.ads.*
 import com.google.android.material.slider.Slider
+import com.hbisoft.pickit.PickiT
+import com.hbisoft.pickit.PickiTCallbacks
 import com.shockwave.pdfium.PdfDocument
 import com.shockwave.pdfium.PdfiumCore
 import java.io.*
@@ -98,6 +100,49 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
 
     override fun initData() {
         startTime = System.currentTimeMillis()
+        val pickIt = PickiT(context, object : PickiTCallbacks {
+            override fun PickiTonUriReturned() {
+                Logger.showLog("Thuytv------PickiTonUriReturned")
+            }
+
+            override fun PickiTonStartListener() {
+                Logger.showLog("Thuytv------PickiTonStartListener")
+            }
+
+            override fun PickiTonProgressUpdate(progress: Int) {
+            }
+
+            override fun PickiTonCompleteListener(path: String?, wasDriveFile: Boolean, wasUnknownProvider: Boolean, wasSuccessful: Boolean, Reason: String?) {
+                Logger.showLog("Thuytv------PickiTonCompleteListener : $path")
+                Logger.showLog("Thuytv------PickiTonCompleteListener wasDriveFile: $wasDriveFile---wasUnknownProvider: $wasUnknownProvider---wasSuccessful: $wasSuccessful----Reason: $Reason")
+                if (wasSuccessful) {
+                    myFileModel = MyFilesModel(uriPath = path, uriOldPath = path, extensionName = "pdf")
+
+                    if (path?.isNotEmpty() == true) {
+                        val cut = path.lastIndexOf("/")
+                        if (cut != -1) {
+                            val fileName = path.substring(cut + 1)
+                            binding.ttToolbarPdf.text = fileName
+                            myFileModel?.name = fileName
+                        }
+                    }
+                    openFDPFile(path)
+                    Handler(Looper.myLooper()!!).postDelayed({
+                        loadDataFile()
+                    }, 500)
+                } else if (Reason?.isNotEmpty() == true) {
+                    getBaseActivity()?.apply {
+                        Logger.showToast(this, Reason)
+                    }
+                }
+            }
+
+            override fun PickiTonMultipleCompleteListener(paths: ArrayList<String>?, wasSuccessful: Boolean, Reason: String?) {
+                Logger.showLog("Thuytv------PickiTonMultipleCompleteListener")
+            }
+
+        }, getBaseActivity())
+
         myFileModel = arguments?.getParcelable(AppKeys.KEY_BUNDLE_DATA)
         isNightMode = getBaseActivity()?.sharedPreferences?.getValueBoolean(SharePreferenceUtils.KEY_NIGHT_MODE) ?: false
         isPageMode = getBaseActivity()?.sharedPreferences?.getValueBoolean(SharePreferenceUtils.KEY_PAGE_MODE) ?: false
@@ -116,21 +161,22 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
 
             }
             uriPath?.apply {
-                val fullPath = RealPathUtil.getRealPath(getBaseActivity()!!, this)
-                myFileModel = MyFilesModel(uriPath = fullPath, uriOldPath = fullPath, extensionName = "pdf")
-
-                if (fullPath?.isNotEmpty() == true) {
-                    val cut = fullPath.lastIndexOf("/")
-                    if (cut != -1) {
-                        val fileName = fullPath.substring(cut + 1)
-                        binding.ttToolbarPdf.text = fileName
-                        myFileModel?.name = fileName
-                    }
-                }
-                openFDPFile(fullPath)
-                Handler(Looper.myLooper()!!).postDelayed({
-                    loadDataFile()
-                }, 500)
+//                val fullPath = RealPathUtil.getRealPath(getBaseActivity()!!, this)
+                pickIt.getPath(this, Build.VERSION.SDK_INT)
+//                myFileModel = MyFilesModel(uriPath = fullPath, uriOldPath = fullPath, extensionName = "pdf")
+//
+//                if (fullPath?.isNotEmpty() == true) {
+//                    val cut = fullPath.lastIndexOf("/")
+//                    if (cut != -1) {
+//                        val fileName = fullPath.substring(cut + 1)
+//                        binding.ttToolbarPdf.text = fileName
+//                        myFileModel?.name = fileName
+//                    }
+//                }
+//                openFDPFile(fullPath)
+//                Handler(Looper.myLooper()!!).postDelayed({
+//                    loadDataFile()
+//                }, 500)
             }
         } else {
             myFileModel?.apply {

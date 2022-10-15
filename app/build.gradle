@@ -13,8 +13,8 @@ android {
         applicationId "com.cocna.pdfreader.viewpdf"
         minSdk 21
         targetSdk 32
-        versionCode 21
-        versionName "1.1.8"
+        versionCode 22
+        versionName "1.1.9"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk { debugSymbolLevel 'SYMBOL_TABLE' }
@@ -102,4 +102,5 @@ dependencies {
     implementation 'com.tom-roush:pdfbox-android:2.0.25.0'
 //    implementation 'com.github.nguyenhoanglam:ImagePicker:1.5.3'
     implementation 'com.github.bumptech.glide:glide:4.13.2'
+    implementation 'com.github.HBiSoft:PickiT:2.0.5'
 }

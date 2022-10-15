@@ -155,31 +155,36 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 //            Uri.parse("content://" + file.absolutePath)
 //        )
 //        startActivity(Intent.createChooser(intentShareFile, getString(R.string.tt_share_file)))
+        try {
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = URLConnection.guessContentTypeFromName(file.name)
+                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                putExtra(
+                    Intent.EXTRA_SUBJECT,
+                    getString(R.string.vl_share_document)
+                )
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    getString(R.string.vl_share_document_content)
+                )
 
-        val shareIntent = Intent(Intent.ACTION_SEND).apply {
-            type = URLConnection.guessContentTypeFromName(file.name)
-            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            putExtra(
-                Intent.EXTRA_SUBJECT,
-                getString(R.string.vl_share_document)
-            )
-            putExtra(
-                Intent.EXTRA_TEXT,
-                getString(R.string.vl_share_document_content)
-            )
-            try {
                 val fileURI = FileProvider.getUriForFile(
                     getBaseActivity()!!, getBaseActivity()!!.packageName + ".provider",
                     file
                 )
                 putExtra(Intent.EXTRA_STREAM, fileURI)
-            }catch (e: Exception){
             }
-
+            getBaseActivity()?.let {
+                if (shareIntent.resolveActivity(it.packageManager) != null) {
+                    startActivity(shareIntent)
+                } else {
+                    Logger.showToast(it, getString(R.string.msg_no_app_share_file))
+                }
+            }
+        } catch (e: Exception) {
         }
-        startActivity(shareIntent)
     }
 
     fun onBackFragment() {
@@ -211,17 +216,23 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
                 Intent(Intent.ACTION_VIEW, null, context, SplashScreenActivity::class.java),
                 intentMessage
             )
+            if (myFileModel.uriPath?.isNotEmpty() == true) {
+                val shortcut2 = ShortcutInfo.Builder(context, myFileModel.uriPath)
+                    .setShortLabel(myFileModel.name ?: "PDF Reader")
+                    .setLongLabel(myFileModel.name ?: "Open PDF File")
+                    .setIcon(Icon.createWithResource(context, R.mipmap.ic_launcher))
+                    .setIntents(intents)
+                    .build()
 
-            val shortcut2 = ShortcutInfo.Builder(context, myFileModel?.uriPath)
-                .setShortLabel(myFileModel.name ?: "PDF Reader")
-                .setLongLabel(myFileModel.name ?: "Open PDF File")
-                .setIcon(Icon.createWithResource(context, R.mipmap.ic_launcher))
-                .setIntents(intents)
-                .build()
 
+                shortcutManager!!.dynamicShortcuts = listOf(shortcut2)
+                shortcutPin(context, myFileModel.uriPath ?: "shortcut_pdf_id", 1232)
+            } else {
+                getBaseActivity()?.let {
+                    Logger.showToast(it, getString(R.string.msg_create_shortcut_fail))
+                }
+            }
 
-            shortcutManager!!.dynamicShortcuts = listOf(shortcut2)
-            shortcutPin(context, myFileModel.uriPath ?: "shortcut_pdf_id", 1232)
         }
     }
 
