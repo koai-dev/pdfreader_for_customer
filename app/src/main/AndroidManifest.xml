@@ -5,7 +5,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
@@ -19,6 +18,9 @@
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-feature
         android:name="android.hardware.camera2"
         android:required="false" />
@@ -42,7 +44,7 @@
         tools:ignore="DataExtractionRules,AllowBackup,GoogleAppIndexingWarning"
         tools:replace="android:allowBackup,android:fullBackupContent">
         <activity
-            android:name=".ui.drive.DemoDriveActivity"
+            android:name=".ui.drive.MainActivity"
             android:exported="true"
             android:hardwareAccelerated="true"
             android:label="@string/app_name"

@@ -46,7 +46,7 @@ class DemoDriveActivity : BaseActivity<ActivityBaseBinding>(), ServiceListener {
 
         }
         binding.btnOpenFile.setOnClickListener {
-            mDriveServiceHelper!!.searchFile("*.pdf","application/pdf").addOnSuccessListener {
+            mDriveServiceHelper!!.searchFile("Rita 10th.pdf","application/vnd.google-apps.file").addOnSuccessListener {
                 Logger.showLog("Thuytv------searchFolder---addOnSuccessListener: " + it.size)
                 if(it.size > 0){
                     for(item in it){

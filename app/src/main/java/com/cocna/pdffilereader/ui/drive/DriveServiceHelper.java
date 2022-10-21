@@ -9,22 +9,29 @@ import android.provider.OpenableColumns;
 import android.util.Log;
 import android.util.Pair;
 
+import com.cocna.pdffilereader.common.Logger;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.AbstractInputStreamContent;
 import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.FileContent;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -428,11 +435,15 @@ public class DriveServiceHelper {
                 // Retrive the metadata as a File object.
                 FileList result = mDriveService.files().list()
 //                        .setQ("name = '" + fileName + "' and mimeType ='" + mimeType + "'")
-                        .setSpaces("drive")
-                        .setFields("files(id, name,size,createdTime,modifiedTime,starred)")
+//                        .setFields("nextPageToken, files(id, name,parents)")
+//                        .setQ("sharedWithMe = true")
+                        .setPageSize(10)
+                        .setFields("nextPageToken, items(id, name)")
+//                        .setSpaces("drive")
+//                        .setFields("files(id, name,size,createdTime,modifiedTime,starred)")
                         .execute();
 
-
+                Logger.INSTANCE.showLog("Thuytv----esult.getFiles().size(): " + result.getFiles().size());
                 for (int i = 0; i < result.getFiles().size(); i++) {
                     GoogleDriveFileHolder googleDriveFileHolder = new GoogleDriveFileHolder();
                     googleDriveFileHolder.setId(result.getFiles().get(i).getId());
