@@ -158,7 +158,13 @@ class ScanCameraFragment : BaseFragment<FragmentScanCameraBinding>(), View.OnCli
         val lstPageMode = ArrayList<PageModel>()
         lstPageMode.add(PageModel(name = getString(R.string.vl_multiple_page), isSelected = true))
         lstPageMode.add(PageModel(name = getString(R.string.vl_single_page), isSelected = false))
-        val pageAdapter = PageAdapter(getBaseActivity(), lstPageMode)
+        val pageAdapter = PageAdapter(getBaseActivity(), lstPageMode, object : PageAdapter.OnItemPageClickListener {
+            override fun onClickItem(position: Int) {
+                isSinglePage = position == 1
+                binding.rcvPageMode.smoothScrollToPosition(position)
+            }
+
+        })
         val mLayoutManager = SliderLayoutManager(getBaseActivity(), LinearLayoutManager.HORIZONTAL, binding.rcvPageMode)
         binding.rcvPageMode.apply {
             layoutManager = mLayoutManager
@@ -173,6 +179,7 @@ class ScanCameraFragment : BaseFragment<FragmentScanCameraBinding>(), View.OnCli
                 isSinglePage = layoutPosition == 1
                 val data = lstPageMode[layoutPosition]
                 pageAdapter.updateData(data)
+
             }
 
         }

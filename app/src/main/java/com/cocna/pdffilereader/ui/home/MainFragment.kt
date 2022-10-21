@@ -7,10 +7,9 @@ import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.DisplayMetrics
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.cocna.pdffilereader.R
@@ -171,16 +170,19 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             }
 
             override fun afterTextChanged(strData: Editable?) {
-                if (R.id.navigation_my_file == idViewSelected) {
-                    myFilesFragment.onSearchFile(strData?.toString() ?: "")
-                } else if (R.id.navigation_favorite == idViewSelected) {
-                    favoriteFragment.onSearchFileFavorite(strData?.toString() ?: "")
-                } else if (R.id.navigation_browse == idViewSelected) {
-                    browseFragment.onSearchFolder(strData?.toString() ?: "")
-                }
+                onSearchFile(strData?.toString() ?: "")
             }
 
         })
+//        binding.edtSearchAll.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+//            override fun onEditorAction(p0: TextView?, actionId: Int, p2: KeyEvent?): Boolean {
+//                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH) {
+//                    onSearchFile(binding.edtSearchAll.text?.toString() ?: "")
+//                    return true
+//                }
+//                return false
+//            }
+//        })
 
         binding.btnToolsPdf.setOnClickListener {
             MultiClickPreventer.preventMultiClick(it)
@@ -198,6 +200,16 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                     }
                 }).show(childFragmentManager, "TOOLS_PDF")
             }
+        }
+    }
+
+    private fun onSearchFile(strSearch: String) {
+        if (R.id.navigation_my_file == idViewSelected) {
+            myFilesFragment.onSearchFile(strSearch)
+        } else if (R.id.navigation_favorite == idViewSelected) {
+            favoriteFragment.onSearchFileFavorite(strSearch)
+        } else if (R.id.navigation_browse == idViewSelected) {
+            browseFragment.onSearchFolder(strSearch)
         }
     }
 
