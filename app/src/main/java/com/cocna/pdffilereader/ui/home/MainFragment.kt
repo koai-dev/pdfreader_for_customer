@@ -94,15 +94,18 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         hideShowFragment(myFilesFragment, settingFragment, favoriteFragment, browseFragment)
         binding.navigationBottom.itemIconTintList = null
         idViewSelected = R.id.navigation_my_file
-        getBaseActivity()?.apply {
-            adView = AdView(this)
-            binding.adViewContainer.addView(adView)
-            // Since we're loading the banner based on the adContainerView size, we need to wait until this
-            // view is laid out before we can get the width.
-            binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
-                if (!initialLayoutComplete) {
-                    initialLayoutComplete = true
-                    loadBannerAds()
+
+            getBaseActivity()?.apply {
+                adView = AdView(this)
+                binding.adViewContainer.addView(adView)
+                // Since we're loading the banner based on the adContainerView size, we need to wait until this
+                // view is laid out before we can get the width.
+                binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
+                    if (!initialLayoutComplete) {
+                        initialLayoutComplete = true
+                        if(SharePreferenceUtils(getBaseActivity()).getAdsConfig().ads_banner_main) {
+                        loadBannerAds()
+                    }
                 }
             }
         }

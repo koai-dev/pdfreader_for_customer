@@ -200,15 +200,18 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
             binding.imvViewBookmark.setImageResource(R.drawable.ic_bookmark)
         }
         changeViewMode(isNightMode)
-        getBaseActivity()?.apply {
-            adView = AdView(this)
-            binding.adViewContainer.addView(adView)
-            // Since we're loading the banner based on the adContainerView size, we need to wait until this
-            // view is laid out before we can get the width.
-            binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
-                if (!initialLayoutComplete) {
-                    initialLayoutComplete = true
-                    loadBannerAds()
+
+            getBaseActivity()?.apply {
+                adView = AdView(this)
+                binding.adViewContainer.addView(adView)
+                // Since we're loading the banner based on the adContainerView size, we need to wait until this
+                // view is laid out before we can get the width.
+                binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
+                    if (!initialLayoutComplete) {
+                        initialLayoutComplete = true
+                        if (getBaseActivity()?.sharedPreferences?.getAdsConfig()?.ads_banner_reader == true) {
+                        loadBannerAds()
+                    }
                 }
             }
         }
@@ -495,10 +498,12 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                     val bundle = Bundle()
                     bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, this)
 //                    bundle.putString(AppKeys.KEY_BUNDLE_DATA, encodedBitmap)
-                    getBaseActivity()?.addFragment(CropImageFragment.newInstance(object : OnShowAdsBackListener{
+                    getBaseActivity()?.addFragment(CropImageFragment.newInstance(object : OnShowAdsBackListener {
                         override fun onShowAds() {
                             getBaseActivity()?.let {
-                                LoadingAdsDialog.newInstance(it,AppConfig.ID_ADS_INTERSTITIAL_BACK).show(childFragmentManager, "LOADING_ADS")
+                                if (it.sharedPreferences.getAdsConfig().ads_inter_back) {
+                                    LoadingAdsDialog.newInstance(it, AppConfig.ID_ADS_INTERSTITIAL_BACK).show(childFragmentManager, "LOADING_ADS")
+                                }
                             }
                         }
 
@@ -742,7 +747,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                         binding.llShowNotification.llShowNotification.gone()
                     }
                 }, 2000)
-                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_FILE,AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_UN_BOOKMARK)
+                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_FILE, AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_UN_BOOKMARK)
             } else {
                 getBaseActivity()?.sharedPreferences?.setFavoriteFile(myFileModel!!)
                 RxBus.publish(EventsBus.RELOAD_FAVORITE)
@@ -763,7 +768,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                         binding.llShowNotification.llShowNotification.gone()
                     }
                 }, 2000)
-                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_FILE,AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_BOOKMARK)
+                getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_FILE, AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_BOOKMARK)
             }
         }
     }

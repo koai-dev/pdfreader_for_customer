@@ -78,20 +78,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
     }
 
     private fun loadAds() {
-//        loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL, object : OnCallbackLoadAds {
-//            override fun onCallbackActionLoadAds(isSuccess: Boolean) {
-//                val endTime = System.currentTimeMillis()
-//                val totalTime = (endTime - startTime) / 1000
-//                Logger.showLog("Thuytv------totalTime: $totalTime")
-//                if (totalTime > 3) {
         gotoMainScreen()
-//                } else {
-//                    Handler(Looper.myLooper()!!).postDelayed({
-//                        gotoMainScreen()
-//                    }, 3000)
-//                }
-//            }
-//        })
     }
 
     private fun checkNewVersionApp() {
@@ -107,7 +94,9 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
                         "android_latest_version_code"
                     )
                     Common.isShowTheme = FirebaseRemoteConfig.getInstance().getBoolean("android_is_show_theme")
-
+                    val androidShowAds = FirebaseRemoteConfig.getInstance().getString("android_show_ads")
+                    Logger.showLog("Thuytv-------androidShowAds: $androidShowAds")
+                    sharedPreferences.setAdsConfig(androidShowAds)
                     val pInfo = this.packageManager.getPackageInfo(packageName, 0)
                     val currentAppVersionCode = PackageInfoCompat.getLongVersionCode(pInfo)
                     Logger.showLog("Thuytv-------playStoreVersionCode: $playStoreVersionCode ----currentAppVersionCode: $currentAppVersionCode ---isShowTheme: " + Common.isShowTheme)

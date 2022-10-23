@@ -46,7 +46,9 @@ class PdfViewActivity : BaseActivity<ActivityBaseBinding>() {
         } else {
             Common.countShowAdsPdf++
             if (Common.countShowAdsPdf == 1 || (Common.countShowAdsPdf % 2 == 1)) {
-                LoadingAdsDialog.newInstance(this, AppConfig.ID_ADS_INTERSTITIAL_FILE).show(supportFragmentManager, "LOADING_ADS")
+                if (sharedPreferences.getAdsConfig().ads_inter_file) {
+                    LoadingAdsDialog.newInstance(this, AppConfig.ID_ADS_INTERSTITIAL_FILE).show(supportFragmentManager, "LOADING_ADS")
+                }
                 gotoPdfViewFragment()
 //                InterstitialUtils.sharedInstance?.showInterstitial(AppConfig.ID_ADS_INTERSTITIAL_FILE, this, object : OnCallbackLoadAds {
 //                    override fun onCallbackActionLoadAds(isSuccess: Boolean) {
@@ -68,7 +70,7 @@ class PdfViewActivity : BaseActivity<ActivityBaseBinding>() {
                 val uriData = intent.data
                 Logger.showLog("Thuytv----uriData:" + uriData?.path)
                 var mBundle = intent.extras
-                if(mBundle == null){
+                if (mBundle == null) {
                     mBundle = Bundle()
                 }
                 uriData?.apply {

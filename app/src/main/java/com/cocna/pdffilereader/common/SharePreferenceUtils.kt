@@ -2,6 +2,7 @@ package com.cocna.pdffilereader.common
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.cocna.pdffilereader.ui.home.model.AdsModelConfig
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
@@ -106,6 +107,16 @@ class SharePreferenceUtils(context: Context?) {
             ?: AppConfig.THEME_1
     }
 
+    fun setAdsConfig(data: String?) {
+        setValueString(KEY_SHOW_ADS_CONFIG, data)
+    }
+
+    fun getAdsConfig(): AdsModelConfig {
+        val strConfig = IShare?.getString(KEY_SHOW_ADS_CONFIG, "")
+        if (strConfig.isNullOrEmpty()) return AdsModelConfig()
+        return Gson().fromJson(strConfig, AdsModelConfig::class.java)
+    }
+
     fun updateRecentFile(data: MyFilesModel) {
         val lstRecent = getRecentFile()
         if (lstRecent.contains(data)) {
@@ -208,6 +219,7 @@ class SharePreferenceUtils(context: Context?) {
         const val KEY_TIME_INSTALL = "KEY_TIME_INSTALL"
         const val KEY_SEND_EVENT_3DAYS = "KEY_SEND_EVENT_3DAYS"
         const val KEY_SEND_EVENT_7DAYS = "KEY_SEND_EVENT_7DAYS"
+        const val KEY_SHOW_ADS_CONFIG = "KEY_SHOW_ADS_CONFIG"
     }
 
 }

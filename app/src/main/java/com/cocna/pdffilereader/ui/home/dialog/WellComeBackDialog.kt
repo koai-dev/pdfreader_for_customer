@@ -127,16 +127,18 @@ class WellComeBackDialog : DialogFragment() {
 
         // Show the app open ad.
         mActivity?.apply {
-            pdfApplication.showAdIfAvailable(
-                this,
-                object : PdfApplication.OnShowAdCompleteListener {
-                    override fun onShowAdComplete() {
-                        Logger.showLog("Thuytv-----onShowAdComplete----isVisible: $isVisible ----isShowing: " + dialog?.isShowing)
-                        if (isVisible && dialog?.isShowing == true) {
-                            dialog?.dismiss()
+            if (sharedPreferences.getAdsConfig().ads_open_resume) {
+                pdfApplication.showAdIfAvailable(
+                    this,
+                    object : PdfApplication.OnShowAdCompleteListener {
+                        override fun onShowAdComplete() {
+                            Logger.showLog("Thuytv-----onShowAdComplete----isVisible: $isVisible ----isShowing: " + dialog?.isShowing)
+                            if (isVisible && dialog?.isShowing == true) {
+                                dialog?.dismiss()
+                            }
                         }
-                    }
-                })
+                    })
+            }
         }
     }
 

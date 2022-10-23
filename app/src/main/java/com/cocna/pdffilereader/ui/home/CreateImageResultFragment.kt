@@ -25,7 +25,9 @@ class CreateImageResultFragment : BaseFragment<FragmentCreatePdfResultBinding>()
 
     override fun initData() {
         getBaseActivity()?.let {
-            LoadingAdsDialog.newInstance(it, AppConfig.ID_ADS_INTERSTITIAL_RESULT_IMGTOPDF).show(childFragmentManager, "LOADING_ADS")
+            if (it.sharedPreferences.getAdsConfig().ads_inter_result_img) {
+                LoadingAdsDialog.newInstance(it, AppConfig.ID_ADS_INTERSTITIAL_RESULT_IMGTOPDF).show(childFragmentManager, "LOADING_ADS")
+            }
         }
         getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_TOOL_IMGTOPDF_SAVE, AppConfig.KEY_EVENT_TOOL_IMGTOPDF_SAVE)
 
@@ -38,7 +40,9 @@ class CreateImageResultFragment : BaseFragment<FragmentCreatePdfResultBinding>()
 
         binding.ttToolbarPdf.text = getString(R.string.tt_result_success)
 
-        getBaseActivity()?.showNativeAdsBottom(binding.adFrameResult, AppConfig.ID_ADS_NATIVE_RESULT)
+        if (getBaseActivity()?.sharedPreferences?.getAdsConfig()?.ads_native_result_img == true) {
+            getBaseActivity()?.showNativeAdsBottom(binding.adFrameResult, AppConfig.ID_ADS_NATIVE_RESULT)
+        }
     }
 
     override fun initEvents() {

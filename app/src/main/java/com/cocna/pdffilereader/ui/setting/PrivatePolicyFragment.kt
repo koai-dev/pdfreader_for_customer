@@ -46,14 +46,17 @@ class PrivatePolicyFragment : BaseActivity<FragmentPrivatePolicyBinding>() {
     override fun initData() {
         binding.ttToolbarPolicy.text = getString(R.string.tt_term_codition)
         openPdfPolicy()
-        adView = AdView(this)
-        binding.adViewContainer.addView(adView)
-        // Since we're loading the banner based on the adContainerView size, we need to wait until this
-        // view is laid out before we can get the width.
-        binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
-            if (!initialLayoutComplete) {
-                initialLayoutComplete = true
-                loadBannerAds()
+
+            adView = AdView(this)
+            binding.adViewContainer.addView(adView)
+            // Since we're loading the banner based on the adContainerView size, we need to wait until this
+            // view is laid out before we can get the width.
+            binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
+                if (!initialLayoutComplete) {
+                    initialLayoutComplete = true
+                    if(sharedPreferences.getAdsConfig().ads_banner_main) {
+                    loadBannerAds()
+                }
             }
         }
     }

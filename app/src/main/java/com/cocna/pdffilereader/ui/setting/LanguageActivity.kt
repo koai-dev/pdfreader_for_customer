@@ -32,16 +32,20 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
     override fun initData() {
         typeScreen = intent.getStringExtra(AppKeys.KEY_BUNDLE_SCREEN)
         if (typeScreen == AppConfig.TYPE_SCREEN_FROM_SPLASH) {
-            LoadingAdsDialog.newInstance(this,AppConfig.ID_ADS_INTERSTITIAL).show(supportFragmentManager, "LOADING_ADS")
+            if(sharedPreferences.getAdsConfig().ads_inter_spalsh) {
+                LoadingAdsDialog.newInstance(this, AppConfig.ID_ADS_INTERSTITIAL).show(supportFragmentManager, "LOADING_ADS")
+            }
             binding.imvAllBack.invisible()
             preLoadAdsNativeTheme()
         }
-        if (Common.mNativeAdLanguage == null) {
-            Logger.showLog("Thuytv----Refresh Ads Language")
-            refreshAd()
-        } else {
-            Logger.showLog("Thuytv----Show Ads Language")
-            showNativeAds(Common.mNativeAdLanguage!!)
+        if(sharedPreferences.getAdsConfig().ads_native_language) {
+            if (Common.mNativeAdLanguage == null) {
+                Logger.showLog("Thuytv----Refresh Ads Language")
+                refreshAd()
+            } else {
+                Logger.showLog("Thuytv----Show Ads Language")
+                showNativeAds(Common.mNativeAdLanguage!!)
+            }
         }
 
         val lstLanguage: ArrayList<LanguageModel> = ArrayList()

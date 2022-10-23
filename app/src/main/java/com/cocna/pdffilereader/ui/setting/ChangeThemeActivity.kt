@@ -38,10 +38,12 @@ class ChangeThemeActivity : BaseActivity<ActivityChangeThemeBinding>() {
     var currentNativeAd: NativeAd? = null
 
     override fun initData() {
-        if (Common.mNativeAdTheme == null) {
-            refreshAd()
-        } else {
-            showAdsNativeTheme(Common.mNativeAdTheme!!)
+        if (sharedPreferences.getAdsConfig().ads_native_theme) {
+            if (Common.mNativeAdTheme == null) {
+                refreshAd()
+            } else {
+                showAdsNativeTheme(Common.mNativeAdTheme!!)
+            }
         }
         typeScreen = intent.getStringExtra(AppKeys.KEY_BUNDLE_SCREEN)
         sharedPreferences.setValueBoolean(SharePreferenceUtils.KEY_FIRST_LOGIN, true)

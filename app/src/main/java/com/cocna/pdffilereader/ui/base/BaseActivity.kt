@@ -141,7 +141,9 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
                 if (EventsBus.SHOW_ADS_BACK == it) {
                     if (!isFinishing && !isDestroyed) {
                         runOnUiThread {
-                            loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_BACK_FILE, null)
+                            if(sharedPreferences.getAdsConfig().ads_inter_back_file) {
+                                loadInterstAds(AppConfig.ID_ADS_INTERSTITIAL_BACK_FILE, null)
+                            }
                         }
                     }
                 }

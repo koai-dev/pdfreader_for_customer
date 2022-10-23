@@ -56,26 +56,14 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
     override fun initData() {
         lstFilePdf = ArrayList()
         setupViewPager(binding.viewPagerMyFile)
-
-        getBaseActivity()?.loadNativeAds(binding.frameAdsNativeAllFile, AppConfig.ID_ADS_NATIVE_TOP_BAR_PDF)
+        if (getBaseActivity()?.sharedPreferences?.getAdsConfig()?.ads_native_top_bar == true) {
+            getBaseActivity()?.loadNativeAds(binding.frameAdsNativeAllFile, AppConfig.ID_ADS_NATIVE_TOP_BAR_PDF)
+        }
         onListenEventBus()
         if (SDK_INT >= Build.VERSION_CODES.M) {
-//            executeWithPerm {
-//                if (Common.listAllData.isNullOrEmpty()) {
-//                    getAllFilePdf()
-//                } else {
-//                    lstFilePdf = Common.listAllData!!
-//                    Handler(Looper.myLooper()!!).postDelayed({
-//                        myFileDetailFragment!!.updateData(lstFilePdf)
-//                        mAdapter.updateTitleTab(0, getString(R.string.vl_home_my_file, lstFilePdf.size))
-//                    }, 200)
-//                }
-//            }
             if (Common.listAllData.isNullOrEmpty()) {
                 getBaseActivity()?.apply {
                     if (PermissionUtil.checkExternalStoragePermission(this)) {
-//                        mDialogProgress = ProgressDialog(this)
-//                        mDialogProgress?.show()
                         getAllFilePdf(true)
                     } else {
                         showPopupPermission()
