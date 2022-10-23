@@ -215,6 +215,7 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                 }
             }
         }
+        
 
         if (getBaseActivity()?.isCurrentNetwork == false) {
             getBaseActivity()?.enabaleNetwork()
