@@ -34,34 +34,34 @@ class DemoDriveActivity : BaseActivity<ActivityBaseBinding>(), ServiceListener {
 //        googleDriveService = GoogleDriveService(this, config)
 //        googleDriveService.serviceListener = this
 //
-        binding.btnLoginDrive.setOnClickListener {
-//            googleDriveService.auth()
-            val account = GoogleSignIn.getLastSignedInAccount(applicationContext)
-//
-            if (account == null) {
-                signIn()
-            } else {
-                mDriveServiceHelper = DriveServiceHelper(getGoogleDriveService(applicationContext, account, "appName"))
-            }
-
-        }
-        binding.btnOpenFile.setOnClickListener {
-            mDriveServiceHelper!!.searchFile("Rita 10th.pdf","application/vnd.google-apps.file").addOnSuccessListener {
-                Logger.showLog("Thuytv------searchFolder---addOnSuccessListener: " + it.size)
-                if(it.size > 0){
-                    for(item in it){
-                        Logger.showLog("Thuytv----item: " + item.name)
-                    }
-                }
-            }.addOnFailureListener {
-                Logger.showLog("Thuytv------searchFolder---addOnFailureListener")
-                it.printStackTrace()
-            }
-//            mDriveServiceHelper?.searchFolder("testDummy")
-//                ?.addOnSuccessListener(object : OnSuccessListener<List<GoogleDriveFileHolder>>() {
+//        binding.btnLoginDrive.setOnClickListener {
+////            googleDriveService.auth()
+//            val account = GoogleSignIn.getLastSignedInAccount(applicationContext)
+////
+//            if (account == null) {
+//                signIn()
+//            } else {
+//                mDriveServiceHelper = DriveServiceHelper(getGoogleDriveService(applicationContext, account, "appName"))
+//            }
 //
 //        }
-        }
+//        binding.btnOpenFile.setOnClickListener {
+//            mDriveServiceHelper!!.searchFile("Rita 10th.pdf","application/vnd.google-apps.file").addOnSuccessListener {
+//                Logger.showLog("Thuytv------searchFolder---addOnSuccessListener: " + it.size)
+//                if(it.size > 0){
+//                    for(item in it){
+//                        Logger.showLog("Thuytv----item: " + item.name)
+//                    }
+//                }
+//            }.addOnFailureListener {
+//                Logger.showLog("Thuytv------searchFolder---addOnFailureListener")
+//                it.printStackTrace()
+//            }
+////            mDriveServiceHelper?.searchFolder("testDummy")
+////                ?.addOnSuccessListener(object : OnSuccessListener<List<GoogleDriveFileHolder>>() {
+////
+////        }
+//        }
     }
 
     override fun initEvents() {

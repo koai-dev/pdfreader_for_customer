@@ -1,8 +1,13 @@
 package com.cocna.pdffilereader.ui.drive;
 
+import com.cocna.pdffilereader.common.AppKeys;
 import com.cocna.pdffilereader.common.Logger;
+import com.cocna.pdffilereader.ui.home.PdfViewActivity;
+import com.cocna.pdffilereader.ui.home.model.MyFilesModel;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
@@ -29,8 +34,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -39,16 +46,24 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends Activity
-    implements EasyPermissions.PermissionCallbacks {
+        implements EasyPermissions.PermissionCallbacks {
     GoogleAccountCredential mCredential;
     private TextView mOutputText;
     private Button mCallApiButton;
@@ -61,10 +76,13 @@ public class MainActivity extends Activity
 
     private static final String BUTTON_TEXT = "Call Drive API";
     private static final String PREF_ACCOUNT_NAME = "accountName";
-    private static final String[] SCOPES = { DriveScopes.DRIVE };
+    private static final String[] SCOPES = {DriveScopes.DRIVE};
+    private final String fileSaveLocation = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/";
+
 
     /**
      * Create the main activity.
+     *
      * @param savedInstanceState previously saved instance data.
      */
     @Override
@@ -101,7 +119,7 @@ public class MainActivity extends Activity
         mOutputText.setVerticalScrollBarEnabled(true);
         mOutputText.setMovementMethod(new ScrollingMovementMethod());
         mOutputText.setText(
-                "Click the \'" + BUTTON_TEXT +"\' button to test the API.");
+                "Click the \'" + BUTTON_TEXT + "\' button to test the API.");
         activityLayout.addView(mOutputText);
 
         mProgress = new ProgressDialog(this);
@@ -111,10 +129,9 @@ public class MainActivity extends Activity
 
         // Initialize credentials and service object.
         mCredential = GoogleAccountCredential.usingOAuth2(
-                getApplicationContext(), Arrays.asList(SCOPES))
+                        getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
     }
-
 
 
     /**
@@ -125,11 +142,11 @@ public class MainActivity extends Activity
      * appropriate.
      */
     private void getResultsFromApi() {
-        if (! isGooglePlayServicesAvailable()) {
+        if (!isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
-        } else if (! isDeviceOnline()) {
+        } else if (!isDeviceOnline()) {
             mOutputText.setText("No network connection available.");
         } else {
             new MakeRequestTask(mCredential).execute();
@@ -175,22 +192,23 @@ public class MainActivity extends Activity
      * Called when an activity launched here (specifically, AccountPicker
      * and authorization) exits, giving you the requestCode you started it with,
      * the resultCode it returned, and any additional data from it.
+     *
      * @param requestCode code indicating which activity result is incoming.
-     * @param resultCode code indicating the result of the incoming
-     *     activity result.
-     * @param data Intent (containing result data) returned by incoming
-     *     activity result.
+     * @param resultCode  code indicating the result of the incoming
+     *                    activity result.
+     * @param data        Intent (containing result data) returned by incoming
+     *                    activity result.
      */
     @Override
     protected void onActivityResult(
             int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode) {
+        switch (requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
                     mOutputText.setText(
                             "This app requires Google Play Services. Please install " +
-                            "Google Play Services on your device and relaunch this app.");
+                                    "Google Play Services on your device and relaunch this app.");
                 } else {
                     getResultsFromApi();
                 }
@@ -221,11 +239,12 @@ public class MainActivity extends Activity
 
     /**
      * Respond to requests for permissions at runtime for API 23 and above.
-     * @param requestCode The request code passed in
-     *     requestPermissions(android.app.Activity, String, int, String[])
-     * @param permissions The requested permissions. Never null.
+     *
+     * @param requestCode  The request code passed in
+     *                     requestPermissions(android.app.Activity, String, int, String[])
+     * @param permissions  The requested permissions. Never null.
      * @param grantResults The grant results for the corresponding permissions
-     *     which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
+     *                     which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
      */
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -239,9 +258,10 @@ public class MainActivity extends Activity
     /**
      * Callback for when a permission is granted using the EasyPermissions
      * library.
+     *
      * @param requestCode The request code associated with the requested
-     *         permission
-     * @param list The requested permission list. Never null.
+     *                    permission
+     * @param list        The requested permission list. Never null.
      */
     @Override
     public void onPermissionsGranted(int requestCode, List<String> list) {
@@ -251,9 +271,10 @@ public class MainActivity extends Activity
     /**
      * Callback for when a permission is denied using the EasyPermissions
      * library.
+     *
      * @param requestCode The request code associated with the requested
-     *         permission
-     * @param list The requested permission list. Never null.
+     *                    permission
+     * @param list        The requested permission list. Never null.
      */
     @Override
     public void onPermissionsDenied(int requestCode, List<String> list) {
@@ -262,6 +283,7 @@ public class MainActivity extends Activity
 
     /**
      * Checks whether the device currently has a network connection.
+     *
      * @return true if the device has a network connection, false otherwise.
      */
     private boolean isDeviceOnline() {
@@ -273,8 +295,9 @@ public class MainActivity extends Activity
 
     /**
      * Check that Google Play services APK is installed and up to date.
+     *
      * @return true if Google Play Services is available and up to
-     *     date on this device; false otherwise.
+     * date on this device; false otherwise.
      */
     private boolean isGooglePlayServicesAvailable() {
         GoogleApiAvailability apiAvailability =
@@ -302,8 +325,9 @@ public class MainActivity extends Activity
     /**
      * Display an error dialog showing that Google Play Services is missing
      * or out of date.
+     *
      * @param connectionStatusCode code describing the presence (or lack of)
-     *     Google Play Services on this device.
+     *                             Google Play Services on this device.
      */
     void showGooglePlayServicesAvailabilityErrorDialog(
             final int connectionStatusCode) {
@@ -334,6 +358,7 @@ public class MainActivity extends Activity
 
         /**
          * Background task to call Drive API.
+         *
          * @param params no parameters needed for this task.
          */
         @Override
@@ -349,8 +374,9 @@ public class MainActivity extends Activity
 
         /**
          * Fetch a list of up to 10 file names and IDs.
+         *
          * @return List of Strings describing files, or an empty list if no files
-         *         found.
+         * found.
          * @throws IOException
          */
         private List<String> getDataFromApi() throws IOException {
@@ -358,12 +384,17 @@ public class MainActivity extends Activity
             List<String> fileInfo = new ArrayList<String>();
             FileList result = mService.files().list()
 //                 .setPageSize(100)
-                 .setFields("nextPageToken, files(id, name)")
-                 .execute();
+                    .setFields("nextPageToken, files(id, name,size,createdTime,modifiedTime)")
+                    .execute();
             Logger.INSTANCE.showLog("Thuytv------result.getFiles(): " + result.getFiles().size());
             List<File> files = result.getFiles();
             if (files != null) {
                 for (File file : files) {
+                    if (file.getName().contains("QAforPMBOK6th.pdf")) {
+                        String strFileData = fileSaveLocation + file.getName();
+                        java.io.File file1 = new java.io.File(strFileData);
+                        downloadFile(file1, file.getId(), mService);
+                    }
                     fileInfo.add(String.format("%s (%s)\n",
                             file.getName(), file.getId()));
                 }
@@ -409,5 +440,57 @@ public class MainActivity extends Activity
                 mOutputText.setText("Request cancelled.");
             }
         }
+    }
+
+    private final Executor mExecutor = Executors.newSingleThreadExecutor();
+
+    public Task<Pair<String, String>> readFile(final String fileId, final com.google.api.services.drive.Drive mService) {
+        return Tasks.call(mExecutor, new Callable<Pair<String, String>>() {
+            @Override
+            public Pair<String, String> call() throws Exception {
+                // Retrieve the metadata as a File object.
+                File metadata = mService.files().get(fileId).execute();
+                String name = metadata.getName();
+                // Stream the file contents to a String.
+                try (InputStream is = mService.files().get(fileId).executeMediaAsInputStream();
+                     BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line;
+
+                    while ((line = reader.readLine()) != null) {
+                        stringBuilder.append(line);
+                    }
+                    String contents = stringBuilder.toString();
+                    mOutputText.setText(contents);
+                    return Pair.create(name, contents);
+                }
+            }
+        });
+    }
+
+    public Task<Void> downloadFile(final java.io.File fileSaveLocation, final String fileId, final com.google.api.services.drive.Drive mService) {
+        return Tasks.call(mExecutor, new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                // Retrieve the metadata as a File object.
+                OutputStream outputStream = new FileOutputStream(fileSaveLocation);
+                mService.files().get(fileId).executeMediaAndDownloadTo(outputStream);
+                Logger.INSTANCE.showLog("Thuytv----downloadFile-----fileSaveLocation: " + fileSaveLocation.getAbsolutePath());
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+//                        MyFilesModel myFilesModel = new MyFilesModel();
+//                        myFilesModel.setUriPath(fileSaveLocation.getAbsolutePath());
+                        Intent intent = new Intent(MainActivity.this, PdfViewActivity.class);
+                       intent.putExtra(AppKeys.KEY_BUNDLE_SHORTCUT_NAME, "Test.pdf");
+                        intent.putExtra(AppKeys.KEY_BUNDLE_SHORTCUT_PATH, fileSaveLocation.getAbsolutePath());
+//                        intent.putExtra(AppKeys.KEY_BUNDLE_DATA, myFilesModel);
+                        startActivity(intent);
+                    }
+                });
+
+                return null;
+            }
+        });
     }
 }

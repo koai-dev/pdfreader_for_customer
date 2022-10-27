@@ -26,11 +26,13 @@ import com.cocna.pdffilereader.databinding.FragmentBrowseBinding
 import com.cocna.pdffilereader.myinterface.OnDialogItemClickListener
 import com.cocna.pdffilereader.myinterface.OnPopupMenuItemClickListener
 import com.cocna.pdffilereader.ui.base.BaseFragment
+import com.cocna.pdffilereader.ui.drive.GoogleDriveActivity
 import com.cocna.pdffilereader.ui.home.adapter.MyFilesAdapter
 import com.cocna.pdffilereader.ui.home.dialog.DeleteFileDialog
 import com.cocna.pdffilereader.ui.home.dialog.FileInfoDialog
 import com.cocna.pdffilereader.ui.home.dialog.RenameFileDialog
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
+import com.google.android.gms.common.api.GoogleApiActivity
 import io.reactivex.disposables.Disposable
 import java.io.File
 
@@ -145,6 +147,10 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
         binding.btnGoToSetting.setOnClickListener {
             MultiClickPreventer.preventMultiClick(it)
             requestPermission()
+        }
+        binding.btnGoogleDrive.setOnClickListener {
+            MultiClickPreventer.preventMultiClick(it)
+            getBaseActivity()?.onNextScreen(GoogleDriveActivity::class.java, null, false)
         }
 
     }

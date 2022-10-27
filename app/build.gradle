@@ -130,9 +130,10 @@ dependencies {
     }
     api 'com.google.http-client:google-http-client-gson:1.26.0'
     implementation 'com.google.guava:guava:27.0.1-android'
-//    implementation 'com.google.api-client:google-api-client-android:1.26.0'
-//    implementation ('com.google.apis:google-api-services-drive:v3-rev136-1.25.0')
-//    implementation 'com.github.ammarptn:GDrive-Rest-Android:1.4.3'
 
     implementation 'pub.devrel:easypermissions:3.0.0'
+
+    implementation 'com.dropbox.core:dropbox-core-sdk:5.4.4'
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-alpha01"
+
 }
