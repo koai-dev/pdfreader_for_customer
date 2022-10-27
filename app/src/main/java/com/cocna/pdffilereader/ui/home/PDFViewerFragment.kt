@@ -116,20 +116,22 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
                 Logger.showLog("Thuytv------PickiTonCompleteListener : $path")
                 Logger.showLog("Thuytv------PickiTonCompleteListener wasDriveFile: $wasDriveFile---wasUnknownProvider: $wasUnknownProvider---wasSuccessful: $wasSuccessful----Reason: $Reason")
                 if (wasSuccessful) {
-                    myFileModel = MyFilesModel(uriPath = path, uriOldPath = path, extensionName = "pdf")
+                    if (isVisible) {
+                        myFileModel = MyFilesModel(uriPath = path, uriOldPath = path, extensionName = "pdf")
 
-                    if (path?.isNotEmpty() == true) {
-                        val cut = path.lastIndexOf("/")
-                        if (cut != -1) {
-                            val fileName = path.substring(cut + 1)
-                            binding.ttToolbarPdf.text = fileName
-                            myFileModel?.name = fileName
+                        if (path?.isNotEmpty() == true) {
+                            val cut = path.lastIndexOf("/")
+                            if (cut != -1) {
+                                val fileName = path.substring(cut + 1)
+                                binding.ttToolbarPdf.text = fileName
+                                myFileModel?.name = fileName
+                            }
                         }
+                        openFDPFile(path)
+                        Handler(Looper.myLooper()!!).postDelayed({
+                            loadDataFile()
+                        }, 500)
                     }
-                    openFDPFile(path)
-                    Handler(Looper.myLooper()!!).postDelayed({
-                        loadDataFile()
-                    }, 500)
                 } else if (Reason?.isNotEmpty() == true) {
                     getBaseActivity()?.apply {
                         Logger.showToast(this, Reason)
@@ -201,15 +203,15 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
         }
         changeViewMode(isNightMode)
 
-            getBaseActivity()?.apply {
-                adView = AdView(this)
-                binding.adViewContainer.addView(adView)
-                // Since we're loading the banner based on the adContainerView size, we need to wait until this
-                // view is laid out before we can get the width.
-                binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
-                    if (!initialLayoutComplete) {
-                        initialLayoutComplete = true
-                        if (getBaseActivity()?.sharedPreferences?.getAdsConfig()?.ads_banner_reader == true) {
+        getBaseActivity()?.apply {
+            adView = AdView(this)
+            binding.adViewContainer.addView(adView)
+            // Since we're loading the banner based on the adContainerView size, we need to wait until this
+            // view is laid out before we can get the width.
+            binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
+                if (!initialLayoutComplete) {
+                    initialLayoutComplete = true
+                    if (getBaseActivity()?.sharedPreferences?.getAdsConfig()?.ads_banner_reader == true) {
                         loadBannerAds()
                     }
                 }
@@ -595,27 +597,29 @@ class PDFViewerFragment : BaseFragment<FragmentPdfViewerBinding>(), View.OnClick
     }
 
     private fun loadDataFile() {
-        loadPdfFile()
-        if (pdfiumCore != null && pdfDocument != null) {
-            val totalCount = pdfiumCore?.getPageCount(pdfDocument) ?: 0
-            previewAdapter =
-                PreviewAdapter(
-                    getBaseActivity(),
-                    pdfiumCore!!,
-                    pdfDocument!!,
-                    myFileModel?.name ?: "",
-                    totalCount,
-                    currentPage,
-                    object : PreviewAdapter.OnItemClickListener {
-                        override fun onClickItem(position: Int) {
-                            binding.pdfViewer.jumpTo(position)
-                        }
-                    })
-            binding.rcvPreviewPage.apply {
-                layoutManager = LinearLayoutManager(getBaseActivity(), LinearLayoutManager.HORIZONTAL, false)
-                adapter = previewAdapter
+        if (isVisible) {
+            loadPdfFile()
+            if (pdfiumCore != null && pdfDocument != null) {
+                val totalCount = pdfiumCore?.getPageCount(pdfDocument) ?: 0
+                previewAdapter =
+                    PreviewAdapter(
+                        getBaseActivity(),
+                        pdfiumCore!!,
+                        pdfDocument!!,
+                        myFileModel?.name ?: "",
+                        totalCount,
+                        currentPage,
+                        object : PreviewAdapter.OnItemClickListener {
+                            override fun onClickItem(position: Int) {
+                                binding.pdfViewer.jumpTo(position)
+                            }
+                        })
+                binding.rcvPreviewPage.apply {
+                    layoutManager = LinearLayoutManager(getBaseActivity(), LinearLayoutManager.HORIZONTAL, false)
+                    adapter = previewAdapter
+                }
+                binding.rcvPreviewPage.scrollToPosition(currentPage)
             }
-            binding.rcvPreviewPage.scrollToPosition(currentPage)
         }
     }
 

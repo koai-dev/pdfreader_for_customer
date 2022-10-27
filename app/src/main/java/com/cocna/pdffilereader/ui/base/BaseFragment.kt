@@ -169,12 +169,15 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
                     Intent.EXTRA_TEXT,
                     getString(R.string.vl_share_document_content)
                 )
-
-                val fileURI = FileProvider.getUriForFile(
-                    getBaseActivity()!!, getBaseActivity()!!.packageName + ".provider",
-                    file
-                )
-                putExtra(Intent.EXTRA_STREAM, fileURI)
+                try {
+                    val fileURI = FileProvider.getUriForFile(
+                        getBaseActivity()!!, getBaseActivity()!!.packageName + ".provider",
+                        file
+                    )
+                    putExtra(Intent.EXTRA_STREAM, fileURI)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
             getBaseActivity()?.let {
                 if (shareIntent.resolveActivity(it.packageManager) != null) {

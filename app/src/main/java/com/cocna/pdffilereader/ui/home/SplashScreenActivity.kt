@@ -183,26 +183,31 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
 
     private fun getAllDir(rootFile: DocumentFile) {
         rootFile.listFiles().let { files ->
-            for (i in files.indices) {
-                val item = files[i]
-                if (item.isDirectory) {
-                    getAllDir(item)
-                } else {
-                    if (item.extension.lowercase() == "pdf") {
-                        val model =
-                            MyFilesModel(
-                                name = item.name,
-                                uriPath = item.uri.path,
-                                uriOldPath = item.uri.path,
-                                lastModified = item.lastModified(),
-                                extensionName = item.extension,
-                                length = item.length(),
-                                locationFile = item.parentFile?.uri?.path,
-                                folderName = item.parentFile?.name
-                            )
-                        Common.listAllData?.add(model)
+            try {
+                val lstFile = files.indices
+                for (i in lstFile) {
+                    val item = files[i]
+                    if (item.isDirectory) {
+                        getAllDir(item)
+                    } else {
+                        if (item.extension.lowercase() == "pdf") {
+                            val model =
+                                MyFilesModel(
+                                    name = item.name,
+                                    uriPath = item.uri.path,
+                                    uriOldPath = item.uri.path,
+                                    lastModified = item.lastModified(),
+                                    extensionName = item.extension,
+                                    length = item.length(),
+                                    locationFile = item.parentFile?.uri?.path,
+                                    folderName = item.parentFile?.name
+                                )
+                            Common.listAllData?.add(model)
+                        }
                     }
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
