@@ -4,29 +4,26 @@ import android.Manifest
 import android.accounts.AccountManager
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
-import android.os.AsyncTask
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ProgressBar
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.common.Logger.showLog
 import com.cocna.pdffilereader.databinding.FragmentGoogleDriveBinding
-import com.cocna.pdffilereader.ui.base.BaseActivity
 import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.drive.adapter.DriveModel
 import com.cocna.pdffilereader.ui.drive.adapter.GGDriveAdapter
 import com.cocna.pdffilereader.ui.home.PdfViewActivity
+import com.cocna.pdffilereader.ui.home.dialog.ProgressDialogLoadingAds
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.json.JsonFactory
@@ -36,9 +33,12 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
-import pub.devrel.easypermissions.AfterPermissionGranted
-import pub.devrel.easypermissions.EasyPermissions
-import pub.devrel.easypermissions.EasyPermissions.PermissionCallbacks
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.single.PermissionListener
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
@@ -50,31 +50,41 @@ import java.util.concurrent.Executors
 /**
  * Created by Thuytv on 24/10/2022.
  */
-class GoogleDriveFragment : BaseFragment<FragmentGoogleDriveBinding>(), PermissionCallbacks {
+class GoogleDriveFragment : BaseFragment<FragmentGoogleDriveBinding>() {
+
+
+    companion object {
+        const val REQUEST_GOOGLE_PLAY_SERVICES = 1002
+    }
+
     private var mCredential: GoogleAccountCredential? = null
     private val SCOPES = DriveScopes.DRIVE
     private val fileSaveLocation = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath + "/"
 
     private var ggDriveAdapter: GGDriveAdapter? = null
     private var mService: Drive? = null
+    private var mProgressDialogLoadingData: ProgressDialogLoadingData? = null
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentGoogleDriveBinding
         get() = FragmentGoogleDriveBinding::inflate
 
     override fun initData() {
+        binding.ttToolbarPdf.text = getString(R.string.vl_google_drive)
+        getBaseActivity()?.let {
+            mProgressDialogLoadingData = ProgressDialogLoadingData(it)
+        }
         ggDriveAdapter = GGDriveAdapter(getBaseActivity(), ArrayList(), object : GGDriveAdapter.OnItemClickListener {
             override fun onClickItem(documentFile: DriveModel) {
-                binding.prbLoadingGetData.visible()
                 val strFileData = fileSaveLocation + documentFile.name
                 val fileData = java.io.File(strFileData)
-                if(fileData.exists()){
+                if (fileData.exists()) {
                     val intent = Intent(getBaseActivity(), PdfViewActivity::class.java)
                     intent.putExtra(AppKeys.KEY_BUNDLE_SHORTCUT_NAME, documentFile.name)
                     intent.putExtra(AppKeys.KEY_BUNDLE_SHORTCUT_PATH, fileData.absolutePath)
                     startActivity(intent)
-                    binding.prbLoadingGetData.gone()
-                }else {
+                } else {
                     mService?.let {
+                        binding.prbLoadingGetData.visible()
                         downloadAndOpenFile(fileData, documentFile, it)
                     }
                 }
@@ -95,17 +105,10 @@ class GoogleDriveFragment : BaseFragment<FragmentGoogleDriveBinding>(), Permissi
     }
 
     override fun initEvents() {
-    }
-
-    /**
-     * Checks whether the device currently has a network connection.
-     *
-     * @return true if the device has a network connection, false otherwise.
-     */
-    private fun isDeviceOnline(): Boolean {
-        val connMgr = getBaseActivity()?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connMgr.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected
+        binding.imvPdfBack.setOnClickListener {
+            MultiClickPreventer.preventMultiClick(it)
+            getBaseActivity()?.finish()
+        }
     }
 
     /**
@@ -151,158 +154,11 @@ class GoogleDriveFragment : BaseFragment<FragmentGoogleDriveBinding>(), Permissi
         val dialog: Dialog? = apiAvailability.getErrorDialog(
             activity as Activity,
             connectionStatusCode,
-            MainActivity.REQUEST_GOOGLE_PLAY_SERVICES
+            REQUEST_GOOGLE_PLAY_SERVICES
         )
         dialog?.show()
     }
 
-    /**
-     * An asynchronous task that handles the Drive API call.
-     * Placing the API calls in their own task ensures the UI stays responsive.
-     */
-    private class MakeRequestTask constructor(
-        private val context: BaseActivity<*>?,
-        private val mService: Drive?,
-        private val ggDriveAdapter: GGDriveAdapter,
-        private val prbLoadingData: ProgressBar
-    ) :
-        AsyncTask<Void?, Void?, List<String?>?>() {
-        private var mLastError: Exception? = null
-
-        /**
-         * Background task to call Drive API.
-         *
-         * @param params no parameters needed for this task.
-         */
-
-        override fun doInBackground(vararg p0: Void?): List<String?>? {
-            try {
-                return dataFromApi
-            } catch (e: Exception) {
-                mLastError = e
-                cancel(true)
-                return null
-            }
-        }
-
-        /**
-         * Fetch a list of up to 10 file names and IDs.
-         *
-         * @return List of Strings describing files, or an empty list if no files
-         * found.
-         * @throws IOException
-         */
-        @get:Throws(IOException::class)
-        private val dataFromApi: List<String?>
-            get() {
-                // Get a list of up to 10 files.
-                val fileInfo: MutableList<String?> = ArrayList()
-//                val result = mService!!.files().list() //                 .setPageSize(100)
-//                    .setFields("nextPageToken, files(id, name,size,createdTime,modifiedTime)")
-//                    .execute()
-
-//                val files = result.files
-                val files = getAllFilesGdrive(mService!!)
-                showLog("Thuytv------result.getFiles(): " + files?.size)
-                try {
-
-                    if (files != null) {
-                        val lstDriveModel = ArrayList<DriveModel>()
-                        for (file in files) {
-//                        showLog("Thuytv------file: " + file.name)
-                            if (file.name.endsWith(".pdf")) {
-                                val driveModel = DriveModel(
-                                    id = file.id,
-                                    name = file.name,
-                                    createdTime = file.createdTime.value,
-                                    modifiedTime = file.modifiedTime.value,
-                                    extensionName = "pdf",
-                                    folderName = "Google Drive"
-                                )
-                                lstDriveModel.add(driveModel)
-
-                            }
-                        }
-                        showLog("Thuytv------lstDriveModel: " + lstDriveModel.size)
-                        context?.runOnUiThread {
-                            ggDriveAdapter.updateData(lstDriveModel)
-                        }
-                    }
-
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-                return fileInfo
-            }
-
-        @Throws(IOException::class)
-        private fun getAllFilesGdrive(service: Drive): List<File>? {
-            val result: ArrayList<File> = ArrayList()
-            val request: Drive.Files.List = service.files().list().setFields("nextPageToken, files(id, name,size,createdTime,modifiedTime)")
-            do {
-                try {
-                    val files: FileList = request.execute()
-                    result.addAll(files.files)
-                    request.pageToken = files.nextPageToken
-                } catch (e: IOException) {
-                    println("An error occurred: $e")
-                    request.pageToken = null
-                }
-            } while (request.pageToken != null &&
-                request.pageToken.isNotEmpty()
-            )
-            return result
-        }
-
-        override fun onPreExecute() {
-//            mOutputText.setText("")
-//            mProgress.show()
-            prbLoadingData.visible()
-        }
-
-        override fun onPostExecute(output: List<String?>?) {
-            prbLoadingData.gone()
-//            mProgress.hide()
-//            if (output == null || output.size == 0) {
-//                mOutputText.setText("No results returned.")
-//            } else {
-//                output.add(0, "Data retrieved using the Drive API:")
-//                mOutputText.setText(TextUtils.join("\n", output))
-//            }
-        }
-
-        override fun onCancelled() {
-//            mProgress.hide()
-//            if (mLastError != null) {
-//                if (mLastError is GooglePlayServicesAvailabilityIOException) {
-//                    showGooglePlayServicesAvailabilityErrorDialog(
-//                        (mLastError as GooglePlayServicesAvailabilityIOException)
-//                            .connectionStatusCode
-//                    )
-//                } else if (mLastError is UserRecoverableAuthIOException) {
-//                    startActivityForResult(
-//                        (mLastError as UserRecoverableAuthIOException).intent,
-//                        MainActivity.REQUEST_AUTHORIZATION
-//                    )
-//                } else {
-//                    mOutputText.setText(
-//                        "The following error occurred:\n"
-//                                + mLastError!!.message
-//                    )
-//                }
-//            } else {
-//                mOutputText.setText("Request cancelled.")
-//            }
-        }
-
-
-    }
-
-    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-    }
-
-    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-    }
 
     /**
      * Attempt to call the API, after verifying that all the preconditions are
@@ -314,9 +170,9 @@ class GoogleDriveFragment : BaseFragment<FragmentGoogleDriveBinding>(), Permissi
     private fun getResultsFromApi() {
         if (!isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices()
-        } else if (mCredential!!.selectedAccountName == null) {
+        } else if (mCredential?.selectedAccountName == null) {
             chooseAccount()
-        } else if (!isDeviceOnline()) {
+        } else if (getBaseActivity()?.isNetworkAvailable() == false) {
             Logger.showToast(getBaseActivity()!!, "No network connection available.")
         } else {
             val transport = AndroidHttp.newCompatibleTransport()
@@ -324,8 +180,10 @@ class GoogleDriveFragment : BaseFragment<FragmentGoogleDriveBinding>(), Permissi
             mService = Drive.Builder(transport, jsonFactory, mCredential)
                 .setApplicationName("Drive API Android Quickstart")
                 .build()
-            ggDriveAdapter?.let {
-                MakeRequestTask(getBaseActivity(), mService, it, binding.prbLoadingGetData).execute()
+            mService?.let {
+//                binding.prbLoadingGetData.visible()
+                mProgressDialogLoadingData?.show()
+                getAllFileFromGGDrive(it)
             }
         }
     }
@@ -340,31 +198,43 @@ class GoogleDriveFragment : BaseFragment<FragmentGoogleDriveBinding>(), Permissi
      * function will be rerun automatically whenever the GET_ACCOUNTS permission
      * is granted.
      */
-    @AfterPermissionGranted(MainActivity.REQUEST_PERMISSION_GET_ACCOUNTS)
     private fun chooseAccount() {
-        if (EasyPermissions.hasPermissions(
-                getBaseActivity()!!, Manifest.permission.GET_ACCOUNTS
-            )
-        ) {
-            val accountName = getBaseActivity()?.sharedPreferences?.getValueString(SharePreferenceUtils.PREF_ACCOUNT_NAME)
-            if (accountName?.isNotEmpty() == true) {
-                mCredential!!.selectedAccountName = accountName
-                getResultsFromApi()
-            } else {
-                // Start a dialog from which the user can choose an account
-                startActivityForResult(
-                    mCredential!!.newChooseAccountIntent(),
-                    MainActivity.REQUEST_ACCOUNT_PICKER
-                )
+        Dexter.withContext(getBaseActivity()).withPermission(Manifest.permission.GET_ACCOUNTS).withListener(
+            object : PermissionListener {
+                override fun onPermissionGranted(report: PermissionGrantedResponse?) {
+                    val accountName = getBaseActivity()?.sharedPreferences?.getValueString(SharePreferenceUtils.PREF_ACCOUNT_NAME)
+                    if (accountName?.isNotEmpty() == true) {
+                        mCredential!!.selectedAccountName = accountName
+                        getResultsFromApi()
+                    } else {
+                        mCredential?.let {
+                            resultLauncherAccountPicker.launch(it.newChooseAccountIntent())
+                        }
+                    }
+                }
+
+                override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                }
+
+                override fun onPermissionRationaleShouldBeShown(p0: PermissionRequest?, token: PermissionToken?) {
+                    token?.continuePermissionRequest()
+                }
+
             }
-        } else {
-            // Request the GET_ACCOUNTS permission via a user dialog
-            EasyPermissions.requestPermissions(
-                this,
-                "This app needs to access your Google account (via Contacts).",
-                MainActivity.REQUEST_PERMISSION_GET_ACCOUNTS,
-                Manifest.permission.GET_ACCOUNTS
-            )
+        ).check()
+    }
+
+    val resultLauncherAccountPicker = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val intent = result.data
+            intent?.let {
+                val accountName = it.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
+                if (accountName != null) {
+                    getBaseActivity()?.sharedPreferences?.setValueString(SharePreferenceUtils.PREF_ACCOUNT_NAME, accountName)
+                    mCredential?.selectedAccountName = accountName
+                    getResultsFromApi()
+                }
+            }
         }
     }
 
@@ -384,7 +254,7 @@ class GoogleDriveFragment : BaseFragment<FragmentGoogleDriveBinding>(), Permissi
     ) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            MainActivity.REQUEST_GOOGLE_PLAY_SERVICES -> if (resultCode != Activity.RESULT_OK) {
+            REQUEST_GOOGLE_PLAY_SERVICES -> if (resultCode != Activity.RESULT_OK) {
                 Logger.showToast(
                     getBaseActivity()!!,
                     "This app requires Google Play Services. Please install " +
@@ -393,36 +263,87 @@ class GoogleDriveFragment : BaseFragment<FragmentGoogleDriveBinding>(), Permissi
             } else {
                 getResultsFromApi()
             }
-            MainActivity.REQUEST_ACCOUNT_PICKER -> if (resultCode == Activity.RESULT_OK && data != null && data.extras != null) {
-                val accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
-                if (accountName != null) {
-                    getBaseActivity()?.sharedPreferences?.setValueString(SharePreferenceUtils.PREF_ACCOUNT_NAME, accountName)
-                    mCredential!!.selectedAccountName = accountName
-                    getResultsFromApi()
-                }
-            }
-            MainActivity.REQUEST_AUTHORIZATION -> if (resultCode == Activity.RESULT_OK) {
-                getResultsFromApi()
-            }
+//            REQUEST_ACCOUNT_PICKER -> if (resultCode == Activity.RESULT_OK && data != null && data.extras != null) {
+//                val accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
+//                if (accountName != null) {
+//                    getBaseActivity()?.sharedPreferences?.setValueString(SharePreferenceUtils.PREF_ACCOUNT_NAME, accountName)
+//                    mCredential!!.selectedAccountName = accountName
+//                    getResultsFromApi()
+//                }
+//            }
+//            REQUEST_AUTHORIZATION -> if (resultCode == Activity.RESULT_OK) {
+//                getResultsFromApi()
+//            }
         }
     }
 
     private val mExecutor: Executor = Executors.newSingleThreadExecutor()
-    fun downloadAndOpenFile(fileSaveLocation: java.io.File, model: DriveModel, mService: Drive): Task<Void> {
-        return Tasks.call(mExecutor) { // Retrieve the metadata as a File object.
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private fun downloadAndOpenFile(fileSaveLocation: java.io.File, model: DriveModel, mService: Drive) {
+        mExecutor.execute {
             val outputStream: OutputStream = FileOutputStream(fileSaveLocation)
             mService.files()[model.id].executeMediaAndDownloadTo(outputStream)
             showLog("Thuytv----downloadFile-----fileSaveLocation: " + fileSaveLocation.absolutePath)
-            getBaseActivity()?.runOnUiThread(Runnable { //                        MyFilesModel myFilesModel = new MyFilesModel();
-                //                        myFilesModel.setUriPath(fileSaveLocation.getAbsolutePath());
-                val intent = Intent(getBaseActivity(), PdfViewActivity::class.java)
-                intent.putExtra(AppKeys.KEY_BUNDLE_SHORTCUT_NAME, model.name)
-                intent.putExtra(AppKeys.KEY_BUNDLE_SHORTCUT_PATH, fileSaveLocation.absolutePath)
-                //                        intent.putExtra(AppKeys.KEY_BUNDLE_DATA, myFilesModel);
-                startActivity(intent)
-                binding.prbLoadingGetData.gone()
-            })
-            null
+            mainHandler.post {
+                if (isVisible) {
+                    val intent = Intent(getBaseActivity(), PdfViewActivity::class.java)
+                    intent.putExtra(AppKeys.KEY_BUNDLE_SHORTCUT_NAME, model.name)
+                    intent.putExtra(AppKeys.KEY_BUNDLE_SHORTCUT_PATH, fileSaveLocation.absolutePath)
+                    //                        intent.putExtra(AppKeys.KEY_BUNDLE_DATA, myFilesModel);
+                    startActivity(intent)
+//                    mProgressDialogLoadingData?.dismiss()
+                    binding.prbLoadingGetData.gone()
+                }
+            }
+        }
+    }
+
+    private fun getAllFileFromGGDrive(mService: Drive) {
+        mExecutor.execute {
+            val result: ArrayList<File> = ArrayList()
+            val request: Drive.Files.List = mService.files().list().setFields("nextPageToken, files(id, name,size,createdTime,modifiedTime)")
+            do {
+                try {
+                    val files: FileList = request.execute()
+                    result.addAll(files.files)
+                    request.pageToken = files.nextPageToken
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    request.pageToken = null
+                }
+            } while (request.pageToken != null &&
+                request.pageToken.isNotEmpty()
+            )
+            showLog("Thuytv------result.getFiles(): " + result.size)
+            try {
+                if (result.isNotEmpty()) {
+                    val lstDriveModel = ArrayList<DriveModel>()
+                    for (file in result) {
+                        if (file.name.endsWith(".pdf")) {
+                            val driveModel = DriveModel(
+                                id = file.id,
+                                name = file.name,
+                                createdTime = file.createdTime.value,
+                                modifiedTime = file.modifiedTime.value,
+                                extensionName = "pdf",
+                                folderName = "Google Drive"
+                            )
+                            lstDriveModel.add(driveModel)
+
+                        }
+                    }
+                    showLog("Thuytv------lstDriveModel: " + lstDriveModel.size)
+                    mainHandler.post {
+                        if (isVisible) {
+                            ggDriveAdapter?.updateData(lstDriveModel)
+                            mProgressDialogLoadingData?.dismiss()
+//                            binding.prbLoadingGetData.gone()
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

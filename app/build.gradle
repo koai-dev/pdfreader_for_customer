@@ -25,12 +25,13 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
+//            applicationIdSuffix ".test"
         }
         debug {
             debuggable true
             minifyEnabled false
             shrinkResources false
+//            applicationIdSuffix ".test"
         }
     }
     compileOptions {
@@ -120,6 +121,8 @@ dependencies {
     implementation 'com.otaliastudios:cameraview:2.7.2'
     implementation 'com.github.HBiSoft:PickiT:2.0.5'
 
+    implementation 'com.karumi:dexter:6.2.3'
+
     implementation "com.google.android.gms:play-services-auth:20.3.0"
     implementation "com.google.android.gms:play-services-drive:17.0.0"
     api('com.google.api-client:google-api-client-android:1.26.0') {
@@ -131,7 +134,6 @@ dependencies {
     api 'com.google.http-client:google-http-client-gson:1.26.0'
     implementation 'com.google.guava:guava:27.0.1-android'
 
-    implementation 'pub.devrel:easypermissions:3.0.0'
 
     implementation 'com.dropbox.core:dropbox-core-sdk:5.4.4'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-alpha01"

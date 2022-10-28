@@ -1,4 +1,4 @@
-package com.cocna.pdffilereader.ui.drive.adapter
+package com.cocna.pdffilereader.ui.drive
 
 import android.content.Intent
 import android.os.Environment
@@ -16,13 +16,17 @@ import com.dropbox.core.v2.files.ListFolderResult
 import com.dropbox.core.v2.files.Metadata
 import com.google.gson.Gson
 import androidx.lifecycle.lifecycleScope
+import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
+import com.cocna.pdffilereader.ui.drive.adapter.DriveModel
+import com.cocna.pdffilereader.ui.drive.adapter.DropBoxAdapter
 import com.cocna.pdffilereader.ui.drive.dropbox.*
 import com.cocna.pdffilereader.ui.home.PdfViewActivity
 import com.dropbox.core.InvalidAccessTokenException
 import com.dropbox.core.v2.files.FileMetadata
 import com.dropbox.core.v2.files.FolderMetadata
 import kotlinx.coroutines.launch
+import java.io.File
 
 
 /**
@@ -42,15 +46,20 @@ class DropBoxFragment : BaseFragment<FragmentDropBoxBinding>() {
     private var ggDriveAdapter: DropBoxAdapter? = null
     private val lstDataDropBox = MutableLiveData<ArrayList<FileMetadata>>()
     private var isAuthentDropBox = false
+    private var mProgressDialogLoadingData: ProgressDialogLoadingData? = null
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentDropBoxBinding
         get() = FragmentDropBoxBinding::inflate
 
     override fun initData() {
+        binding.ttToolbarDropbox.text = getString(R.string.vl_dropbox)
+        getBaseActivity()?.let {
+            mProgressDialogLoadingData = ProgressDialogLoadingData(it)
+        }
         ggDriveAdapter = DropBoxAdapter(getBaseActivity(), java.util.ArrayList(), object : DropBoxAdapter.OnItemClickListener {
             override fun onClickItem(documentFile: FileMetadata) {
                 val strFileData = fileSaveLocation + documentFile.name
-                val fileData = java.io.File(strFileData)
+                val fileData = File(strFileData)
                 if (fileData.exists()) {
                     val intent = Intent(getBaseActivity(), PdfViewActivity::class.java)
                     intent.putExtra(AppKeys.KEY_BUNDLE_SHORTCUT_NAME, documentFile.name)
@@ -66,16 +75,19 @@ class DropBoxFragment : BaseFragment<FragmentDropBoxBinding>() {
             layoutManager = LinearLayoutManager(getBaseActivity())
             adapter = ggDriveAdapter
         }
-        binding.prbLoadingDropbox.visible()
+//        binding.prbLoadingDropbox.visible()
         lstDataDropBox.observe(this, Observer {
             if (isVisible) {
-                binding.prbLoadingDropbox.gone()
+//                binding.prbLoadingDropbox.gone()
+                mProgressDialogLoadingData?.dismiss()
                 ggDriveAdapter?.updateData(it)
             }
         })
         isAuthentDropBox = isAuthenticated()
         if (isAuthentDropBox) {
+
             dropboxApiWrapper.dropboxClient.let {
+                mProgressDialogLoadingData?.show()
                 getAllFile()
             }
         } else {
@@ -108,11 +120,15 @@ class DropBoxFragment : BaseFragment<FragmentDropBoxBinding>() {
         }
     }
 
-    protected fun isAuthenticated(): Boolean {
+    private fun isAuthenticated(): Boolean {
         return dropboxCredentialUtil.isAuthenticated()
     }
 
     override fun initEvents() {
+        binding.imvBackDropBox.setOnClickListener {
+            MultiClickPreventer.preventMultiClick(it)
+            getBaseActivity()?.finish()
+        }
     }
 
     private fun getAllFile() {
@@ -205,9 +221,9 @@ class DropBoxFragment : BaseFragment<FragmentDropBoxBinding>() {
                         }
 
                     }
-                    if (isVisible) {
-                        binding.prbLoadingDropbox.gone()
-                    }
+//                    if (isVisible) {
+//                        binding.prbLoadingDropbox.gone()
+//                    }
                 } else if (it is GetFilesResponse.Success) {
                     val lstData = ArrayList<FileMetadata>()
                     val result = it.result
@@ -323,7 +339,8 @@ class DropBoxFragment : BaseFragment<FragmentDropBoxBinding>() {
                     getBaseActivity()?.let {
                         if (isVisible) {
                             Logger.showToast(it, "Failed to get account details." + apiResult.e.message)
-                            binding.prbLoadingDropbox.gone()
+//                            binding.prbLoadingDropbox.gone()
+                            mProgressDialogLoadingData?.dismiss()
                         }
                     }
                     apiResult.e

@@ -148,9 +148,15 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
             MultiClickPreventer.preventMultiClick(it)
             requestPermission()
         }
-        binding.btnGoogleDrive.setOnClickListener {
+        binding.llGoogleDrive.setOnClickListener {
             MultiClickPreventer.preventMultiClick(it)
             getBaseActivity()?.onNextScreen(GoogleDriveActivity::class.java, null, false)
+        }
+        binding.llDropbox.setOnClickListener {
+            MultiClickPreventer.preventMultiClick(it)
+            val bundle = Bundle()
+            bundle.putString(AppKeys.KEY_BUNDLE_SCREEN, AppConfig.TYPE_SCREEN_DROPBOX)
+            getBaseActivity()?.onNextScreen(GoogleDriveActivity::class.java, bundle, false)
         }
 
     }
