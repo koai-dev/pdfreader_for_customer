@@ -119,6 +119,38 @@
     <string name="vl_last_modified">Last modified</string>
     <string name="vl_accessed">Accessed: %s</string>
     <string name="msg_add_shortcut_success">File added to HomeScreen successfully</string>
+    <string name="vl_size_image">%d Image</string>
+    <string name="btn_menu_rotate">Rotate</string>
+    <string name="tt_tool">Tools</string>
+    <string name="tt_scan_document">Scan Document</string>
+    <string name="tt_image_to_pdf">Images to PDF</string>
+    <string name="msg_coming_soon">Coming soon</string>
+    <string name="tt_select_photo">Select Photo</string>
+    <string name="btn_add_image">Add Image</string>
+    <string name="btn_add_image_num">Add Image (%d)</string>
+    <string name="msg_swipe_edit_image">Swipe to edit the other images</string>
+    <string name="tt_save_file">Save file</string>
+    <string name="tt_open_file">Open file</string>
+    <string name="tt_back_to_home">Back to Home</string>
+    <string name="tt_result_success">Convert successfully</string>
+    <string name="tt_add">Add</string>
+    <string name="imagepicker_action_ok">OK</string>
+    <string name="imagepicker_action_done">DONE</string>
+    <string name="imagepicker_action_cancel">CANCEL</string>
+    <string name="imagepicker_title_folder">Albums</string>
+    <string name="imagepicker_title_image">Photos</string>
+    <string name="imagepicker_text_gif">GIF</string>
+    <string name="imagepicker_error_no_camera">No camera found.</string>
+    <string name="imagepicker_error_open_camera">Could not open camera.</string>
+    <string name="imagepicker_msg_no_images">No image available.</string>
+    <string name="imagepicker_msg_no_external_storage_permission">To continue, please allow app to access photos and media on this device.</string>
+    <string name="imagepicker_msg_limit_images">Limit selection to %d images.</string>
+    <string name="vl_next">Next</string>
+    <string name="vl_multiple_page">Multiple Page</string>
+    <string name="vl_single_page">Single Page</string>
+    <string name="msg_no_app_share_file">No app to share file. Please install at least one</string>
+    <string name="msg_create_shortcut_fail">Create shortcut fail</string>
+    <string name="txt_click_to_exit">Click again to exit</string>
 
 
 </resources>

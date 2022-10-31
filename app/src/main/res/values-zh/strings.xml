@@ -106,5 +106,37 @@
     <string name="vl_last_modified">最后修改</string>
     <string name="vl_accessed">已访问：%s</string>
     <string name="msg_add_shortcut_success">文件已成功添加到 HomeScreen</string>
+    <string name="vl_size_image">%d 图片</string>
+    <string name="btn_menu_rotate">旋转</string>
+    <string name="tt_tool">工具</string>
+    <string name="tt_scan_document">扫描文档</string>
+    <string name="tt_image_to_pdf">图像转PDF</string>
+    <string name="msg_coming_soon">快来了</string>
+    <string name="tt_select_photo">选择照片</string>
+    <string name="btn_add_image">添加图片</string>
+    <string name="btn_add_image_num">添加图像 (%d)</string>
+    <string name="msg_swipe_edit_image">滑动编辑其他图片</string>
+    <string name="tt_save_file">保存存档</string>
+    <string name="tt_open_file">打开文件</string>
+    <string name="tt_back_to_home">返回首页</string>
+    <string name="tt_result_success">转换成功</string>
+    <string name="tt_add">添加</string>
+    <string name="imagepicker_action_ok">好的</string>
+    <string name="imagepicker_action_done">完毕</string>
+    <string name="imagepicker_action_cancel">取消</string>
+    <string name="imagepicker_title_folder">相册</string>
+    <string name="imagepicker_title_image">相片</string>
+    <string name="imagepicker_text_gif">动图</string>
+    <string name="imagepicker_error_no_camera">没有找到相机。</string>
+    <string name="imagepicker_error_open_camera">无法打开相机。</string>
+    <string name="imagepicker_msg_no_images">没有可用的图像。</string>
+    <string name="imagepicker_msg_no_external_storage_permission">要继续，请允许应用访问此设备上的照片和媒体。</string>
+    <string name="imagepicker_msg_limit_images">将选择限制为 %d 个图像。</string>
+    <string name="vl_next">下一个</string>
+    <string name="vl_multiple_page">多页</string>
+    <string name="vl_single_page">单页</string>
+    <string name="msg_no_app_share_file">没有应用程序来共享文件。 请至少安装一个</string>
+    <string name="msg_create_shortcut_fail">创建快捷方式失败</string>
+    <string name="txt_click_to_exit">再次点击退出</string>
 
 </resources>

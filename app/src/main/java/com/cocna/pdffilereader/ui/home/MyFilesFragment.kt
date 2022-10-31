@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.documentfile.provider.DocumentFile
 import androidx.viewpager.widget.ViewPager
 import com.anggrayudi.storage.file.*
+import com.cocna.pdffilereader.MainActivity
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.FragmentMyFilesBinding
@@ -135,6 +136,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                 if (tab?.position == 1) {
                     getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_HISTORY_SCREEN, AppConfig.KEY_EVENT_FB_HISTORY_SCREEN)
                 }
+                gotoHideNativeAdsExit()
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -151,6 +153,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                 if (PermissionUtil.checkExternalStoragePermission(this)) {
                     getAllFilePdf(false)
                 }
+                gotoHideNativeAdsExit()
             }
         }
     }
@@ -167,6 +170,7 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                 }
                 myFileDetailFragment?.changeTypeViewAdapter(isViewType)
                 historyFragment?.changeTypeViewAdapter(isViewType)
+                gotoHideNativeAdsExit()
             }
             R.id.imv_filter_file -> {
                 val lstRecent = getBaseActivity()?.sharedPreferences?.getRecentFile()
@@ -228,9 +232,11 @@ class MyFilesFragment : BaseFragment<FragmentMyFilesBinding>(), View.OnClickList
                     }
 
                 })
+                gotoHideNativeAdsExit()
             }
             R.id.btn_go_to_setting -> {
                 requestPermission()
+                gotoHideNativeAdsExit()
             }
         }
     }

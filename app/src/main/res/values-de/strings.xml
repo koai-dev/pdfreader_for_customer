@@ -106,5 +106,37 @@
     <string name="vl_last_modified">Zuletzt bearbeitet</string>
     <string name="vl_accessed">Zugriff: %s</string>
     <string name="msg_add_shortcut_success">Datei erfolgreich zum Startbildschirm hinzugefügt</string>
+    <string name="vl_size_image">%d Bild</string>
+    <string name="btn_menu_rotate">Drehen</string>
+    <string name="tt_tool">Werkzeug</string>
+    <string name="tt_scan_document">Dokument scannen</string>
+    <string name="tt_image_to_pdf">Bilder in PDF</string>
+    <string name="msg_coming_soon">Demnächst</string>
+    <string name="tt_select_photo">Wählen Sie Foto aus</string>
+    <string name="btn_add_image">Bild hinzufügen</string>
+    <string name="btn_add_image_num">Bild hinzufügen (%d)</string>
+    <string name="msg_swipe_edit_image">Streichen Sie, um die anderen Bilder zu bearbeiten</string>
+    <string name="tt_save_file">Datei speichern</string>
+    <string name="tt_open_file">Datei öffnen</string>
+    <string name="tt_back_to_home">Zurück nach Hause</string>
+    <string name="tt_result_success">Konvertieren Sie erfolgreich</string>
+    <string name="tt_add">Hinzufügen</string>
+    <string name="imagepicker_action_ok">OK</string>
+    <string name="imagepicker_action_done">ERLEDIGT</string>
+    <string name="imagepicker_action_cancel">ABBRECHEN</string>
+    <string name="imagepicker_title_folder">Alben</string>
+    <string name="imagepicker_title_image">Fotos</string>
+    <string name="imagepicker_text_gif">GIF</string>
+    <string name="imagepicker_error_no_camera">Keine Kamera gefunden.</string>
+    <string name="imagepicker_error_open_camera">Kamera konnte nicht geöffnet werden.</string>
+    <string name="imagepicker_msg_no_images">Kein Bild verfügbar.</string>
+    <string name="imagepicker_msg_no_external_storage_permission">Um fortzufahren, erlaube der App bitte, auf Fotos und Medien auf diesem Gerät zuzugreifen.</string>
+    <string name="imagepicker_msg_limit_images">Auswahl auf %d Bilder beschränken.</string>
+    <string name="vl_next">Nächste</string>
+    <string name="vl_multiple_page">Mehrere Seiten</string>
+    <string name="vl_single_page">Einzelne Seite</string>
+    <string name="msg_no_app_share_file">Keine App zum Teilen von Dateien. Bitte installieren Sie mindestens eine</string>
+    <string name="msg_create_shortcut_fail">Verknüpfung erstellen fehlgeschlagen</string>
+    <string name="txt_click_to_exit">Klicken Sie erneut, um zu beenden</string>
 
 </resources>

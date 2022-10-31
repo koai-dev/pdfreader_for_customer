@@ -106,5 +106,37 @@
     <string name="vl_last_modified">Terakhir diubah</string>
     <string name="vl_accessed">Diakses: %s</string>
     <string name="msg_add_shortcut_success">File berhasil ditambahkan ke Layar Beranda</string>
+    <string name="vl_size_image">%d Gambar</string>
+    <string name="btn_menu_rotate">Memutar</string>
+    <string name="tt_tool">Peralatan</string>
+    <string name="tt_scan_document">Pindai Dokumen</string>
+    <string name="tt_image_to_pdf">Gambar ke PDF</string>
+    <string name="msg_coming_soon">Segera</string>
+    <string name="tt_select_photo">Pilih Foto</string>
+    <string name="btn_add_image">Menambahkan gambar</string>
+    <string name="btn_add_image_num">Tambahkan Gambar (%d)</string>
+    <string name="msg_swipe_edit_image">Geser untuk mengedit gambar lainnya</string>
+    <string name="tt_save_file">Menyimpan file</string>
+    <string name="tt_open_file">Membuka file</string>
+    <string name="tt_back_to_home">Kembali ke rumah</string>
+    <string name="tt_result_success">Konversikan dengan sukses</string>
+    <string name="tt_add">Menambahkan</string>
+    <string name="imagepicker_action_ok">Oke</string>
+    <string name="imagepicker_action_done">SELESAI</string>
+    <string name="imagepicker_action_cancel">MEMBATALKAN</string>
+    <string name="imagepicker_title_folder">Album</string>
+    <string name="imagepicker_title_image">Foto</string>
+    <string name="imagepicker_text_gif">GIF</string>
+    <string name="imagepicker_error_no_camera">Tidak ada kamera yang ditemukan.</string>
+    <string name="imagepicker_error_open_camera">Tidak dapat membuka kamera.</string>
+    <string name="imagepicker_msg_no_images">Tidak ada gambar yang tersedia.</string>
+    <string name="imagepicker_msg_no_external_storage_permission">Untuk melanjutkan, izinkan aplikasi mengakses foto dan media di perangkat ini.</string>
+    <string name="imagepicker_msg_limit_images">Batasi pilihan ke %d gambar.</string>
+    <string name="vl_next">Lanjut</string>
+    <string name="vl_multiple_page">Banyak Halaman</string>
+    <string name="vl_single_page">Halaman tunggal</string>
+    <string name="msg_no_app_share_file">Tidak ada aplikasi untuk berbagi file. Silakan instal setidaknya satu</string>
+    <string name="msg_create_shortcut_fail">Buat pintasan gagal</string>
+    <string name="txt_click_to_exit">Klik lagi untuk keluar</string>
 
 </resources>

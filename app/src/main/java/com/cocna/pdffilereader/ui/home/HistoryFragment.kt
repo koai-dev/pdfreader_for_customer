@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.cocna.pdffilereader.MainActivity
 import com.google.gson.Gson
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
@@ -32,6 +33,7 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
     private var rxBusDisposable: Disposable? = null
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentHistoryBinding = FragmentHistoryBinding::inflate
+
     companion object {
         private var mOnCallbackTittleTab: OnCallbackTittleTab? = null
         fun newInstance(onCallbackTittleTab: OnCallbackTittleTab?): HistoryFragment {
@@ -78,22 +80,24 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
 //            }
 //        }
     }
-@Suppress("DEPRECATION")
-private fun setBackgroundColor(isEmpty: Boolean){
-    if(isEmpty){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            binding.llHistory.setBackgroundColor(resources.getColor(R.color.color_bg_menu, getBaseActivity()?.theme))
-        }else{
-            binding.llHistory.setBackgroundColor(resources.getColor(R.color.color_bg_menu))
-        }
-    }else{
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            binding.llHistory.setBackgroundColor(resources.getColor(R.color.color_bg, getBaseActivity()?.theme))
-        }else{
-            binding.llHistory.setBackgroundColor(resources.getColor(R.color.color_bg))
+
+    @Suppress("DEPRECATION")
+    private fun setBackgroundColor(isEmpty: Boolean) {
+        if (isEmpty) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                binding.llHistory.setBackgroundColor(resources.getColor(R.color.color_bg_menu, getBaseActivity()?.theme))
+            } else {
+                binding.llHistory.setBackgroundColor(resources.getColor(R.color.color_bg_menu))
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                binding.llHistory.setBackgroundColor(resources.getColor(R.color.color_bg, getBaseActivity()?.theme))
+            } else {
+                binding.llHistory.setBackgroundColor(resources.getColor(R.color.color_bg))
+            }
         }
     }
-}
+
     private fun setupRecycleView() {
         val lstRecent = getBaseActivity()?.sharedPreferences?.getRecentFile()
         Logger.showLog("Thuytv------lstRecent: " + Gson().toJson(lstRecent))
@@ -106,15 +110,17 @@ private fun setBackgroundColor(isEmpty: Boolean){
             binding.rcvRecentFile.visible()
             setBackgroundColor(false)
         }
-        mRecentAdapter = MyFilesAdapter(context, lstRecent ?: ArrayList(), 0,AppConfig.TYPE_FILTER_FILE, object : MyFilesAdapter.OnItemClickListener {
+        mRecentAdapter = MyFilesAdapter(context, lstRecent ?: ArrayList(), 0, AppConfig.TYPE_FILTER_FILE, object : MyFilesAdapter.OnItemClickListener {
             override fun onClickItem(documentFile: MyFilesModel) {
                 val bundle = Bundle()
                 bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, documentFile)
                 getBaseActivity()?.onNextScreen(PdfViewActivity::class.java, bundle, false)
+                gotoHideNativeAdsExit()
             }
 
             override fun onClickItemMore(view: View, documentFile: MyFilesModel) {
                 showPopupItemRecentMore(view, documentFile)
+                gotoHideNativeAdsExit()
             }
         })
         if (getBaseActivity()?.sharedPreferences?.getValueBoolean(SharePreferenceUtils.KEY_TYPE_VIEW_FILE) == true) {
@@ -221,27 +227,27 @@ private fun setBackgroundColor(isEmpty: Boolean){
 
                             }).show()
                         }
-                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_RENAME_FILE,AppConfig.KEY_EVENT_FB_RENAME_FILE)
+                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_RENAME_FILE, AppConfig.KEY_EVENT_FB_RENAME_FILE)
                     }
                     R.id.menu_favorite -> {
                         getBaseActivity()?.sharedPreferences?.setFavoriteFile(myFileModel)
                         RxBus.publish(EventsBus.RELOAD_FAVORITE)
-                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_FILE,AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_BOOKMARK)
+                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_FILE, AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_BOOKMARK)
                     }
                     R.id.menu_un_favorite -> {
                         getBaseActivity()?.sharedPreferences?.removeFavoriteFile(myFileModel)
                         RxBus.publish(EventsBus.RELOAD_FAVORITE)
-                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_FILE,AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_UN_BOOKMARK)
+                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_BOOKMARK_FILE, AppConfig.KEY_PARAM_FB_STATUS, AppConfig.KEY_FB_UN_BOOKMARK)
                     }
                     R.id.menu_share -> {
                         myFileModel.uriPath?.let { File(it) }?.let { shareFile(it) }
-                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_SHARE_FILE,AppConfig.KEY_EVENT_FB_SHARE_FILE)
+                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_SHARE_FILE, AppConfig.KEY_EVENT_FB_SHARE_FILE)
                     }
                     R.id.menu_delete -> {
                         getBaseActivity()?.apply {
                             val deleteFileDialog = DeleteFileDialog(this, myFileModel, object : OnDialogItemClickListener {
                                 override fun onClickItemConfirm(mData: MyFilesModel) {
-                                    getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_DELETE_FILE,AppConfig.KEY_EVENT_FB_DELETE_FILE)
+                                    getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_DELETE_FILE, AppConfig.KEY_EVENT_FB_DELETE_FILE)
                                 }
 
                             })
@@ -252,7 +258,7 @@ private fun setBackgroundColor(isEmpty: Boolean){
                         getBaseActivity()?.apply {
                             setUpShortCut(this, myFileModel)
                         }
-                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_SHORTCUT_FILE,AppConfig.KEY_EVENT_FB_SHORTCUT_FILE)
+                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_FB_SHORTCUT_FILE, AppConfig.KEY_EVENT_FB_SHORTCUT_FILE)
                     }
                     R.id.menu_file_info -> {
                         getBaseActivity()?.apply {

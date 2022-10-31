@@ -7,12 +7,12 @@ import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.DisplayMetrics
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.cocna.pdffilereader.MainActivity
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.FragmentMainBinding
@@ -24,6 +24,7 @@ import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.home.dialog.BottomSheetToolsPdf
 import com.cocna.pdffilereader.ui.home.dialog.RatingAppDialog
 import com.cocna.pdffilereader.ui.home.model.AdsLogModel
+import com.cocna.pdffilereader.ui.scan.ScanCameraActivity
 import com.google.android.gms.ads.*
 import com.google.android.material.navigation.NavigationBarView
 import com.tom_roush.pdfbox.pdmodel.PDDocument
@@ -54,32 +55,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     private var initialLayoutComplete = false
     private val lstImageSelected = ArrayList<Image>()
 
-    // Determine the screen width (less decorations) to use for the ad width.
-    // If the ad hasn't been laid out, default to the full screen width.
-    private val adSize: AdSize
-        get() {
-            if (isVisible) {
-                val display = getBaseActivity()?.windowManager?.defaultDisplay
-                val outMetrics = DisplayMetrics()
-                display?.getMetrics(outMetrics)
-
-                val density = outMetrics.density
-
-                var adWidthPixels = binding.adViewContainer.width.toFloat()
-                if (adWidthPixels == 0f) {
-                    adWidthPixels = outMetrics.widthPixels.toFloat()
-                }
-
-                val adWidth = (adWidthPixels / density).toInt()
-                return if (getBaseActivity() != null) {
-                    AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getBaseActivity()!!, adWidth)
-                } else {
-                    AdSize.BANNER
-                }
-            } else {
-                return AdSize.BANNER
-            }
-        }
 
     override fun initData() {
         myFilesFragment = MyFilesFragment()
@@ -173,30 +148,48 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             }
 
             override fun afterTextChanged(strData: Editable?) {
-                if (R.id.navigation_my_file == idViewSelected) {
-                    myFilesFragment.onSearchFile(strData?.toString() ?: "")
-                } else if (R.id.navigation_favorite == idViewSelected) {
-                    favoriteFragment.onSearchFileFavorite(strData?.toString() ?: "")
-                } else if (R.id.navigation_browse == idViewSelected) {
-                    browseFragment.onSearchFolder(strData?.toString() ?: "")
-                }
+                onSearchFile(strData?.toString() ?: "")
             }
 
         })
+//        binding.edtSearchAll.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+//            override fun onEditorAction(p0: TextView?, actionId: Int, p2: KeyEvent?): Boolean {
+//                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH) {
+//                    onSearchFile(binding.edtSearchAll.text?.toString() ?: "")
+//                    return true
+//                }
+//                return false
+//            }
+//        })
 
         binding.btnToolsPdf.setOnClickListener {
             MultiClickPreventer.preventMultiClick(it)
-            getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_TOOL_CLICK,AppConfig.KEY_EVENT_TOOL_CLICK )
+            getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_TOOL_CLICK, AppConfig.KEY_EVENT_TOOL_CLICK)
             getBaseActivity()?.let {
                 BottomSheetToolsPdf(it, object : BottomSheetToolsPdf.OnItemClickToolsPdf {
                     override fun onItemClickImageToPdf() {
-                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_TOOL_IMGTOPDF_CLICK,AppConfig.KEY_EVENT_TOOL_IMGTOPDF_CLICK )
+                        getBaseActivity()?.logEventFirebase(AppConfig.KEY_EVENT_TOOL_IMGTOPDF_CLICK, AppConfig.KEY_EVENT_TOOL_IMGTOPDF_CLICK)
                         lstImageSelected.clear()
                         selectImage()
+                    }
+
+                    override fun onItemClickScan() {
+                        getBaseActivity()?.onNextScreen(ScanCameraActivity::class.java, null, false)
                     }
                 }).show(childFragmentManager, "TOOLS_PDF")
             }
         }
+    }
+
+    private fun onSearchFile(strSearch: String) {
+        if (R.id.navigation_my_file == idViewSelected) {
+            myFilesFragment.onSearchFile(strSearch)
+        } else if (R.id.navigation_favorite == idViewSelected) {
+            favoriteFragment.onSearchFileFavorite(strSearch)
+        } else if (R.id.navigation_browse == idViewSelected) {
+            browseFragment.onSearchFolder(strSearch)
+        }
+        (activity as? MainActivity)?.hideNativeAdsExit()
     }
 
     private fun loadFragment(fragment: Fragment) {
@@ -211,7 +204,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     private fun loadBannerAds() {
         adView.adUnitId = AppConfig.ID_ADS_BANNER_MAIN
-        adView.setAdSize(adSize)
+        adView.setAdSize(getAdSize(binding.adViewContainer))
 
         // Create an ad request.
         val adRequest = AdRequest.Builder().build()

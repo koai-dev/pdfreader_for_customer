@@ -30,5 +30,7 @@ data class AdsModelConfig(
     @field:SerializedName("ads_open_resume")
     var ads_open_resume: Boolean = true,
     @field:SerializedName("ads_inter_back_file")
-    var ads_inter_back_file: Boolean = true
+    var ads_inter_back_file: Boolean = true,
+    @field:SerializedName("ads_native_exit")
+    var ads_native_exit: Boolean = true
 )

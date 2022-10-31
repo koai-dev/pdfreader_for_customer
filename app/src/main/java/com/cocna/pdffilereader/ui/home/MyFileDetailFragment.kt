@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.cocna.pdffilereader.MainActivity
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.databinding.FragmentMyFileDetailBinding
@@ -198,6 +199,7 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                         bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, documentFile)
                         getBaseActivity()?.onNextScreen(PdfViewActivity::class.java, bundle, false)
                         RxBus.publish(EventsBus.RELOAD_RECENT)
+                        gotoHideNativeAdsExit()
                     }
 
                     override fun onClickItemMore(view: View, documentFile: MyFilesModel) {
@@ -258,6 +260,7 @@ class MyFileDetailFragment : BaseFragment<FragmentMyFileDetailBinding>(), View.O
                             }
 
                         })
+                        gotoHideNativeAdsExit()
                     }
                 })
             if (sharePreferenceUtils.getValueBoolean(SharePreferenceUtils.KEY_TYPE_VIEW_FILE) == true) {

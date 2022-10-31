@@ -45,10 +45,12 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>() {
                 val bundle = Bundle()
                 bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, documentFile)
                 getBaseActivity()?.onNextScreen(PdfViewActivity::class.java, bundle, false)
+                gotoHideNativeAdsExit()
             }
 
             override fun onClickItemMore(view: View, documentFile: MyFilesModel) {
                 showPopupItemFavoriteMore(view, documentFile)
+                gotoHideNativeAdsExit()
             }
 
         })
@@ -74,6 +76,7 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>() {
         binding.imvTypeAdapter.setOnClickListener {
             MultiClickPreventer.preventMultiClick(it)
             changeTypeViewAdapter()
+            gotoHideNativeAdsExit()
         }
     }
 

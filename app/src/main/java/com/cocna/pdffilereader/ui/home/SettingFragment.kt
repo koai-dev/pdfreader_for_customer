@@ -33,17 +33,21 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(), View.OnClickList
         when (v?.id) {
             R.id.llSettingLanguage -> {
                 getBaseActivity()?.onNextScreen(LanguageActivity::class.java, null, false)
+                gotoHideNativeAdsExit()
             }
             R.id.llSettingTheme -> {
                 getBaseActivity()?.onNextScreen(ChangeThemeActivity::class.java, null, false)
+                gotoHideNativeAdsExit()
             }
             R.id.llSettingShare -> {
                 shareApplication()
+                gotoHideNativeAdsExit()
             }
             R.id.llSettingRate -> {
                 getBaseActivity()?.apply {
                     RatingAppDialog(this, false).show()
                 }
+                gotoHideNativeAdsExit()
             }
             R.id.llSettingTerm -> {
                 getBaseActivity()?.onNextScreen(PrivatePolicyFragment::class.java, null, false)

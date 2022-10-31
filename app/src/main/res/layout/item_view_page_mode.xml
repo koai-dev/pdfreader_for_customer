@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llItemMyFile"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/margin_small"
+    android:paddingBottom="@dimen/margin_double_all">
+
+    <TextView
+        android:id="@+id/vlItemName"
+        style="@style/Text_Content_All"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        android:paddingStart="@dimen/margin_all"
+        android:paddingEnd="@dimen/margin_all"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view_item_selected"
+        android:layout_width="@dimen/margin_all"
+        android:layout_height="@dimen/dp2"
+        android:background="@color/text_color_all"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@id/vlItemName"
+        app:layout_constraintStart_toStartOf="@id/vlItemName"
+        app:layout_constraintTop_toBottomOf="@id/vlItemName" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

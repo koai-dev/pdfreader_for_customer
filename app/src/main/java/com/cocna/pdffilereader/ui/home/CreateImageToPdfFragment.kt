@@ -28,7 +28,12 @@ import com.cocna.pdffilereader.ui.base.BaseFragment
 import com.cocna.pdffilereader.ui.home.adapter.ViewPagerRecyclerAdapter
 import com.cocna.pdffilereader.ui.home.dialog.DeleteImageDialog
 import com.cocna.pdffilereader.ui.home.dialog.SaveFilePdfDialog
+import com.cocna.pdffilereader.ui.home.model.AdsLogModel
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.LoadAdError
 import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.pdmodel.PDPage
 import com.tom_roush.pdfbox.pdmodel.PDPageContentStream
@@ -53,6 +58,8 @@ class CreateImageToPdfFragment : BaseFragment<FragmentCreatePdfFromImageBinding>
     lateinit var viewPagerAdapter: ViewPagerRecyclerAdapter
     private var isCropClick = false
     private var totalImage = 0
+    private lateinit var adView: AdView
+    private var initialLayoutComplete = false
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCreatePdfFromImageBinding
         get() = FragmentCreatePdfFromImageBinding::inflate
@@ -71,6 +78,16 @@ class CreateImageToPdfFragment : BaseFragment<FragmentCreatePdfFromImageBinding>
         }
         binding.ttToolbarPdf.text = Common.getDateCreatePdf()
 //        binding.viewPagerImage.beginFakeDrag()
+        getBaseActivity()?.apply {
+            adView = AdView(this)
+            binding.adViewContainer.addView(adView)
+            binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
+                if (!initialLayoutComplete) {
+                    initialLayoutComplete = true
+                    loadBannerAds()
+                }
+            }
+        }
     }
 
     override fun initEvents() {
@@ -295,6 +312,7 @@ class CreateImageToPdfFragment : BaseFragment<FragmentCreatePdfFromImageBinding>
                 uriSaveFile = lstImageSelected?.get(0)?.uri
             )
         } catch (e: Exception) {
+            e.printStackTrace()
             Toast.makeText(getBaseActivity(), "Save Image Fail", Toast.LENGTH_LONG).show()
         }
         return null
@@ -340,5 +358,47 @@ class CreateImageToPdfFragment : BaseFragment<FragmentCreatePdfFromImageBinding>
         val width = (ratio * realImage.width).roundToInt()
         val height = (ratio * realImage.height).roundToInt()
         return Bitmap.createScaledBitmap(realImage, width, height, filter)
+    }
+
+    override fun onPause() {
+        adView.pause()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        adView.resume()
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        adView.destroy()
+        super.onDestroy()
+    }
+
+    private fun loadBannerAds() {
+        adView.adUnitId = AppConfig.ID_ADS_BANNER_EDIT_SCAN
+        adView.setAdSize(getAdSize(binding.adViewContainer))
+
+        // Create an ad request.
+        val adRequest = AdRequest.Builder().build()
+
+        // Start loading the ad in the background.
+        adView.loadAd(adRequest)
+        adView.adListener = object : AdListener() {
+            override fun onAdFailedToLoad(loadAdsError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdsError)
+                getBaseActivity()?.setLogDataToFirebase(
+                    AdsLogModel(
+                        adsId = AppConfig.ID_ADS_BANNER_EDIT_SCAN, adsName = "Ads Banner Edit Scan", message = loadAdsError.message,
+                        deviceName = Common.getDeviceName(getBaseActivity())
+                    )
+                )
+            }
+
+            override fun onAdLoaded() {
+                Common.setEventAdsBanner(AppConfig.ID_ADS_BANNER_EDIT_SCAN)
+            }
+        }
+
     }
 }

@@ -105,5 +105,37 @@
     <string name="vl_last_modified">Laatst gewijzigd</string>
     <string name="vl_accessed">Betreden: %s</string>
     <string name="msg_add_shortcut_success">Bestand succesvol toegevoegd aan HomeScreen</string>
+    <string name="vl_size_image">%d Afbeelding</string>
+    <string name="btn_menu_rotate">Draaien</string>
+    <string name="tt_tool">Hulpmiddelen</string>
+    <string name="tt_scan_document">Document scannen</string>
+    <string name="tt_image_to_pdf">Afbeeldingen naar PDF</string>
+    <string name="msg_coming_soon">Binnenkort beschikbaar</string>
+    <string name="tt_select_photo">Selecteer foto</string>
+    <string name="btn_add_image">Voeg afbeelding toe</string>
+    <string name="btn_add_image_num">Afbeelding toevoegen (%d)</string>
+    <string name="msg_swipe_edit_image">Veeg om de andere afbeeldingen te bewerken</string>
+    <string name="tt_save_file">Sla bestand op</string>
+    <string name="tt_open_file">Open bestand</string>
+    <string name="tt_back_to_home">Terug naar huis</string>
+    <string name="tt_result_success">Succesvol converteren</string>
+    <string name="tt_add">Toevoegen</string>
+    <string name="imagepicker_action_ok">Oké</string>
+    <string name="imagepicker_action_done">GEDAAN</string>
+    <string name="imagepicker_action_cancel">ANNULEREN</string>
+    <string name="imagepicker_title_folder">Albums</string>
+    <string name="imagepicker_title_image">Foto\'s</string>
+    <string name="imagepicker_text_gif">GIF</string>
+    <string name="imagepicker_error_no_camera">Geen camera gevonden.</string>
+    <string name="imagepicker_error_open_camera">Kan camera niet openen.</string>
+    <string name="imagepicker_msg_no_images">Geen afbeelding beschikbaar.</string>
+    <string name="imagepicker_msg_no_external_storage_permission">Geef de app toegang tot foto\'s en media op dit apparaat om door te gaan.</string>
+    <string name="imagepicker_msg_limit_images">Beperk de selectie tot %d afbeeldingen.</string>
+    <string name="vl_next">Volgende</string>
+    <string name="vl_multiple_page">Meerdere pagina\'s</string>
+    <string name="vl_single_page">Enkele pagina</string>
+    <string name="msg_no_app_share_file">Geen app om bestand te delen. Installeer er ten minste één</string>
+    <string name="msg_create_shortcut_fail">Snelkoppeling maken mislukt</string>
+    <string name="txt_click_to_exit">Klik nogmaals om af te sluiten</string>
 
 </resources>

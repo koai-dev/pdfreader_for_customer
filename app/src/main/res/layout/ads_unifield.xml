@@ -127,6 +127,14 @@
                         android:layout_height="wrap_content"
                         android:gravity="center" />
                 </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_click_to_exit"
+                    style="@style/Button_Confirm_All"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_click_to_exit"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

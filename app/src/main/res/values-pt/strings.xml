@@ -105,5 +105,37 @@
     <string name="vl_last_modified">Última modificação</string>
     <string name="vl_accessed">Acessado: %s</string>
     <string name="msg_add_shortcut_success">Arquivo adicionado ao HomeScreen com sucesso</string>
+    <string name="vl_size_image">%d Imagem</string>
+    <string name="btn_menu_rotate">Girar</string>
+    <string name="tt_tool">Ferramentas</string>
+    <string name="tt_scan_document">Digitalizar documento</string>
+    <string name="tt_image_to_pdf">Imagens para PDF</string>
+    <string name="msg_coming_soon">Em breve</string>
+    <string name="tt_select_photo">Selecionar foto</string>
+    <string name="btn_add_image">Adicionar imagem</string>
+    <string name="btn_add_image_num">Adicionar imagem (%d)</string>
+    <string name="msg_swipe_edit_image">Deslize para editar as outras imagens</string>
+    <string name="tt_save_file">Salvar Arquivo</string>
+    <string name="tt_open_file">Abrir arquivo</string>
+    <string name="tt_back_to_home">Voltar para casa</string>
+    <string name="tt_result_success">Converter com sucesso</string>
+    <string name="tt_add">Adicionar</string>
+    <string name="imagepicker_action_ok">OK</string>
+    <string name="imagepicker_action_done">FEITO</string>
+    <string name="imagepicker_action_cancel">CANCELAR</string>
+    <string name="imagepicker_title_folder">Álbuns</string>
+    <string name="imagepicker_title_image">Fotos</string>
+    <string name="imagepicker_text_gif">GIF</string>
+    <string name="imagepicker_error_no_camera">Nenhuma câmera encontrada.</string>
+    <string name="imagepicker_error_open_camera">Não foi possível abrir a câmera.</string>
+    <string name="imagepicker_msg_no_images">Nenhuma imagem disponível.</string>
+    <string name="imagepicker_msg_no_external_storage_permission">Para continuar, permita que o aplicativo acesse fotos e mídia neste dispositivo.</string>
+    <string name="imagepicker_msg_limit_images">Limite a seleção a %d imagens.</string>
+    <string name="vl_next">Próximo</string>
+    <string name="vl_multiple_page">Várias páginas</string>
+    <string name="vl_single_page">Página Única</string>
+    <string name="msg_no_app_share_file">Nenhum aplicativo para compartilhar arquivo. Instale pelo menos um</string>
+    <string name="msg_create_shortcut_fail">Falha ao criar atalho</string>
+    <string name="txt_click_to_exit">Clique novamente para sair</string>
 
 </resources>

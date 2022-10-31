@@ -106,5 +106,37 @@
     <string name="vl_last_modified">最終更新日</string>
     <string name="vl_accessed">アクセス: %s</string>
     <string name="msg_add_shortcut_success">ファイルがホームスクリーンに正常に追加されました</string>
+    <string name="vl_size_image">%d 画像</string>
+    <string name="btn_menu_rotate">回転する</string>
+    <string name="tt_tool">ツール</string>
+    <string name="tt_scan_document">ドキュメントをスキャン</string>
+    <string name="tt_image_to_pdf">画像から PDF</string>
+    <string name="msg_coming_soon">近日公開</string>
+    <string name="tt_select_photo">写真を選択</string>
+    <string name="btn_add_image">画像を追加</string>
+    <string name="btn_add_image_num">画像を追加 (%d)</string>
+    <string name="msg_swipe_edit_image">スワイプして他の画像を編集</string>
+    <string name="tt_save_file">ファイルを保存</string>
+    <string name="tt_open_file">ファイルを開く</string>
+    <string name="tt_back_to_home">家に帰る</string>
+    <string name="tt_result_success">正常に変換</string>
+    <string name="tt_add">追加</string>
+    <string name="imagepicker_action_ok">わかった</string>
+    <string name="imagepicker_action_done">終わり</string>
+    <string name="imagepicker_action_cancel">キャンセル</string>
+    <string name="imagepicker_title_folder">アルバム</string>
+    <string name="imagepicker_title_image">写真</string>
+    <string name="imagepicker_text_gif">GIF</string>
+    <string name="imagepicker_error_no_camera">カメラが見つかりません。</string>
+    <string name="imagepicker_error_open_camera">カメラを開けませんでした。</string>
+    <string name="imagepicker_msg_no_images">使用可能なイメージはありません。</string>
+    <string name="imagepicker_msg_no_external_storage_permission">続行するには、このデバイスの写真とメディアへのアクセスをアプリに許可してください。</string>
+    <string name="imagepicker_msg_limit_images">選択を %d 画像に制限します。</string>
+    <string name="vl_next">次</string>
+    <string name="vl_multiple_page">複数ページ</string>
+    <string name="vl_single_page">シングルページ</string>
+    <string name="msg_no_app_share_file">ファイルを共有するアプリがありません。 少なくとも 1 つインストールしてください</string>
+    <string name="msg_create_shortcut_fail">ショートカットの作成に失敗しました</string>
+    <string name="txt_click_to_exit">もう一度クリックして終了します</string>
 
 </resources>

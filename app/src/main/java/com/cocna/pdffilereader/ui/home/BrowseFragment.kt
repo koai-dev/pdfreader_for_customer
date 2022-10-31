@@ -62,6 +62,7 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
                     bundle.putParcelable(AppKeys.KEY_BUNDLE_DATA, documentFile)
                     getBaseActivity()?.onNextScreen(PdfViewActivity::class.java, bundle, false)
                 }
+                gotoHideNativeAdsExit()
             }
 
             override fun onClickItemMore(view: View, documentFile: MyFilesModel) {
@@ -116,6 +117,7 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
                     }
 
                 })
+                gotoHideNativeAdsExit()
             }
 
         })
@@ -145,6 +147,7 @@ class BrowseFragment : BaseFragment<FragmentBrowseBinding>() {
         binding.btnGoToSetting.setOnClickListener {
             MultiClickPreventer.preventMultiClick(it)
             requestPermission()
+            gotoHideNativeAdsExit()
         }
 
     }

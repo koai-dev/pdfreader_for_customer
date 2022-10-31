@@ -11,19 +11,23 @@ import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.*
+import android.widget.FrameLayout
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.cocna.pdffilereader.MainActivity
 import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.common.*
 import com.cocna.pdffilereader.myinterface.OnPopupMenuItemClickListener
 import com.cocna.pdffilereader.ui.home.PdfViewActivity
 import com.cocna.pdffilereader.ui.home.SplashScreenActivity
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
+import com.google.android.gms.ads.AdSize
 import com.kochava.tracker.events.Event
 import com.kochava.tracker.events.EventType
 import io.reactivex.disposables.Disposable
@@ -287,5 +291,35 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         }
     }
 
+    // Determine the screen width (less decorations) to use for the ad width.
+    // If the ad hasn't been laid out, default to the full screen width.
+    fun getAdSize(adViewContainer: FrameLayout): AdSize {
+        if (isVisible) {
+            val display = getBaseActivity()?.windowManager?.defaultDisplay
+            val outMetrics = DisplayMetrics()
+            display?.getMetrics(outMetrics)
+
+            val density = outMetrics.density
+
+            var adWidthPixels = adViewContainer.width.toFloat()
+            if (adWidthPixels == 0f) {
+                adWidthPixels = outMetrics.widthPixels.toFloat()
+            }
+
+            val adWidth = (adWidthPixels / density).toInt()
+            return if (getBaseActivity() != null) {
+                AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getBaseActivity()!!, adWidth)
+            } else {
+                AdSize.BANNER
+            }
+        } else {
+            return AdSize.BANNER
+        }
+    }
+    fun gotoHideNativeAdsExit(){
+        if(isVisible) {
+            (activity as? MainActivity)?.hideNativeAdsExit()
+        }
+    }
 
 }

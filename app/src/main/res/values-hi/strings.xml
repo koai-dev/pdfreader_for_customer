@@ -106,5 +106,37 @@
     <string name="vl_last_modified">अंतिम बार संशोधित</string>
     <string name="vl_accessed">एक्सेस किया गया:%s</string>
     <string name="msg_add_shortcut_success">फ़ाइल को होमस्क्रीन में सफलतापूर्वक जोड़ा गया</string>
+    <string name="vl_size_image">%d छवि</string>
+    <string name="btn_menu_rotate">घुमाएँ</string>
+    <string name="tt_tool">औजार</string>
+    <string name="tt_scan_document">दस्तावेज़ स्कैन करें</string>
+    <string name="tt_image_to_pdf">पीडीएफ के लिए छवियां</string>
+    <string name="msg_coming_soon">जल्द आ रहा है</string>
+    <string name="tt_select_photo">फोटो का चयन करें</string>
+    <string name="btn_add_image">छवि जोड़ें</string>
+    <string name="btn_add_image_num">छवि जोड़ें (%d)</string>
+    <string name="msg_swipe_edit_image">अन्य छवियों को संपादित करने के लिए स्वाइप करें</string>
+    <string name="tt_save_file">फाइल सुरक्षित करें</string>
+    <string name="tt_open_file">खुली फाइल</string>
+    <string name="tt_back_to_home">घर वापिस जा रहा हूँ</string>
+    <string name="tt_result_success">सफलतापूर्वक रूपांतरित करें</string>
+    <string name="tt_add">जोड़ें</string>
+    <string name="imagepicker_action_ok">ठीक है</string>
+    <string name="imagepicker_action_done">किया हुआ</string>
+    <string name="imagepicker_action_cancel">रद्द करना</string>
+    <string name="imagepicker_title_folder">एलबम</string>
+    <string name="imagepicker_title_image">तस्वीरें</string>
+    <string name="imagepicker_text_gif">जीआईएफ</string>
+    <string name="imagepicker_error_no_camera">कोई कैमरा नहीं मिला।</string>
+    <string name="imagepicker_error_open_camera">कैमरा नहीं खोल सका.</string>
+    <string name="imagepicker_msg_no_images">कोई चित्र उपलब्ध नहीं।</string>
+    <string name="imagepicker_msg_no_external_storage_permission">जारी रखने के लिए, कृपया ऐप को इस डिवाइस पर फ़ोटो और मीडिया तक पहुंचने की अनुमति दें।</string>
+    <string name="imagepicker_msg_limit_images">चयन को %d छवियों तक सीमित करें।</string>
+    <string name="vl_next">अगला</string>
+    <string name="vl_multiple_page">एकाधिक पृष्ठ</string>
+    <string name="vl_single_page">एक पृष्ठ</string>
+    <string name="msg_no_app_share_file">फ़ाइल साझा करने के लिए कोई ऐप नहीं। कृपया कम से कम एक स्थापित करें</string>
+    <string name="msg_create_shortcut_fail">शॉर्टकट बनाएं विफल</string>
+    <string name="txt_click_to_exit">बाहर निकलने के लिए फिर से क्लिक करें</string>
 
 </resources>

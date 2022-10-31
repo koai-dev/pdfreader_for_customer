@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:focusable="true"
-    android:id="@+id/layout_container">
+    android:focusable="true">
+
+    <FrameLayout
+        android:id="@+id/layout_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <ProgressBar
         android:id="@+id/prbLoadingMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:visibility="gone"
-        android:layout_gravity="center"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <FrameLayout
+        android:id="@+id/ad_frame_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:minHeight="@dimen/height_ads_change_theme"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

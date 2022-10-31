@@ -45,7 +45,8 @@ class BottomSheetToolsPdf(private val mContent: Context, private val mOnItemClic
         binding.imvScanDocument.setOnClickListener {
             MultiClickPreventer.preventMultiClick(it)
             logEventFirebase(AppConfig.KEY_EVENT_TOOL_SCAN_CLICK, AppConfig.KEY_EVENT_TOOL_SCAN_CLICK)
-            Toast.makeText(mContent, mContent.getString(R.string.msg_coming_soon), Toast.LENGTH_SHORT).show()
+            mOnItemClickToolsPdf.onItemClickScan()
+            dismiss()
         }
         binding.imvImagesToPdf.setOnClickListener {
             MultiClickPreventer.preventMultiClick(it)
@@ -62,5 +63,6 @@ class BottomSheetToolsPdf(private val mContent: Context, private val mOnItemClic
 
     interface OnItemClickToolsPdf {
         fun onItemClickImageToPdf()
+        fun onItemClickScan()
     }
 }

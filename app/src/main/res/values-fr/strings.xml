@@ -105,5 +105,37 @@
     <string name="vl_last_modified">Dernière modification</string>
     <string name="vl_accessed">Accédé : %s</string>
     <string name="msg_add_shortcut_success">Fichier ajouté à HomeScreen avec succès</string>
+    <string name="vl_size_image">%d image</string>
+    <string name="btn_menu_rotate">Tourner</string>
+    <string name="tt_tool">Outils</string>
+    <string name="tt_scan_document">Numériser un document</string>
+    <string name="tt_image_to_pdf">Images au format PDF</string>
+    <string name="msg_coming_soon">Bientôt disponible</string>
+    <string name="tt_select_photo">Sélectionnez une photo</string>
+    <string name="btn_add_image">Ajouter une image</string>
+    <string name="btn_add_image_num">Ajouter une image (%d)</string>
+    <string name="msg_swipe_edit_image">Balayez pour éditer les autres images</string>
+    <string name="tt_save_file">Enregistrer le fichier</string>
+    <string name="tt_open_file">Fichier ouvert</string>
+    <string name="tt_back_to_home">De retour à la maison</string>
+    <string name="tt_result_success">Convertir avec succès</string>
+    <string name="tt_add">Ajouter</string>
+    <string name="imagepicker_action_ok">D\'ACCORD</string>
+    <string name="imagepicker_action_done">FINI</string>
+    <string name="imagepicker_action_cancel">ANNULER</string>
+    <string name="imagepicker_title_folder">Albums</string>
+    <string name="imagepicker_title_image">Photos</string>
+    <string name="imagepicker_text_gif">GIF</string>
+    <string name="imagepicker_error_no_camera">Aucune caméra trouvée.</string>
+    <string name="imagepicker_error_open_camera">Impossible d\'ouvrir l\'appareil photo.</string>
+    <string name="imagepicker_msg_no_images">Pas d\'image disponible.</string>
+    <string name="imagepicker_msg_no_external_storage_permission">Pour continuer, veuillez autoriser l\'application à accéder aux photos et aux médias sur cet appareil.</string>
+    <string name="imagepicker_msg_limit_images">Limiter la sélection à %d images.</string>
+    <string name="vl_next">Prochain</string>
+    <string name="vl_multiple_page">Plusieurs pages</string>
+    <string name="vl_single_page">Une seule page</string>
+    <string name="msg_no_app_share_file">Aucune application pour partager le fichier. Veuillez installer au moins un</string>
+    <string name="msg_create_shortcut_fail">Échec de la création d\'un raccourci</string>
+    <string name="txt_click_to_exit">Cliquez à nouveau pour quitter</string>
 
 </resources>

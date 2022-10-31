@@ -204,6 +204,7 @@
         <item name="android:textSize">@dimen/text_size_menu_home</item>
         <item name="android:text">@string/ad_attribution</item>
         <item name="android:background">#FFCC66</item>
+        <item name="android:visibility">invisible</item>
     </style>
 
     <style name="FullScreenDialog" parent="Theme.AppCompat.Light.Dialog">
@@ -295,6 +296,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+
     <style name="CustomBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
     </style>

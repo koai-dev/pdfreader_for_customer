@@ -3,7 +3,9 @@ package com.cocna.pdffilereader.common
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.widget.TextView
 import androidx.annotation.Keep
+import com.cocna.pdffilereader.R
 import com.cocna.pdffilereader.ui.home.model.MyFilesModel
 import com.google.android.gms.ads.nativead.NativeAd
 import com.kochava.tracker.events.Event
@@ -145,11 +147,12 @@ object Common {
     fun covertDateLongToString(time: Long?): String {
         time?.let {
             val sdf = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-            return sdf.format(Date(time*1000))
+            return sdf.format(Date(time * 1000))
 //            return DateFormat.getDateInstance().format(Date(time * 1000))
         }
         return ""
     }
+
     @JvmStatic
     fun covertTimeDisplayResult(time: Long?): String {
         time?.let {
@@ -159,10 +162,11 @@ object Common {
         }
         return ""
     }
+
     @JvmStatic
     fun getDateCreatePdf(): String {
-            val sdf = SimpleDateFormat("dd.MM.yyyy-hh:MM:ss", Locale.getDefault())
-            return sdf.format(Date())
+        val sdf = SimpleDateFormat("dd.MM.yyyy-hh:MM:ss", Locale.getDefault())
+        return sdf.format(Date())
     }
 
     fun formatDateCompare(strDate: String): String {
@@ -171,5 +175,16 @@ object Common {
         val displayDate = dfDisplay.parse(strDate)
         val dfServer = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
         return dfServer.format(displayDate)
+    }
+
+    @Suppress("DEPRECATION")
+    fun setTextColor(mContext: Context?, textView: TextView, color: Int) {
+        mContext?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                textView.setTextColor(mContext.resources.getColor(color, mContext.theme))
+            } else {
+                textView.setTextColor(mContext.resources.getColor(color))
+            }
+        }
     }
 }
