@@ -54,32 +54,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     private var initialLayoutComplete = false
     private val lstImageSelected = ArrayList<Image>()
 
-    // Determine the screen width (less decorations) to use for the ad width.
-    // If the ad hasn't been laid out, default to the full screen width.
-    private val adSize: AdSize
-        get() {
-            if (isVisible) {
-                val display = getBaseActivity()?.windowManager?.defaultDisplay
-                val outMetrics = DisplayMetrics()
-                display?.getMetrics(outMetrics)
-
-                val density = outMetrics.density
-
-                var adWidthPixels = binding.adViewContainer.width.toFloat()
-                if (adWidthPixels == 0f) {
-                    adWidthPixels = outMetrics.widthPixels.toFloat()
-                }
-
-                val adWidth = (adWidthPixels / density).toInt()
-                return if (getBaseActivity() != null) {
-                    AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getBaseActivity()!!, adWidth)
-                } else {
-                    AdSize.BANNER
-                }
-            } else {
-                return AdSize.BANNER
-            }
-        }
 
     override fun initData() {
         myFilesFragment = MyFilesFragment()
@@ -225,7 +199,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     private fun loadBannerAds() {
         adView.adUnitId = AppConfig.ID_ADS_BANNER_MAIN
-        adView.setAdSize(adSize)
+        adView.setAdSize(getAdSize(binding.adViewContainer))
 
         // Create an ad request.
         val adRequest = AdRequest.Builder().build()

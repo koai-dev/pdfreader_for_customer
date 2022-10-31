@@ -60,12 +60,12 @@ class ScanCameraFragment : BaseFragment<FragmentScanCameraBinding>(), View.OnCli
                 binding.cameraViewScan.takePicture()
             }
             R.id.btn_capture_next -> {
-                gotoCreatPdf()
+                gotoCreatePdf()
             }
         }
     }
 
-    private fun gotoCreatPdf() {
+    private fun gotoCreatePdf() {
         val bundle = Bundle()
         bundle.putParcelableArrayList(AppKeys.KEY_BUNDLE_DATA, lstImageCapture)
         getBaseActivity()?.onNextScreen(CreateImageToPdfActivity::class.java, bundle, true)
@@ -143,7 +143,7 @@ class ScanCameraFragment : BaseFragment<FragmentScanCameraBinding>(), View.OnCli
                             }
                             binding.vlCountImage.text = lstImageCapture.size.toString()
                             if (isSinglePage) {
-                                gotoCreatPdf()
+                                gotoCreatePdf()
                             }
                         }
                     }

@@ -161,5 +161,6 @@
     <string name="vl_single_page">Single Page</string>
     <string name="msg_no_app_share_file">No app to share file. Please install at least one</string>
     <string name="msg_create_shortcut_fail">Create shortcut fail</string>
+    <string name="txt_click_to_exit">Click again to exit</string>
 
 </resources>

@@ -18,6 +18,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.cocna.pdffilereader.R
@@ -485,11 +486,14 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
      *
      */
     fun showNativeAdsBottom(frameAdsNative: FrameLayout, uuidAds: String) {
+        showNativeAdsBottom(frameAdsNative, uuidAds, null)
+    }
+    fun showNativeAdsBottom(frameAdsNative: FrameLayout, uuidAds: String, prbLoadingAds: ProgressBar?) {
 
         val builder = AdLoader.Builder(this, uuidAds)
 
         builder.forNativeAd { nativeAd ->
-            showAdsNativeTheme(nativeAd, frameAdsNative)
+            showAdsNativeTheme(nativeAd, frameAdsNative, uuidAds)
         }
 
         val videoOptions = VideoOptions.Builder()
@@ -510,11 +514,13 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
                         deviceName = Common.getDeviceName(this@BaseActivity)
                     )
                 )
+                prbLoadingAds?.gone()
             }
 
             override fun onAdLoaded() {
                 super.onAdLoaded()
                 Common.setEventAdsNative(uuidAds)
+                prbLoadingAds?.gone()
             }
         }).build()
 
@@ -523,7 +529,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
 //        videostatus_text.text = ""
     }
 
-    private fun showAdsNativeTheme(nativeAd: NativeAd, adFrameTheme: FrameLayout) {
+    private fun showAdsNativeTheme(nativeAd: NativeAd, adFrameTheme: FrameLayout, uuidAds: String) {
         var activityDestroyed = false
         activityDestroyed = isDestroyed
         if (activityDestroyed || isFinishing || isChangingConfigurations) {
@@ -536,12 +542,12 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         currentNativeAd = nativeAd
         val adView = layoutInflater
             .inflate(R.layout.ads_unifield, null) as NativeAdView
-        populateNativeAdViewBottom(nativeAd, adView)
+        populateNativeAdViewBottom(nativeAd, adView, uuidAds)
         adFrameTheme.removeAllViews()
         adFrameTheme.addView(adView)
     }
 
-    private fun populateNativeAdViewBottom(nativeAd: NativeAd, adView: NativeAdView) {
+    private fun populateNativeAdViewBottom(nativeAd: NativeAd, adView: NativeAdView, uuidAds: String) {
         // Set the media view.
         adView.mediaView = adView.findViewById<MediaView>(R.id.ad_media)
 
@@ -554,6 +560,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         adView.starRatingView = adView.findViewById(R.id.ad_stars)
         adView.storeView = adView.findViewById(R.id.ad_store)
         adView.advertiserView = adView.findViewById(R.id.ad_advertiser)
+        val btnClickToExit = adView.findViewById<AppCompatButton>(R.id.btn_click_to_exit)
 
         // The headline and media content are guaranteed to be in every UnifiedNativeAd.
         (adView.headlineView as TextView).text = nativeAd.headline
@@ -610,6 +617,12 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         } else {
             (adView.advertiserView as TextView).text = nativeAd.advertiser
             adView.advertiserView?.visibility = View.VISIBLE
+        }
+        if (uuidAds == AppConfig.ID_ADS_NATIVE_EXIT) {
+            btnClickToExit.visible()
+            btnClickToExit.setOnClickListener {
+                finish()
+            }
         }
 
         // This method tells the Google Mobile Ads SDK that you have finished populating your
