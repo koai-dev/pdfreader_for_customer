@@ -50,9 +50,9 @@ class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
         get() = ActivitySplassScreenBinding::inflate
 
     override fun initData() {
-        val testDeviceIds = Arrays.asList("B8D2F4981BD1CDC61FB420D2A9CC64E0", "391347B342346395839E0B6C68235561")
-        val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
-        MobileAds.setRequestConfiguration(configuration)
+//        val testDeviceIds = Arrays.asList("B8D2F4981BD1CDC61FB420D2A9CC64E0", "391347B342346395839E0B6C68235561")
+//        val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
+//        MobileAds.setRequestConfiguration(configuration)
 
         getAllFilePdf()
         getAllFileInDevice()

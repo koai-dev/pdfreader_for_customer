@@ -18,6 +18,9 @@ dependencyResolutionManagement {
         maven {
             url 'https://android-sdk.is.com/'
         }
+        maven {
+            url "https://sdk.tapjoy.com/"
+        }
         flatDir { dir "libs" }
     }
 }

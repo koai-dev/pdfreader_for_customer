@@ -13,8 +13,8 @@ android {
         applicationId "com.cocna.pdfreader.viewpdf"
         minSdk 21
         targetSdk 32
-        versionCode 25
-        versionName "1.2.2"
+        versionCode 26
+        versionName "1.2.3"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk { debugSymbolLevel 'SYMBOL_TABLE' }
@@ -64,12 +64,18 @@ dependencies {
     implementation 'io.github.inflationx:viewpump:2.0.3'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'com.google.android.gms:play-services-ads:21.1.0'
+    implementation 'com.google.android.gms:play-services-ads:21.3.0'
 
-//    implementation 'com.google.ads.mediation:applovin:11.4.4.0'
-//    implementation 'com.google.ads.mediation:pangle:4.5.0.6.0'
-//    implementation 'com.google.ads.mediation:ironsource:7.2.3.1.0'
-    
+    implementation 'com.google.ads.mediation:vungle:6.12.0.0'
+    implementation 'com.google.ads.mediation:adcolony:4.8.0.0'
+    implementation 'com.google.ads.mediation:applovin:11.5.3.1'
+    implementation 'com.google.ads.mediation:pangle:4.7.0.7.0'
+//
+    implementation 'com.unity3d.ads:unity-ads:4.4.1'
+    implementation 'com.google.ads.mediation:unity:4.4.1.0'
+    implementation 'com.google.ads.mediation:tapjoy:12.11.0.0'
+    implementation 'com.google.ads.mediation:facebook:6.11.0.1'
+
     implementation "com.anggrayudi:storage:1.4.1"
     implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
 
