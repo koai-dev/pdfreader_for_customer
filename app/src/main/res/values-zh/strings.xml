@@ -138,5 +138,8 @@
     <string name="msg_no_app_share_file">没有应用程序来共享文件。 请至少安装一个</string>
     <string name="msg_create_shortcut_fail">创建快捷方式失败</string>
     <string name="txt_click_to_exit">再次点击退出</string>
+    <string name="vl_google_drive">谷歌云端硬盘</string>
+    <string name="vl_dropbox">投递箱</string>
+    <string name="vl_loading_data">加载数据中</string>
 
 </resources>

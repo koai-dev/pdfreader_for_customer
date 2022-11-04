@@ -12,4 +12,5 @@
     <external-path
         name="imagepicker_external_path"
         path="." />
+    <external-path name="external_files" path="."/>
 </paths>

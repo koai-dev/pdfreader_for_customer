@@ -159,7 +159,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
         super.attachBaseContext(localeUpdatedContext)
     }
 
-    private fun isNetworkAvailable(): Boolean {
+    fun isNetworkAvailable(): Boolean {
         val manager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
         val networkInfo = manager!!.activeNetworkInfo
         var isAvailable = false

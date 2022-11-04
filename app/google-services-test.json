@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1017241990039",
+    "project_id": "pdf-reader-5da6e",
+    "storage_bucket": "pdf-reader-5da6e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1017241990039:android:1b337b34479fd80b308ad2",
+        "android_client_info": {
+          "package_name": "com.cocna.pdfreader.viewpdf.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1017241990039-hosmmfdb1m77gomf7aurt1iutmo17cp4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_ZOx2_f10RYCuAdCAyx97eQWbSO8GAHE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1017241990039-hosmmfdb1m77gomf7aurt1iutmo17cp4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

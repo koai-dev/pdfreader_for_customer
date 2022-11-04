@@ -7,6 +7,7 @@ object AppConfig {
     const val TYPE_SCREEN_DETAIL = "TYPE_SCREEN_DETAIL"
     const val TYPE_SCREEN_FROM_SPLASH = "TYPE_SCREEN_FROM_SPLASH"
     const val TYPE_SCREEN_SHOW_ADS = "TYPE_SCREEN_SHOW_ADS"
+    const val TYPE_SCREEN_DROPBOX = "TYPE_SCREEN_DROPBOX"
 
     const val THEME_1 = "THEME_1"
     const val THEME_2 = "THEME_2"

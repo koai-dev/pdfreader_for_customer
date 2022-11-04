@@ -16,6 +16,8 @@ import com.google.android.gms.ads.*
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.firebase.FirebaseApp
 import com.cocna.pdffilereader.common.Logger
+import com.cocna.pdffilereader.ui.drive.dropbox.AppGraph
+import com.cocna.pdffilereader.ui.drive.dropbox.AppGraphImpl
 import com.kochava.tracker.Tracker
 import java.util.*
 
@@ -28,7 +30,7 @@ class PdfApplication : MultiDexApplication(), LifecycleObserver, Application.Act
     private lateinit var appOpenAdManager: AppOpenAdManager
     private var currentActivity: Activity? = null
     private var mOnShowAdCompleteListener: OnShowAdCompleteListener? = null
-
+    val appGraph: AppGraph = AppGraphImpl(this)
     override fun onCreate() {
         super.onCreate()
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
@@ -37,6 +39,7 @@ class PdfApplication : MultiDexApplication(), LifecycleObserver, Application.Act
         MobileAds.initialize(this)
         appOpenAdManager = AppOpenAdManager()
         Tracker.getInstance().startWithAppGuid(applicationContext, "kopdf-reader-8uxpczix")
+
     }
 
     // ads start

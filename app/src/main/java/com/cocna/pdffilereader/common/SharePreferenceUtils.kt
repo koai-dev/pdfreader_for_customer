@@ -220,6 +220,9 @@ class SharePreferenceUtils(context: Context?) {
         const val KEY_SEND_EVENT_3DAYS = "KEY_SEND_EVENT_3DAYS"
         const val KEY_SEND_EVENT_7DAYS = "KEY_SEND_EVENT_7DAYS"
         const val KEY_SHOW_ADS_CONFIG = "KEY_SHOW_ADS_CONFIG"
+        const val PREF_ACCOUNT_NAME = "PREF_ACCOUNT_NAME"
+        const val PREF_ACCOUNT_NAME_DROPBOX = "PREF_ACCOUNT_NAME_DROPBOX"
+        const val PREF_DROPBOX_CREDENTIAL = "credential"
     }
 
 }
