@@ -13,8 +13,8 @@ android {
         applicationId "com.cocna.pdfreader.viewpdf"
         minSdk 21
         targetSdk 32
-        versionCode 26
-        versionName "1.2.3"
+        versionCode 27
+        versionName "1.2.4"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk { debugSymbolLevel 'SYMBOL_TABLE' }
