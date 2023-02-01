@@ -178,6 +178,7 @@ class CameraActivity : AppCompatActivity() {
         finish()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         setResult(Activity.RESULT_CANCELED)
         finish()

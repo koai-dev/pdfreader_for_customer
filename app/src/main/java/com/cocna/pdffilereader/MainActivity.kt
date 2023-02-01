@@ -26,6 +26,7 @@ class MainActivity : BaseActivity<ActivityBaseBinding>() {
     }
 
     /** Override the default implementation when the user presses the back key. */
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         // Move the task containing the MainActivity to the back of the activity stack, instead of
         // destroying it. Therefore, MainActivity will be shown when the user switches back to the app.

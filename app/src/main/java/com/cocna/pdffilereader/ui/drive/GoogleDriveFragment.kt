@@ -249,6 +249,7 @@ class GoogleDriveFragment : BaseFragment<FragmentGoogleDriveBinding>() {
      * @param data        Intent (containing result data) returned by incoming
      * activity result.
      */
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(
         requestCode: Int, resultCode: Int, data: Intent?
     ) {

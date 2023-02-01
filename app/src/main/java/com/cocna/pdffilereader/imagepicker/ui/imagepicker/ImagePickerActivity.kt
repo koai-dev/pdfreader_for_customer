@@ -200,6 +200,7 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
         viewModel.fetchImages()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
         val fragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)

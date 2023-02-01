@@ -75,6 +75,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), Connectivit
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemeUtils.onActivityCreateSetTheme(this)
         super.onCreate(savedInstanceState)
+
         if (!isFinishing && !isDestroyed) {
             _binding = bindingInflater.invoke(layoutInflater)
             firebaseAnalytics = Firebase.analytics
