@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_spalsh_screen"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <!--    <Button-->
@@ -58,7 +59,7 @@
         android:layout_marginTop="@dimen/margin_all"
         android:fontFamily="@font/googlesans_bold"
         android:text="PDF Reader"
-        android:textColor="@color/rgb_F44336"
+        android:textColor="@color/bg_line_crop"
         android:textSize="@dimen/text_size_sp24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,23 +71,35 @@
         android:layout_width="@dimen/size_image_splash"
         android:layout_height="@dimen/size_image_splash"
         android:padding="@dimen/margin_double_all"
-        android:src="@mipmap/logo_app_splash"
+        android:src="@drawable/logo"
         app:layout_constraintBottom_toTopOf="@id/vlAppName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
+    <!--    <ProgressBar-->
+    <!--        style="?android:attr/progressBarStyleHorizontal"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="@dimen/height_toolbar_all"-->
+    <!--        android:layout_marginTop="@dimen/margin_double_all"-->
+    <!--        android:layout_marginEnd="@dimen/height_toolbar_all"-->
+    <!--        android:indeterminate="true"-->
+    <!--        android:max="100"-->
+    <!--        android:progress="55"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/vlAppName" />-->
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/height_toolbar_all"
-        android:layout_marginTop="@dimen/margin_double_all"
-        android:layout_marginEnd="@dimen/height_toolbar_all"
-        android:indeterminate="true"
-        android:max="100"
-        android:progress="55"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/loading"
+        android:cropToPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vlAppName" />
+        app:srcCompat="@drawable/bg_splash_screen" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

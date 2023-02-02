@@ -1,5 +1,6 @@
 package com.cocna.pdffilereader.ui.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -42,6 +43,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by Thuytv on 09/06/2022.
  */
+@SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : BaseActivity<ActivitySplassScreenBinding>() {
     private val PATH_DEFAULT_STORE = "/storage/emulated/0"
     private var startTime: Long = 0
